@@ -11,4 +11,13 @@
     <string name="tatlelogin">Welcome Back 👋</string>
     <string name="tatleregister">Hallo 👋</string>
     <string name="description">Empower Your Health Journey with GlucoFit</string>
+
+    <!--onbirding-->
+    <string name="title_menu_1">Get sugar limit warning notifications </string>
+    <string name="title_menu_2">Maintain your glucose and stay healthy!</string>
+    <string name="title_menu_3">Scan your food and know it’s glucose</string>
+    <string name="desc_menu_1">tolol 1111 bh convallis varius iaculis Lorem ipsum dolor sit amet, conse ctetur adipi scing elit. Nibh convallis varius iaculis.</string>
+    <string name="desc_menu_2">tolol 222 Lorem ipsum dolor sit amet, conse ctetur adipi scing elit. Nibh convallis varius iaculis Lorem ipsum dolor sit amet, conse ctetur adipi scing elit. Nibh convallis varius iaculis.</string>
+    <string name="desc_menu_3">tolol 123424 Lorem ipsum dolor sit amet, conse ctetur adipi scing elit. Nibh convallis varius iaculis Lorem ipsum dolor sit amet, conse ctetur adipi scing elit. Nibh convallis varius iaculis.</string>
+    <string name="learn_now">Next</string>
 </resources>
