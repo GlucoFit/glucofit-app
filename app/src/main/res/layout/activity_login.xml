@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orage"
-    tools:context=".ui.LoginActivity">
+    android:background="@color/orange"
+    tools:context=".view.activity.login.LoginActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
                 android:alpha="0"
-                android:backgroundTint="@color/orage"
+                android:backgroundTint="@color/orange"
                 android:text="@string/login"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -133,7 +133,7 @@
                     android:layout_marginTop="40dp"
                     android:text="@string/LoginButton"
                     android:textAlignment="center"
-                    android:textColor="@color/orage"
+                    android:textColor="@color/orange"
                     app:layout_constraintStart_toEndOf="@+id/registertext"
                     app:layout_constraintTop_toTopOf="@+id/registertext" />
 

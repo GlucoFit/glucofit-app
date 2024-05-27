@@ -20,4 +20,9 @@
     <string name="desc_menu_2">tolol 222 Lorem ipsum dolor sit amet, conse ctetur adipi scing elit. Nibh convallis varius iaculis Lorem ipsum dolor sit amet, conse ctetur adipi scing elit. Nibh convallis varius iaculis.</string>
     <string name="desc_menu_3">tolol 123424 Lorem ipsum dolor sit amet, conse ctetur adipi scing elit. Nibh convallis varius iaculis Lorem ipsum dolor sit amet, conse ctetur adipi scing elit. Nibh convallis varius iaculis.</string>
     <string name="learn_now">Next</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_home_fragment">Hello from home fragment</string>
+    <string name="hello_favorite_fragment">Hello from favorite fragment</string>
+    <string name="hello_history_fragment">Hello from history fragment</string>
+    <string name="hello_profile_fragment">Hello from profile fragment</string>
 </resources>

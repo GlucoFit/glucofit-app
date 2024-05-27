@@ -1,19 +1,16 @@
-package com.fitcoders.glucofitapp.ui
+package com.fitcoders.glucofitapp.view.activity.onboarding
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.fitcoders.glucofitapp.R
-import com.fitcoders.glucofitapp.databinding.ActivityLoginBinding
 import com.fitcoders.glucofitapp.databinding.ActivityOnBorardingBinding
+import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 
-class OnBorardingActivity : AppCompatActivity() {
+class OnBoardingActivity : AppCompatActivity() {
 
     private  lateinit var  binding: ActivityOnBorardingBinding
     override fun onCreate(savedInstanceState: Bundle?) {
