@@ -2,30 +2,38 @@ package com.fitcoders.glucofitapp.view.activity.register
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityRegisterBinding
+import com.fitcoders.glucofitapp.view.ViewModelFactory
+import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityRegisterBinding
+    private lateinit var modelFactory : ViewModelFactory
+    private val  registerViewModel: RegisterViewModel by viewModels { modelFactory }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_register)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        modelFactory = ViewModelFactory.getInstance(this)
 
         binding.passwordEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -46,18 +54,79 @@ class RegisterActivity : AppCompatActivity() {
                 // No action needed
             }
         })
-    
 
+        setupView()
+        setupAction()
         playAnimation()
 
     }
 
+    private fun setupAction() {
+        binding.apply {
+            loginButton.setOnClickListener {
+                if (nameEditText.length() == 0 && emailEditText.length() == 0 && passwordEditText.length() < 8) {
+                    nameEditText.error = getString(R.string.error_empty)
+                    emailEditText.error = getString(R.string.error_empty)
+                    passwordEditText.setError(getString(R.string.error_empty), null)
+                } else if (nameEditText.length() != 0 && emailEditText.length() != 0 && passwordEditText.length() > 7) {
+                    showLoading()
+                    postText()
+                    showToast()
+                    moveActivity()
+                }
+            }
+        }
+    }
+
+    private fun postText() {
+        binding.apply {
+            registerViewModel.postRegister(
+                nameEditText.text.toString(),
+                emailEditText.text.toString(),
+                passwordEditText.text.toString()
+            )
+        }
+    }
+
+    private fun showToast() {
+        registerViewModel.toastText.observe(this@RegisterActivity) {
+            it.getContentIfNotHandled()?.let { toastText ->
+                Toast.makeText(
+                    this@RegisterActivity, toastText, Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun showLoading() {
+        registerViewModel.isLoading.observe(this) {
+            binding.pbRegister.visibility = if (it) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun moveActivity() {
+        registerViewModel.registerResponse.observe(this) { response ->
+            if (response.error != true) {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+        }
+    }
+
+    private fun setupView() {
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
+        supportActionBar?.hide()
+    }
+
     private fun playAnimation() {
-        /*ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()*/
 
         val title = ObjectAnimator.ofFloat(binding.title, View.ALPHA, 1f).setDuration(100)
         val nameTextView =

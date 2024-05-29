@@ -11,6 +11,7 @@
     <string name="tatlelogin">Welcome Back 👋</string>
     <string name="tatleregister">Hallo 👋</string>
     <string name="description">Empower Your Health Journey with GlucoFit</string>
+    <string name="error_empty">Required!</string>
 
     <!--onbirding-->
     <string name="title_menu_1">Get sugar limit warning notifications </string>
@@ -25,4 +26,74 @@
     <string name="hello_favorite_fragment">Hello from favorite fragment</string>
     <string name="hello_history_fragment">Hello from history fragment</string>
     <string name="hello_profile_fragment">Hello from profile fragment</string>
+
+    <string name="title_asses">Quick Self Assessment</string>
+    <string name="desc_asses">Please provide accurate information to help us understand your health status and give you related content.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_text_1">Step 1</string>
+    <string name="tab_text_2">Step 2</string>
+    <string name="tab_text_3">Step 3</string>
+
+   <!-- Health Condition-->
+    <string name="title_health_condition">Health Condition</string>
+    <string name="subtitle_health_condition">Do you have any health conditions that need attention?</string>
+    <string name="instruction_health_condition">Please select one or more</string>
+    <string name="option_diabetes">Diabetes</string>
+    <string name="option_hypertension">Hipertensi</string>
+    <string name="option_obesity">Obesitas</string>
+    <string name="option_metabolic_syndrome">Sindrom metabolik</string>
+    <string name="option_digestion_issues">Gangguan pencernaan terkait gula (misalnya, intoleransi laktosa)</string>
+    <string name="option_high_cholesterol">Kolesterol tinggi</string>
+    <string name="option_heart_disease">Resiko Penyakit jantung</string>
+    <string name="option_special_diet">Kebutuhan diet khusus (misalnya, diet rendah karbohidrat)</string>
+    <string name="option_none">Tidak memiliki</string>
+
+    <!--life style-->
+    <string name="question_sweet_consumption">How often do you consume sweet foods or drinks in a week?</string>
+    <string name="instruction_condition">Please select one </string>
+    <string name="info_icon">info</string>
+    <string name="sweet_consumption_everyday">Setiap hari</string>
+    <string name="sweet_consumption_5_6_times">5-6 kali seminggu</string>
+    <string name="sweet_consumption_3_4_times">3-4 kali seminggu</string>
+    <string name="sweet_consumption_1_2_times">1-2 kali seminggu</string>
+    <string name="sweet_consumption_rarely">Jarang sekali</string>
+
+    <string name="question_sugar_intake">How much sugar (in grams) do you usually consume in a day?</string>
+    <string name="sugar_intake_less_1_teaspoon">&lt; dari 1 sendok teh (sekitar 4 g gula)</string>
+    <string name="sugar_intake_1_2_teaspoons">1-2 sendok teh (sekitar 4-8 g gula)</string>
+    <string name="sugar_intake_2_3_teaspoons">2-3 sendok teh (sekitar 8-12 g gula)</string>
+    <string name="sugar_intake_more_3_teaspoons">&gt; dari 3 sendok teh (lebih dari 12 g gula)</string>
+
+    <string name="question_exercise_frequency">How often do you exercise in a week?</string>
+    <string name="exercise_frequency_everyday">Setiap hari</string>
+    <string name="exercise_frequency_5_6_times">5-6 kali seminggu</string>
+    <string name="exercise_frequency_3_4_times">3-4 kali seminggu</string>
+    <string name="exercise_frequency_1_2_times">1-2 kali seminggu</string>
+    <string name="exercise_frequency_rarely">Jarang sekali</string>
+
+    <string name="question_food_preferences">Do you have any particular food preferences?</string>
+    <string name="preference_vegetarian">Vegetarian</string>
+    <string name="preference_vegan">Vegan</string>
+    <string name="preference_paleo">Paleo</string>
+    <string name="preference_gluten_free">Gluten-Free</string>
+    <string name="preference_lactose_free">Lactose-Free</string>
+    <string name="preference_organic">Organik</string>
+
+    <string name="question_food_allergies">Do you have allergies or intolerances to certain foods?</string>
+    <string name="allergies_yes">Yes</string>
+    <string name="allergies_no">No</string>
+    <string name="allergies_other">Other</string>
+    <string name="hint_type_here">Type here</string>
+
+    <string name="question_food_likes">Do you have a food or ingredient that you really like?</string>
+    <string name="question_food_dislikes">Do you have a food or ingredient you don\'t like?</string>
+
+  <!--  informasi toolip-->
+    <string name="toolip_vetarian">Makanan yang tidak mengandung daging atau produk-produk hewani.</string>
+    <string name="toolip_vegan">Makanan yang tidak mengandung produk hewani sama sekali, termasuk daging, susu, telur, dan produk-produk susu.</string>
+    <string name="toolip_paleo">Makanan yang meniru pola makan manusia zaman prasejarah, fokus pada daging, ikan, sayuran, buah-buahan, kacang-kacangan, dan biji-bijian.</string>
+    <string name="toolip_gluten">Makanan yang tidak mengandung gluten, protein yang ditemukan dalam gandum, jelai, dan gandum hitam.</string>
+    <string name="toolip_lactose">Makanan yang tidak mengandung laktosa, gula alami yang ditemukan dalam susu dan produk susu.</string>
+    <string name="toolip_organik">Makanan yang diproduksi tanpa menggunakan pestisida atau bahan kimia sintetis</string>
 </resources>

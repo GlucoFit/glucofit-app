@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".view.fragment.healthconditin.HealthConditionFragment">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="@string/title_health_condition"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="@string/subtitle_health_condition"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+    <TextView
+        android:id="@+id/tv_instruction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="@string/instruction_health_condition"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_subtitle" />
+
+    <CheckBox
+        android:id="@+id/cb_diabetes"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="@string/option_diabetes"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_instruction" />
+
+    <CheckBox
+        android:id="@+id/cb_hypertension"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="@string/option_hypertension"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_diabetes" />
+
+    <CheckBox
+        android:id="@+id/cb_obesity"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="@string/option_obesity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_hypertension" />
+
+    <CheckBox
+        android:id="@+id/cb_metabolic_syndrome"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="@string/option_metabolic_syndrome"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_obesity" />
+
+    <CheckBox
+        android:id="@+id/cb_digestion_issues"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="@string/option_digestion_issues"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_metabolic_syndrome" />
+
+    <CheckBox
+        android:id="@+id/cb_high_cholesterol"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="@string/option_high_cholesterol"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_digestion_issues" />
+
+    <CheckBox
+        android:id="@+id/cb_heart_disease"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="@string/option_heart_disease"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_high_cholesterol" />
+
+    <CheckBox
+        android:id="@+id/cb_special_diet"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="@string/option_special_diet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_heart_disease" />
+
+    <CheckBox
+        android:id="@+id/cb_none"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="14dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="@string/option_none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_special_diet" />
+</androidx.constraintlayout.widget.ConstraintLayout>
