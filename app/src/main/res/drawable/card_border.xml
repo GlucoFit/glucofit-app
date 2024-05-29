@@ -1,0 +1,20 @@
+<!-- res/drawable/card_border.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background color -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" /> <!-- or your preferred background color -->
+            <corners android:radius="32dp" /> <!-- Same as cardCornerRadius -->
+        </shape>
+    </item>
+    <!-- Border -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <stroke
+                android:width="2dp"
+                android:color="@android:color/black" /> <!-- Your border color -->
+            <corners android:radius="32dp" /> <!-- Same as cardCornerRadius -->
+        </shape>
+    </item>
+</layer-list>
