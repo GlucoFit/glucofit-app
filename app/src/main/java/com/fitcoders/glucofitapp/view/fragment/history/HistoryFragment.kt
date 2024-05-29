@@ -16,6 +16,8 @@ class HistoryFragment : Fragment() {
 
     private val viewModel: HistoryViewModel by viewModels()
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
