@@ -18,7 +18,6 @@ import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.data.UserModel
 import com.fitcoders.glucofitapp.databinding.ActivityLoginBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
-import com.fitcoders.glucofitapp.view.activity.assesment.AssessmentActivity
 import com.fitcoders.glucofitapp.view.activity.register.RegisterActivity
 import com.fitcoders.glucofitapp.view.activity.main.MainActivity
 

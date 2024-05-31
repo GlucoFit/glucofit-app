@@ -12,6 +12,9 @@
     <string name="tatleregister">Hallo 👋</string>
     <string name="description">Empower Your Health Journey with GlucoFit</string>
     <string name="error_empty">Required!</string>
+    <string name="cameraButton">Camera</string>
+    <string name="galleryButton">Gallery</string>
+    <string name="analyzeButton">Analyze</string>
 
     <!--onbirding-->
     <string name="title_menu_1">Get sugar limit warning notifications </string>
@@ -35,7 +38,7 @@
     <string name="tab_text_2">Step 2</string>
     <string name="tab_text_3">Step 3</string>
 
-   <!-- Health Condition-->
+    <!-- Health Condition-->
     <string name="title_health_condition">Health Condition</string>
     <string name="subtitle_health_condition">Do you have any health conditions that need attention?</string>
     <string name="instruction_health_condition">Please select one or more</string>
@@ -89,7 +92,7 @@
     <string name="question_food_likes">Do you have a food or ingredient that you really like?</string>
     <string name="question_food_dislikes">Do you have a food or ingredient you don\'t like?</string>
 
-  <!--  informasi toolip-->
+    <!--  informasi toolip-->
     <string name="toolip_vetarian">Makanan yang tidak mengandung daging atau produk-produk hewani.</string>
     <string name="toolip_vegan">Makanan yang tidak mengandung produk hewani sama sekali, termasuk daging, susu, telur, dan produk-produk susu.</string>
     <string name="toolip_paleo">Makanan yang meniru pola makan manusia zaman prasejarah, fokus pada daging, ikan, sayuran, buah-buahan, kacang-kacangan, dan biji-bijian.</string>
@@ -106,4 +109,11 @@
     <string name="No">No</string>
 
 
+
+
+    <!--Action bar-->
+    <string name="back_button">Back</string>
+    <string name="selected_date">Selected date: %1$s</string>
+    <string name="selected_dd">Selected DD: %1$s</string>
+    <string name="selected_day">Selected day: %1$s</string>
 </resources>

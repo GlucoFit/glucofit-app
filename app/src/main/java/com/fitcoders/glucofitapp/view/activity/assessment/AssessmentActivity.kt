@@ -1,11 +1,8 @@
-package com.fitcoders.glucofitapp.view.activity.assesment
+package com.fitcoders.glucofitapp.view.activity.assessment
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.fitcoders.glucofitapp.R
 import com.google.android.material.tabs.TabLayout
