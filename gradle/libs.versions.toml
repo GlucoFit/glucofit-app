@@ -16,7 +16,6 @@ fragmentKtx = "1.5.6"
 roundedImageView = "2.3.0"
 viewpager2 = "1.1.0"
 
-
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -36,4 +35,5 @@ androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", vers
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
 

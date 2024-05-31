@@ -19,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityRegisterBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
-import com.fitcoders.glucofitapp.view.activity.assesment.AssessmentActivity
+import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
 import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {

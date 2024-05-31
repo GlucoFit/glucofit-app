@@ -1,4 +1,4 @@
-package com.fitcoders.glucofitapp.view.activity.assesment
+package com.fitcoders.glucofitapp.view.activity.assessment
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
