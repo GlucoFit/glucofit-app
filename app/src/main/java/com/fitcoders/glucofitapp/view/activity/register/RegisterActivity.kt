@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityRegisterBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
+import com.fitcoders.glucofitapp.view.activity.assesment.AssessmentActivity
 import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {
@@ -106,9 +107,18 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun moveActivity() {
         registerViewModel.registerResponse.observe(this) { response ->
-            if (response.error != true) {
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
+            response?.let {
+                val user = it.user
+                if (user != null) {
+                    startActivity(Intent(this, AssessmentActivity::class.java))
+                    finish()
+                } else {
+                    // Handle the case where the user data is null or there's an error
+                    Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show()
+                }
+            } ?: run {
+                // Handle the case where the response is null
+                Toast.makeText(this, "Registration response is null. Please try again.", Toast.LENGTH_SHORT).show()
             }
         }
     }

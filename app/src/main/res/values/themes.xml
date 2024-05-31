@@ -15,5 +15,18 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <!-- Custom Toolbar Style -->
+    <style name="CustomToolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="titleTextAppearance">@style/CustomToolbarTitle</item>
+        <item name="android:background">@color/white</item> <!-- Background color -->
+    </style>
+
+    <!-- Custom Toolbar Title Text Appearance -->
+    <style name="CustomToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:fontFamily">@font/poppins_regular</item> <!-- Custom font family -->
+        <item name="android:textSize">20sp</item> <!-- Custom font size -->
+        <item name="android:textColor">@color/black</item> <!-- Custom text color -->
+    </style>
+
     <style name="Theme.GlucofitApp" parent="Base.Theme.GlucofitApp" />
 </resources>

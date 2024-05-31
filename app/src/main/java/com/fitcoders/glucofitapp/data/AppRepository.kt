@@ -3,6 +3,8 @@ package com.fitcoders.glucofitapp.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
+import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.RegisterResponse
 import com.fitcoders.glucofitapp.service.ApiService
 import com.fitcoders.glucofitapp.utils.Event
@@ -11,17 +13,26 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class AppRepository private constructor(private val pref: UserPreference, private val apiService: ApiService){
-    private val _registerResponse = MutableLiveData<RegisterResponse>()
-    val registerResponse: LiveData<RegisterResponse> = _registerResponse
+    private val _registerResponse = MutableLiveData<RegisterResponse?>()
+    val registerResponse: MutableLiveData<RegisterResponse?> = _registerResponse
+
+    private val _loginResponse = MutableLiveData<LoginResponse>()
+    val loginResponse: LiveData<LoginResponse> = _loginResponse
 
     private val _toastText = MutableLiveData<Event<String>>()
     val toastText: LiveData<Event<String>> = _toastText
 
+    private val _alertDialog = MutableLiveData<Boolean>()
+    val alertDialog: LiveData<Boolean> =_alertDialog
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-    fun pRegister(username: String, email: String, password: String) {
+
+    fun pRegister(userName: String, email: String, password: String) {
         _isLoading.value = true
-        val client = apiService.Postregister(username, email, password)
+        val client = apiService.postRegister(userName, email, password)
+
+        Log.d(TAG, "Registering with userName: $userName, email: $email, password: $password")
 
         client.enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
@@ -32,14 +43,16 @@ class AppRepository private constructor(private val pref: UserPreference, privat
                 if (response.isSuccessful) {
                     val registerResponse = response.body()
                     if (registerResponse != null) {
-                        _registerResponse.value = registerResponse!!
-                        _toastText.value = Event(registerResponse.message ?: "Success")
+                        _registerResponse.value = registerResponse
+                        _toastText.value = Event("Success Register")
                     } else {
                         _toastText.value = Event("Response body is empty.")
                     }
                 } else {
-                    _toastText.value = Event("Error: ${response.code()} ${response.message()}")
-                    Log.e(TAG, "onResponse error: ${response.code()} ${response.message()}")
+                    // Log detailed error information
+                    val errorBody = response.errorBody()?.string()
+                    Log.e(TAG, "onResponse error: ${response.code()} ${response.message()}. Body: $errorBody")
+                    _toastText.value = Event("Error: ${response.code()} ${response.message()}. Body: $errorBody")
                 }
             }
 
@@ -50,6 +63,49 @@ class AppRepository private constructor(private val pref: UserPreference, privat
             }
         })
     }
+
+    fun postLogin(email: String, password: String) {
+        _isLoading.value = true
+        val client = apiService.postLogin(email, password)
+
+        client.enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(
+                call: Call<LoginResponse>,
+                response: Response<LoginResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful && response.body() != null) {
+                    _loginResponse.value = response.body()
+                    _alertDialog.value = true
+                    _toastText.value = Event("Success Login")
+                } else {
+                    _toastText.value = Event("Response body is empty.")
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                _toastText.value = Event(t.message.toString())
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+            }
+        })
+    }
+
+    fun getSession(): LiveData<UserModel> {
+        return pref.getSession().asLiveData()
+    }
+
+    suspend fun saveSession(session: UserModel) {
+        pref.saveSession(session)
+    }
+
+    suspend fun login() {
+        pref.login()
+    }
+
+    suspend fun logout() {
+        pref.logout()
+    }
+
 
     companion object {
         private const val TAG = "AppRepository"

@@ -1,5 +1,6 @@
 package com.fitcoders.glucofitapp.service
 
+import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.RegisterResponse
 import retrofit2.Call
 import retrofit2.http.Field
@@ -8,11 +9,17 @@ import retrofit2.http.POST
 
 interface ApiService {
     @FormUrlEncoded
-    @POST("register")
-    fun Postregister(
-        @Field("username") name: String,
+    @POST("auth/register")
+    fun postRegister(
+        @Field("userName") userName: String,
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<RegisterResponse>
 
+    @FormUrlEncoded
+    @POST("auth/login")
+    fun postLogin(
+        @Field("email") email: String,
+        @Field("password") password: String
+    ): Call<LoginResponse>
 }

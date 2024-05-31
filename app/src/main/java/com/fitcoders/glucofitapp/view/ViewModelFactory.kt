@@ -5,7 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fitcoders.glucofitapp.data.AppRepository
 import com.fitcoders.glucofitapp.di.Injection
+import com.fitcoders.glucofitapp.view.activity.login.LoginViewModel
 import com.fitcoders.glucofitapp.view.activity.register.RegisterViewModel
+import com.fitcoders.glucofitapp.view.fragment.profile.ProfileViewModel
 
 class ViewModelFactory(private val repository: AppRepository) : ViewModelProvider.NewInstanceFactory() {
 
@@ -18,10 +20,13 @@ class ViewModelFactory(private val repository: AppRepository) : ViewModelProvide
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 RegisterViewModel(repository) as T
             }
-           /* modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
+            modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(repository) as T
             }
-            modelClass.isAssignableFrom(AddStoryViewModel::class.java) -> {
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(repository) as T
+            }
+           /* modelClass.isAssignableFrom(AddStoryViewModel::class.java) -> {
                 AddStoryViewModel(repository) as T
             }*/
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     R.id.profile -> {
-                        val fragment = ProfileFragment.newInstance("value1", "value2")
+                        val fragment = ProfileFragment.newInstance()
                         fragmentManager(fragment)
                     }
                 }

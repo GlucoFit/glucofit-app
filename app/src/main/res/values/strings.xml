@@ -96,4 +96,14 @@
     <string name="toolip_gluten">Makanan yang tidak mengandung gluten, protein yang ditemukan dalam gandum, jelai, dan gandum hitam.</string>
     <string name="toolip_lactose">Makanan yang tidak mengandung laktosa, gula alami yang ditemukan dalam susu dan produk susu.</string>
     <string name="toolip_organik">Makanan yang diproduksi tanpa menggunakan pestisida atau bahan kimia sintetis</string>
+    <string name="searchbar_hint">Search</string>
+    <string name="profil_title">Profil</string>
+
+    <!--alert-->
+    <string name="logout">Logout</string>
+    <string name="sure">Are You Sure?</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+
+
 </resources>
