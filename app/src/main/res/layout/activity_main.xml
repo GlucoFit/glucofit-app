@@ -34,5 +34,4 @@
             app:itemTextAppearanceActive="@style/BottomNavigationTextStyle"
             app:itemTextColor="@color/orange"
             app:menu="@menu/bottom_nav_menu" />
-
 </RelativeLayout>
