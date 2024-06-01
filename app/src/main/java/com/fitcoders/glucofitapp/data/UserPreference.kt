@@ -6,9 +6,12 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "session")
 class UserPreference private constructor(private val dataStore: DataStore<Preferences>) {
@@ -16,11 +19,12 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
     companion object {
         @Volatile
         private var INSTANCE: UserPreference? = null
-        private val NAME_KEY = stringPreferencesKey("name")
+        private val USERNAME_KEY = stringPreferencesKey("username")
+        private val EMAIL_KEY = stringPreferencesKey("email")
         private val TOKEN_KEY = stringPreferencesKey("token")
-        private val STATE_KEY = booleanPreferencesKey("state")
+        private val STATE_KEY = booleanPreferencesKey("isLogin")
 
-        fun getInstance(dataStore: DataStore<Preferences>):UserPreference {
+        fun getInstance(dataStore: DataStore<Preferences>): UserPreference {
             return INSTANCE ?: synchronized(this) {
                 val instance = UserPreference(dataStore)
                 INSTANCE = instance
@@ -30,18 +34,27 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
     }
 
     fun getSession(): Flow<UserModel> {
-        return dataStore.data.map { preferences ->
+        return dataStore.data.catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }.map { preferences ->
             UserModel(
-                preferences[NAME_KEY] ?: "",
-                preferences[TOKEN_KEY] ?: "",
-                preferences[STATE_KEY] ?: false
+                username = preferences[USERNAME_KEY] ?: "",
+                email = preferences[EMAIL_KEY] ?: "",
+                token = preferences[TOKEN_KEY] ?: "",
+                isLogin = preferences[STATE_KEY] ?: false
             )
         }
     }
 
+
     suspend fun saveSession(user: UserModel) {
         dataStore.edit { preferences ->
-            preferences[NAME_KEY] = user.email
+            preferences[USERNAME_KEY] = user.username
+            preferences[EMAIL_KEY] = user.email
             preferences[TOKEN_KEY] = user.token
             preferences[STATE_KEY] = user.isLogin
         }

@@ -1,12 +1,15 @@
 package com.fitcoders.glucofitapp.view
 
+import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fitcoders.glucofitapp.data.AppRepository
 import com.fitcoders.glucofitapp.di.Injection
+import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 import com.fitcoders.glucofitapp.view.activity.login.LoginViewModel
 import com.fitcoders.glucofitapp.view.activity.register.RegisterViewModel
+import com.fitcoders.glucofitapp.view.fragment.home.HomeViewModel
 import com.fitcoders.glucofitapp.view.fragment.profile.ProfileViewModel
 
 class ViewModelFactory(private val repository: AppRepository) : ViewModelProvider.NewInstanceFactory() {
@@ -14,9 +17,6 @@ class ViewModelFactory(private val repository: AppRepository) : ViewModelProvide
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
-           /* modelClass.isAssignableFrom(MainViewModel::class.java) -> {
-                MainViewModel(repository) as T
-            }*/
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 RegisterViewModel(repository) as T
             }
@@ -26,9 +26,9 @@ class ViewModelFactory(private val repository: AppRepository) : ViewModelProvide
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(repository) as T
             }
-           /* modelClass.isAssignableFrom(AddStoryViewModel::class.java) -> {
-                AddStoryViewModel(repository) as T
-            }*/
+            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
+                HomeViewModel(repository) as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
@@ -45,5 +45,7 @@ class ViewModelFactory(private val repository: AppRepository) : ViewModelProvide
             }
             return INSTANCE as ViewModelFactory
         }
+
+
     }
 }

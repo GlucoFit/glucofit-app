@@ -12,7 +12,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AppRepository private constructor(private val pref: UserPreference, private val apiService: ApiService){
+class AppRepository private constructor(private val pref: UserPreference, private val apiService: ApiService) {
+
     private val _registerResponse = MutableLiveData<RegisterResponse?>()
     val registerResponse: MutableLiveData<RegisterResponse?> = _registerResponse
 
@@ -23,16 +24,17 @@ class AppRepository private constructor(private val pref: UserPreference, privat
     val toastText: LiveData<Event<String>> = _toastText
 
     private val _alertDialog = MutableLiveData<Boolean>()
-    val alertDialog: LiveData<Boolean> =_alertDialog
+    val alertDialog: LiveData<Boolean> = _alertDialog
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _userProfile = MutableLiveData<LoginResponse>()
+    val userProfile: LiveData<LoginResponse> = _userProfile
+
     fun pRegister(userName: String, email: String, password: String) {
         _isLoading.value = true
         val client = apiService.postRegister(userName, email, password)
-
-        Log.d(TAG, "Registering with userName: $userName, email: $email, password: $password")
 
         client.enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
@@ -49,9 +51,7 @@ class AppRepository private constructor(private val pref: UserPreference, privat
                         _toastText.value = Event("Response body is empty.")
                     }
                 } else {
-                    // Log detailed error information
                     val errorBody = response.errorBody()?.string()
-                    Log.e(TAG, "onResponse error: ${response.code()} ${response.message()}. Body: $errorBody")
                     _toastText.value = Event("Error: ${response.code()} ${response.message()}. Body: $errorBody")
                 }
             }
@@ -59,7 +59,6 @@ class AppRepository private constructor(private val pref: UserPreference, privat
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 _isLoading.value = false
                 _toastText.value = Event("Failure: ${t.message}")
-                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
     }
@@ -85,10 +84,42 @@ class AppRepository private constructor(private val pref: UserPreference, privat
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 _toastText.value = Event(t.message.toString())
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
             }
         })
     }
+
+    /*fun fetchUserProfile(token: String) {
+        _isLoading.value = true
+
+        val client = apiService.getUserProfile("$token")
+
+        client.enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(
+                call: Call<LoginResponse>,
+                response: Response<LoginResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful && response.body() != null) {
+                    _userProfile.value = response.body()
+                    _toastText.value = Event("Success to fetch user profile.")
+                } else {
+                    _toastText.value = Event("Failed to fetch user profile: ${response.errorBody()?.string() ?: "Unknown error"}")
+                    val errorBody = response.errorBody()?.string()
+                    Log.e(
+                        TAG,
+                        "Error: ${response.code()} ${response.message()}. Body: ${errorBody}"
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                _isLoading.value = false
+                _toastText.value = Event("Network error: ${t.localizedMessage ?: "Unknown error"}")
+                Log.e(TAG, "Network error", t)
+            }
+        })
+    }*/
+
 
     fun getSession(): LiveData<UserModel> {
         return pref.getSession().asLiveData()
@@ -107,18 +138,18 @@ class AppRepository private constructor(private val pref: UserPreference, privat
     }
 
 
+
     companion object {
         private const val TAG = "AppRepository"
 
         @Volatile
         private var instance: AppRepository? = null
-        fun getInstance(
-            preferences: UserPreference,
-            apiService: ApiService
-        ): AppRepository =
-            instance ?: synchronized(this) {
-                instance ?: AppRepository(preferences, apiService)
-            }.also { instance = it }
 
+        fun getInstance(preferences: UserPreference, apiService: ApiService): AppRepository {
+            return instance ?: synchronized(this) {
+                instance ?: AppRepository(preferences, apiService).also { instance = it }
+            }
+        }
     }
 }
+
