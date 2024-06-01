@@ -33,7 +33,7 @@
             android:name=".view.activity.assessment.AssessmentActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activity.scanner.ScannerActivity"
+            android:name=".view.activity.onboarding.OnBoardingActivity"
             android:exported="false" />
         <activity
             android:name=".view.activity.login.LoginActivity"
@@ -45,7 +45,7 @@
             android:name=".view.activity.main.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activity.onboarding.OnBoardingActivity"
+            android:name=".view.activity.scanner.ScannerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

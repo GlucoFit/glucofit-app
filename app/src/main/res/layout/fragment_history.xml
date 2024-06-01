@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             tools:text="December 2020"
             android:textColor="@color/black"
+            android:fontFamily="@font/poppins_regular"
             app:layout_constraintBottom_toBottomOf="@id/iv_calendar_next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

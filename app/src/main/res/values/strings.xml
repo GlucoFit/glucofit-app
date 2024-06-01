@@ -116,4 +116,9 @@
     <string name="selected_date">Selected date: %1$s</string>
     <string name="selected_dd">Selected DD: %1$s</string>
     <string name="selected_day">Selected day: %1$s</string>
+    <string name="scanner_title">Scanner</string>
+    <string name="image_get_uri_error">There was a problem getting the URI from the image.</string>
+    <string name="image_capture_error">There was an error capturing the image. Please try again!</string>
+    <string name="image_crop_error">There was an error cropping the image. Please try again!</string>
+    <string name="image_classifier_failed">Image classification failed. Please try again!</string>
 </resources>
