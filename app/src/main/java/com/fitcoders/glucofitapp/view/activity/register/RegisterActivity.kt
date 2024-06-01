@@ -11,16 +11,12 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityRegisterBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
-import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {
 

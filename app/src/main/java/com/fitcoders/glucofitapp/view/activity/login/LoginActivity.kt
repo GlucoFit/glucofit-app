@@ -9,11 +9,8 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.data.UserModel
 import com.fitcoders.glucofitapp.databinding.ActivityLoginBinding
@@ -47,10 +44,6 @@ class LoginActivity : AppCompatActivity() {
         setupAction()
     }
 
-    private fun navigateToMainActivity() {
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
-    }
 
     private fun setupView() {
         @Suppress("DEPRECATION")
@@ -118,13 +111,27 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun postText() {
-        binding.apply {
-            loginViewModel.postLogin(
-                emailEditText.text.toString(),
-                passwordEditText.text.toString()
-            )
-        }
+        val email = binding.emailEditText.text.toString()
+        val password = binding.passwordEditText.text.toString()
+        loginViewModel.postLogin(email, password)
 
+        // Observe the LiveData object for login response
+        loginViewModel.loginResponse.observe(this@LoginActivity) { response ->
+            response?.user?.let { user ->
+                // Build the user model from the response
+                val userModel = UserModel(
+                    username = user.userName ?: "",  // Handle potential null userName
+                    email = email,  // Reuse the email used for login request
+                    token = AUTH_KEY + response.token,  // Handle potential null token and prepend AUTH_KEY
+                    isLogin = true  // Set login state to true
+                )
+                saveSession(userModel)
+            } ?: run {
+                // Handle null response or user object here, maybe show an error message
+                showError("Failed to login. Please check your credentials.")
+            }
+        }
+/*
         loginViewModel.loginResponse.observe(this@LoginActivity) { response ->
             saveSession(
                 UserModel(
@@ -133,7 +140,13 @@ class LoginActivity : AppCompatActivity() {
                     true
                 )
             )
-        }
+        }*/
+    }
+
+
+
+    private fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     private fun saveSession(session: UserModel){

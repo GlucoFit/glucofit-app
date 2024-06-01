@@ -6,26 +6,48 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.DatePicker
+import android.widget.RadioGroup
+import android.widget.Toast
 import com.fitcoders.glucofitapp.R
+import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
 import com.google.android.material.textfield.TextInputEditText
 import java.util.Calendar
 
 
 class UserInformationFragment : Fragment() {
 
-    private lateinit var etDOB: TextInputEditText
+    private lateinit var etName: TextInputEditText
+    private lateinit var etDob: TextInputEditText
+    private lateinit var rgGender: RadioGroup
+    private lateinit var etWeight: TextInputEditText
+    private lateinit var etHeight: TextInputEditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_user_information, container, false)
 
-        etDOB = view.findViewById(R.id.et_dob)
-        etDOB.setOnClickListener {
+        etName = view.findViewById(R.id.et_name)
+        etDob = view.findViewById(R.id.et_dob)
+        rgGender = view.findViewById(R.id.rg_gender)
+        etWeight = view.findViewById(R.id.et_weight)
+        etHeight = view.findViewById(R.id.et_height)
+
+        etDob.setOnClickListener {
             showDatePicker()
+        }
+
+        val nextButton: Button = view.findViewById(R.id.button_next)
+        nextButton.setOnClickListener {
+            if (validateInputs()) {
+                (activity as AssessmentActivity).moveToNextStep()
+            } else {
+                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return view
@@ -38,13 +60,18 @@ class UserInformationFragment : Fragment() {
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(requireContext(),
-            DatePickerDialog.OnDateSetListener { view: DatePicker?, year: Int, month: Int, dayOfMonth: Int ->
-                // Set the selected date to the EditText
+            { _, year, month, dayOfMonth ->
                 val selectedDate = "$dayOfMonth/${month + 1}/$year"
-                etDOB.setText(selectedDate)
+                etDob.setText(selectedDate)
             }, year, month, dayOfMonth)
         datePickerDialog.show()
     }
 
-
+    private fun validateInputs(): Boolean {
+        return etName.text.toString().isNotEmpty() &&
+                etDob.text.toString().isNotEmpty() &&
+                rgGender.checkedRadioButtonId != -1 &&
+                etWeight.text.toString().isNotEmpty() &&
+                etHeight.text.toString().isNotEmpty()
+    }
 }
