@@ -33,8 +33,6 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         binding.registerbutton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
@@ -43,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
         playAnimation()
         setupAction()
     }
-
 
     private fun setupView() {
         @Suppress("DEPRECATION")
@@ -75,7 +72,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-
     private fun moveActivity() {
         loginViewModel.loginResponse.observe(this) { response ->
             response?.let {
@@ -84,12 +80,10 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
-                    // Handle the case where the user data is null or there's an error
-                    Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Login failed. Please try again.", Toast.LENGTH_SHORT).show()
                 }
             } ?: run {
-                // Handle the case where the response is null
-                Toast.makeText(this, "Registration response is null. Please try again.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Login response is null. Please try again.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -97,16 +91,14 @@ class LoginActivity : AppCompatActivity() {
     private fun showToast() {
         loginViewModel.toastText.observe(this) {
             it.getContentIfNotHandled()?.let { toastText ->
-                Toast.makeText(
-                    this, toastText, Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun showLoading() {
         loginViewModel.isLoading.observe(this) {
-            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+            binding.pbLogin.visibility = if (it) View.VISIBLE else View.GONE
         }
     }
 
@@ -115,41 +107,26 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.passwordEditText.text.toString()
         loginViewModel.postLogin(email, password)
 
-        // Observe the LiveData object for login response
         loginViewModel.loginResponse.observe(this@LoginActivity) { response ->
             response?.user?.let { user ->
-                // Build the user model from the response
                 val userModel = UserModel(
-                    username = user.userName ?: "",  // Handle potential null userName
-                    email = email,  // Reuse the email used for login request
-                    token = AUTH_KEY + response.token,  // Handle potential null token and prepend AUTH_KEY
-                    isLogin = true  // Set login state to true
+                    username = user.userName ?: "",
+                    email = email,
+                    token = AUTH_KEY + response.token,
+                    isLogin = true
                 )
                 saveSession(userModel)
             } ?: run {
-                // Handle null response or user object here, maybe show an error message
                 showError("Failed to login. Please check your credentials.")
             }
         }
-/*
-        loginViewModel.loginResponse.observe(this@LoginActivity) { response ->
-            saveSession(
-                UserModel(
-                    response.user?.userName.toString(),
-                    AUTH_KEY + (response.token.toString()),
-                    true
-                )
-            )
-        }*/
     }
-
-
 
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
-    private fun saveSession(session: UserModel){
+    private fun saveSession(session: UserModel) {
         loginViewModel.saveSession(session)
     }
 
@@ -158,21 +135,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun playAnimation() {
-
         val title = ObjectAnimator.ofFloat(binding.title, View.ALPHA, 1f).setDuration(100)
-        val message =
-            ObjectAnimator.ofFloat(binding.desc, View.ALPHA, 1f).setDuration(100)
-        val emailTextView =
-            ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
-        val emailEditTextLayout =
-            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val passwordTextView =
-            ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
-        val passwordEditTextLayout =
-            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val message = ObjectAnimator.ofFloat(binding.desc, View.ALPHA, 1f).setDuration(100)
+        val emailTextView = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
+        val emailEditTextLayout = ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val passwordTextView = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
+        val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val login = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
-        val logintext = ObjectAnimator.ofFloat(binding.registertext,View.ALPHA,1f).setDuration(100)
-        val loginbutton  = ObjectAnimator.ofFloat(binding.registerbutton,View.ALPHA,1f).setDuration(100)
+        val logintext = ObjectAnimator.ofFloat(binding.registertext, View.ALPHA, 1f).setDuration(100)
+        val loginbutton = ObjectAnimator.ofFloat(binding.registerbutton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
             playSequentially(

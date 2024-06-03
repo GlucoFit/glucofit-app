@@ -29,19 +29,19 @@ class HealthConditionFragment : Fragment() {
             view.findViewById(R.id.cb_none)
         )
 
-        val nextButton: Button = view.findViewById(R.id.button_next)
-        nextButton.setOnClickListener {
-            if (validateInputs()) {
-                (activity as AssessmentActivity).moveToNextStep()
-            } else {
-                Toast.makeText(requireContext(), "Please select at least one option", Toast.LENGTH_SHORT).show()
-            }
-        }
-
         return view
     }
 
-    private fun validateInputs(): Boolean {
+    fun validateInputs(): Boolean {
         return checkBoxes.any { it.isChecked }
     }
+
+    fun onNextButtonClicked() {
+        if (validateInputs()) {
+            (activity as AssessmentActivity).moveToNextStep()
+        } else {
+            Toast.makeText(requireContext(), "Please select at least one option", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
+

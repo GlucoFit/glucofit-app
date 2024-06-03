@@ -1,76 +1,110 @@
 package com.fitcoders.glucofitapp.view.activity.main
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.fitcoders.glucofitapp.R
+import com.fitcoders.glucofitapp.data.UserPreference
+import com.fitcoders.glucofitapp.data.dataStore
 import com.fitcoders.glucofitapp.databinding.ActivityMainBinding
+import com.fitcoders.glucofitapp.view.ViewModelFactory
+import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
+import com.fitcoders.glucofitapp.view.activity.onboarding.OnBoardingActivity
 import com.fitcoders.glucofitapp.view.fragment.home.HomeFragment
 import com.fitcoders.glucofitapp.view.fragment.favorite.FavoriteFragment
 import com.fitcoders.glucofitapp.view.fragment.history.HistoryFragment
 import com.fitcoders.glucofitapp.view.fragment.profile.ProfileFragment
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainBinding: ActivityMainBinding
-
-    private fun fragmentManager(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-
-        transaction.replace(R.id.content, fragment, fragment.javaClass.simpleName)
-        transaction.commit()
-    }
-
-/*    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-    }*/
+    private var token = ""
+    private lateinit var modelfactory: ViewModelFactory
+    private val mainViewModel: MainViewModel by viewModels { modelfactory }
+    private lateinit var userPreference: UserPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
-        mainBinding.apply {
-            bottomNavigation.setOnItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.home -> {
-                        val fragment = HomeFragment.newInstance()
-                        fragmentManager(fragment)
-                    }
+        modelfactory = ViewModelFactory.getInstance(this)
+        userPreference = UserPreference.getInstance(dataStore)
 
-                    R.id.favorite -> {
-                        val fragment = FavoriteFragment.newInstance("value1", "value2")
-                        fragmentManager(fragment)
-                    }
+        lifecycleScope.launch {
+            val isOnboardingComplete = userPreference.isOnboardingComplete().first()
+            val isLoggedIn = userPreference.getSession().first().isLogin
 
-                    R.id.history -> {
-                        val fragment = HistoryFragment.newInstance()
-                        fragmentManager(fragment)
-                    }
-
-                    R.id.profile -> {
-                        val fragment = ProfileFragment.newInstance()
-                        fragmentManager(fragment)
-                    }
-                }
-                bottomNavigation.menu.findItem(item.itemId)?.isChecked = true
-                false
+            if (!isOnboardingComplete) {
+                startActivity(Intent(this@MainActivity, OnBoardingActivity::class.java))
+                finish()
+            } else if (!isLoggedIn) {
+                navigateToLogin()
+            } else {
+                setupUser()
             }
         }
+    }
 
-        val fragment = HomeFragment.newInstance()
-        fragmentManager(fragment)
+    private fun setupUser() {
+        mainViewModel.getSession().observe(this) { session ->
+            token = session.token
+            if (!session.isLogin) {
+                navigateToLogin()
+            } else {
+                setupBottomNavigation()
+                val fragment = HomeFragment.newInstance()
+                fragmentManager(fragment)
+            }
+        }
+        showToast()
+    }
 
+    private fun fragmentManager(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.content, fragment, fragment.javaClass.simpleName)
+        transaction.commit()
+    }
+
+    private fun setupBottomNavigation() {
+        mainBinding.bottomNavigation.setOnItemSelectedListener { item ->
+            val fragment = when (item.itemId) {
+                R.id.home -> HomeFragment.newInstance()
+                R.id.favorite -> FavoriteFragment.newInstance("value1", "value2")
+                R.id.history -> HistoryFragment.newInstance()
+                R.id.profile -> ProfileFragment.newInstance()
+                else -> return@setOnItemSelectedListener false
+            }
+            fragmentManager(fragment)
+            true
+        }
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
+    private fun showToast() {
+        mainViewModel.toastText.observe(this) { event ->
+            event.getContentIfNotHandled()?.let { toastText ->
+                Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun finish() {
+        super.finish()
+        finishAffinity()  // Ensure this activity is completely closed
     }
 }
+

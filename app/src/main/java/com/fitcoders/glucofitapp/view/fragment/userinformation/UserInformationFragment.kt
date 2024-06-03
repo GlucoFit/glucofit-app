@@ -24,10 +24,6 @@ class UserInformationFragment : Fragment() {
     private lateinit var etWeight: TextInputEditText
     private lateinit var etHeight: TextInputEditText
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_user_information, container, false)
 
@@ -39,15 +35,6 @@ class UserInformationFragment : Fragment() {
 
         etDob.setOnClickListener {
             showDatePicker()
-        }
-
-        val nextButton: Button = view.findViewById(R.id.button_next)
-        nextButton.setOnClickListener {
-            if (validateInputs()) {
-                (activity as AssessmentActivity).moveToNextStep()
-            } else {
-                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
-            }
         }
 
         return view
@@ -67,11 +54,21 @@ class UserInformationFragment : Fragment() {
         datePickerDialog.show()
     }
 
-    private fun validateInputs(): Boolean {
+    fun validateInputs(): Boolean {
         return etName.text.toString().isNotEmpty() &&
                 etDob.text.toString().isNotEmpty() &&
                 rgGender.checkedRadioButtonId != -1 &&
                 etWeight.text.toString().isNotEmpty() &&
                 etHeight.text.toString().isNotEmpty()
     }
+
+    fun onNextButtonClicked() {
+        if (validateInputs()) {
+            (activity as AssessmentActivity).moveToNextStep()
+        } else {
+            Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
+
+

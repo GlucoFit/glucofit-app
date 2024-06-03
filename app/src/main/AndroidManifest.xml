@@ -8,7 +8,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
@@ -23,6 +25,9 @@
         android:theme="@style/Theme.GlucofitApp"
         tools:targetApi="31">
         <activity
+            android:name=".view.activity.main.MainActivity"
+            android:exported="false" />
+        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -33,7 +38,7 @@
             android:name=".view.activity.scanner.ScannerActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activity.main.MainActivity"
+            android:name=".view.activity.assessment.AssessmentActivity"
             android:exported="false" />
         <activity
             android:name=".view.activity.login.LoginActivity"
@@ -45,7 +50,7 @@
             android:name=".view.activity.onboarding.OnBoardingActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activity.assessment.AssessmentActivity"
+            android:name=".view.activity.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,6 +58,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

@@ -13,13 +13,18 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.fitcoders.glucofitapp.R
+import com.fitcoders.glucofitapp.data.UserPreference
 import com.fitcoders.glucofitapp.databinding.ActivityLoginBinding
 import com.fitcoders.glucofitapp.databinding.FragmentProfileBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 import com.fitcoders.glucofitapp.view.activity.login.LoginViewModel
 import com.fitcoders.glucofitapp.view.activity.register.RegisterActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.log
 
 
@@ -29,6 +34,7 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var modelFactory: ViewModelFactory
     private val profileViewModel: ProfileViewModel by viewModels { modelFactory }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,33 +79,9 @@ class ProfileFragment : Fragment() {
 
     private fun performLogout() {
         profileViewModel.logout() // Delegate logout to ViewModel
+        Toast.makeText(requireContext(), "Logout successful", Toast.LENGTH_SHORT).show()
 
-        // Optionally clear preferences and navigate to login in ViewModel or handle here
-        val intent = Intent(requireContext(), LoginActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        startActivity(intent)
-        requireActivity().finish()
     }
-
-   /* private fun showAlertDialog() {
-        val TAG = "AlertDialog"
-        val builder = AlertDialog.Builder(requireContext())
-        val alert = builder.create()
-        builder
-            .setTitle(getString(R.string.logout))
-            .setMessage(getString(R.string.sure))
-            .setPositiveButton(getString(R.string.No)) { _, _ ->
-                Log.d(TAG, "Positive button (No) clicked")
-                alert.cancel()
-            }
-            .setNegativeButton(getString(R.string.Yes)) { _, _ ->
-                Log.d(TAG, "Negative button (Yes) clicked")
-                profileViewModel.logout()
-            }
-            .show()
-        Log.d(TAG, "AlertDialog shown")
-    }*/
 
     companion object {
         fun newInstance() = ProfileFragment()

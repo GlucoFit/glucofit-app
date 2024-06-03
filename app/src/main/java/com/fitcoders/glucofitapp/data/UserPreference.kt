@@ -1,6 +1,7 @@
 package com.fitcoders.glucofitapp.data
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.core.Preferences
@@ -23,6 +24,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val STATE_KEY = booleanPreferencesKey("isLogin")
+        private val ONBOARDING_KEY = booleanPreferencesKey("onboarding_complete")
 
         fun getInstance(dataStore: DataStore<Preferences>): UserPreference {
             return INSTANCE ?: synchronized(this) {
@@ -50,7 +52,6 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
-
     suspend fun saveSession(user: UserModel) {
         dataStore.edit { preferences ->
             preferences[USERNAME_KEY] = user.username
@@ -68,7 +69,22 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
 
     suspend fun logout() {
         dataStore.edit { preferences ->
-            preferences.clear()
+            preferences[STATE_KEY] = false
+            preferences[USERNAME_KEY] = ""
+            preferences[EMAIL_KEY] = ""
+            preferences[TOKEN_KEY] = ""
+        }
+    }
+
+    suspend fun setOnboardingComplete() {
+        dataStore.edit { preferences ->
+            preferences[ONBOARDING_KEY] = true
+        }
+    }
+
+    fun isOnboardingComplete(): Flow<Boolean> {
+        return dataStore.data.map { preferences ->
+            preferences[ONBOARDING_KEY] ?: false
         }
     }
 }

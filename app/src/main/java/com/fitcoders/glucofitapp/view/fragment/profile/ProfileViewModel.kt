@@ -1,5 +1,6 @@
 package com.fitcoders.glucofitapp.view.fragment.profile
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ class ProfileViewModel (private val repository: AppRepository) : ViewModel() {
     fun logout() {
         viewModelScope.launch {
             repository.logout()
+            Log.d("ProfileViewModel", "Logout executed in ViewModel")
         }
     }
 

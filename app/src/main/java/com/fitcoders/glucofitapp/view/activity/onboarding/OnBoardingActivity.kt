@@ -6,27 +6,47 @@ import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.fitcoders.glucofitapp.R
+import com.fitcoders.glucofitapp.data.UserPreference
+import com.fitcoders.glucofitapp.data.dataStore
 import com.fitcoders.glucofitapp.databinding.ActivityOnBorardingBinding
+import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
 import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class OnBoardingActivity : AppCompatActivity() {
 
-    private  lateinit var  binding: ActivityOnBorardingBinding
+    private lateinit var binding: ActivityOnBorardingBinding
+    private lateinit var userPreference: UserPreference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_on_borarding)
 
-        setupView()
+        userPreference = UserPreference.getInstance(dataStore)
+
+        lifecycleScope.launch {
+            if (userPreference.isOnboardingComplete().first()) {
+                startActivity(Intent(this@OnBoardingActivity, LoginActivity::class.java))
+                finish()
+                return@launch
+            }
+        }
 
         binding = ActivityOnBorardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.button.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }
+        setupView()
 
+        binding.button.setOnClickListener {
+            lifecycleScope.launch {
+                userPreference.setOnboardingComplete()
+                startActivity(Intent(this@OnBoardingActivity, AssessmentActivity::class.java))
+                finish()
+            }
+        }
     }
 
     private fun setupView() {
@@ -42,3 +62,5 @@ class OnBoardingActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 }
+
+

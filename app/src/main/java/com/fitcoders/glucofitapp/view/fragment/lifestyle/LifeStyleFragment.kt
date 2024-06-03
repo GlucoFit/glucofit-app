@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.FragmentLifeStyleBinding
+import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
 
 class LifeStyleFragment : Fragment() {
 
@@ -51,32 +53,39 @@ class LifeStyleFragment : Fragment() {
         binding.iconOrganicInfo.setOnClickListener {
             showTooltip(it, getString(R.string.toolip_organik))
         }
-
-
     }
 
     private fun showTooltip(anchorView: View, tooltipText: String) {
-        // Inflate layout untuk tooltip
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val tooltipView = inflater.inflate(R.layout.tooltip_layout, null)
 
-        // Atur teks untuk tooltip
         val textView: TextView = tooltipView.findViewById(R.id.tooltip_text)
         textView.text = tooltipText
 
-        // Buat PopupWindow
         val popupWindow = PopupWindow(
             tooltipView,
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
-        // Menutup PopupWindow ketika di-klik
         popupWindow.isOutsideTouchable = true
         popupWindow.isFocusable = true
 
-        // Tampilkan PopupWindow di anchorView
         popupWindow.showAsDropDown(anchorView, -2, 1)
+    }
+
+    fun validateInputs(): Boolean {
+        // Validasi input yang relevan di fragment ini
+        // Contoh validasi:
+        return true // Ganti dengan kondisi validasi yang sebenarnya
+    }
+
+    fun onNextButtonClicked() {
+        if (validateInputs()) {
+            (activity as AssessmentActivity).moveToNextStep()
+        } else {
+            Toast.makeText(requireContext(), "Please fill in all required fields", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

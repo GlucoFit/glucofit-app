@@ -430,17 +430,6 @@
                 android:hint="@string/hint_type_here"
                 android:textSize="14sp" />
 
-            <Button
-                android:id="@+id/submit_asses"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="Submit"
-                android:textAlignment="center" />
-
-
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

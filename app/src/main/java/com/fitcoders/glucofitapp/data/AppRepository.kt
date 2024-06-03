@@ -1,6 +1,8 @@
 package com.fitcoders.glucofitapp.data
 
+import android.content.Intent
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
@@ -8,6 +10,7 @@ import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.RegisterResponse
 import com.fitcoders.glucofitapp.service.ApiService
 import com.fitcoders.glucofitapp.utils.Event
+import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -135,6 +138,7 @@ class AppRepository private constructor(private val pref: UserPreference, privat
 
     suspend fun logout() {
         pref.logout()
+        Log.d("AppRepository", "Logout called")
     }
 
 

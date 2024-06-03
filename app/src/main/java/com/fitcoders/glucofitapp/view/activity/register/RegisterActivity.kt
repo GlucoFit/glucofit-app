@@ -17,6 +17,7 @@ import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityRegisterBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
+import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -106,7 +107,7 @@ class RegisterActivity : AppCompatActivity() {
             response?.let {
                 val user = it.user
                 if (user != null) {
-                    startActivity(Intent(this, AssessmentActivity::class.java))
+                    startActivity(Intent(this, LoginActivity::class.java))
                     finish()
                 } else {
                     // Handle the case where the user data is null or there's an error

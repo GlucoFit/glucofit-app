@@ -109,8 +109,6 @@
     <string name="No">No</string>
 
 
-
-
     <!--Action bar-->
     <string name="back_button">Back</string>
     <string name="selected_date">Selected date: %1$s</string>
@@ -121,4 +119,6 @@
     <string name="image_capture_error">There was an error capturing the image. Please try again!</string>
     <string name="image_crop_error">There was an error cropping the image. Please try again!</string>
     <string name="image_classifier_failed">Image classification failed. Please try again!</string>
+    <string name="String_judul">nama makanan</string>
+    <string name="String_deskripsi">deskripsi</string>
 </resources>
