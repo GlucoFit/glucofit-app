@@ -8,4 +8,18 @@
     <color name="background">#F7F7F7</color>
     <color name="gray">#9D9D9D</color>
     <color name="red">#C62828</color>
+    <color name="lightGray">#F6F6F8</color>
+
+
+    <color name="text_color_light_primary">#010101</color>
+    <color name="text_color_light_secondary">#9D9D9D</color>
+
+    <color name="text_color_dark_primary">#FFFFFF</color>
+    <color name="text_color_dark_secondary">#9D9D9D</color>
+
+    <color name="light_theme_primary">#F6F6F8</color>
+    <color name="dark_theme_primary">#010101</color>
+
+    <color name="light_theme_secondary">#FFFFFF</color>
+    <color name="dark_theme_secondary">#171719</color>
 </resources>

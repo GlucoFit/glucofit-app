@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/light_theme_primary"
     tools:context=".view.activity.main.MainActivity">
 
     <FrameLayout
@@ -14,12 +14,12 @@
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation"/>
 
-        <!-- Shadow View for transition -->
+<!--        &lt;!&ndash; Shadow View for transition &ndash;&gt;
         <View
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_above="@id/bottom_navigation"
-            android:background="@drawable/shadow_top" />
+            android:background="@drawable/shadow_top" />-->
 
         <!-- BottomNavigationView -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,11 +27,11 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/shape_bottom_navigation"
+            android:background="@color/light_theme_primary"
             android:paddingBottom="10dp"
-            app:itemActiveIndicatorStyle="@color/black"
+            app:itemActiveIndicatorStyle="@color/orange"
             app:itemIconTint="@color/bottom_navigation_states"
             app:itemTextAppearanceActive="@style/BottomNavigationTextStyle"
-            app:itemTextColor="@color/orange"
+            app:itemTextColor="@color/text_color_light_primary"
             app:menu="@menu/bottom_nav_menu" />
 </RelativeLayout>

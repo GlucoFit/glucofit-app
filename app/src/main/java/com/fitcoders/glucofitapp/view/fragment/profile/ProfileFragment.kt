@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -53,6 +55,12 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val titleText: TextView = binding.root.findViewById(R.id.titleText)
+        val backButton: ImageButton = binding.root.findViewById(R.id.backButton)
+
+        titleText.text = "Profile"
+        backButton.visibility = View.GONE
 
         // Observe the session for changes and update UI accordingly
          profileViewModel.getSession().observe(viewLifecycleOwner) { user ->

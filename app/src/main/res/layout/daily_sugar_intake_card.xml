@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="25dp"
+    android:elevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_sugar_intake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daily"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textColor="@color/black"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_sugar_intake2"/>
+        <TextView
+            android:id="@+id/tv_sugar_intake2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sugar Intake"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textColor="@color/black"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sugar_intake"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv_sugar_intake"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_emoticon_angry"
+            android:contentDescription="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv_blood_sugar"
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
+            android:paddingTop="10dp"
+            android:src="@drawable/ic_blood_sugar"
+            android:contentDescription="@null"
+            app:layout_constraintTop_toTopOf="@+id/iv_sugar_intake"
+            app:layout_constraintStart_toEndOf="@+id/iv_sugar_intake"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_sugar_intake_value"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:text="90"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textColor="@color/black"
+            android:textSize="25dp"
+
+            app:layout_constraintBottom_toTopOf="@+id/tv_sugar_intake_max"
+            app:layout_constraintStart_toEndOf="@+id/iv_blood_sugar"
+            app:layout_constraintTop_toTopOf="@+id/iv_blood_sugar"/>
+
+        <TextView
+            android:id="@+id/tv_sugar_intake_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="5dp"
+            android:layout_marginTop="5dp"
+            android:text="110%"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/red"
+            android:textSize="15dp"
+            android:background="@drawable/shape_red_transparent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_blood_sugar"
+            app:layout_constraintEnd_toEndOf="@+id/iv_blood_sugar"/>
+
+        <TextView
+            android:id="@+id/tv_sugar_intake_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="/50 g"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            android:layout_marginEnd="20dp"
+            android:textSize="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sugar_intake_value"
+            app:layout_constraintStart_toStartOf="@+id/tv_sugar_intake_value"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</androidx.cardview.widget.CardView>
