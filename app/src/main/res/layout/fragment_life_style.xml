@@ -35,12 +35,14 @@
         app:layout_constraintTop_toBottomOf="@+id/title">
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <!-- Sweet Consumption -->
             <TextView
+                android:id="@+id/tv_sweet_consumption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -49,6 +51,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_instruction_condition_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
@@ -57,10 +60,12 @@
                 android:textSize="14sp" />
 
             <RadioGroup
+                android:id="@+id/rg_sweet_consumption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:id="@+id/rb_sweet_consumption_everyday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -68,6 +73,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_sweet_consumption_5_6_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -75,6 +81,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_sweet_consumption_3_4_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -82,6 +89,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_sweet_consumption_1_2_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -89,6 +97,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_sweet_consumption_rarely"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -98,6 +107,7 @@
 
             <!-- Sugar Intake -->
             <TextView
+                android:id="@+id/tv_sugar_intake"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -105,6 +115,7 @@
                 android:text="@string/question_sugar_intake"
                 android:textSize="14sp" />
             <TextView
+                android:id="@+id/tv_instruction_condition_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
@@ -113,10 +124,12 @@
                 android:textSize="14sp" />
 
             <RadioGroup
+                android:id="@+id/rg_sugar_intake"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:id="@+id/rb_sugar_intake_less_1_teaspoon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -124,11 +137,13 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_sugar_intake_1_2_teaspoons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sugar_intake_1_2_teaspoons" />
 
                 <RadioButton
+                    android:id="@+id/rb_sugar_intake_2_3_teaspoons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -136,6 +151,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_sugar_intake_more_3_teaspoons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -145,6 +161,7 @@
 
             <!-- Exercise Frequency -->
             <TextView
+                android:id="@+id/tv_exercise_frequency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -152,6 +169,7 @@
                 android:text="@string/question_exercise_frequency"
                 android:textSize="14sp" />
             <TextView
+                android:id="@+id/tv_instruction_condition_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
@@ -160,10 +178,12 @@
                 android:textSize="14sp" />
 
             <RadioGroup
+                android:id="@+id/rg_exercise_frequency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:id="@+id/rb_exercise_frequency_everyday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -171,6 +191,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_exercise_frequency_5_6_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -178,6 +199,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_exercise_frequency_3_4_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -185,6 +207,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_exercise_frequency_1_2_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -192,6 +215,7 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_exercise_frequency_rarely"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -201,6 +225,7 @@
 
             <!-- Food Preferences -->
             <TextView
+                android:id="@+id/tv_food_preferences"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -209,6 +234,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/tv_instruction_health_condition_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
@@ -216,141 +242,249 @@
                 android:textColor="@color/grey"
                 android:textSize="14sp" />
 
-
             <LinearLayout
+                android:id="@+id/ll_vegetarian"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
 
                 <CheckBox
+                    android:id="@+id/cb_vegetarian"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/preference_vegetarian" />
 
                 <ImageView
+                    android:id="@+id/icon_vegetarian_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_info"
                     android:contentDescription="@string/info_icon"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="10dp"
-                    android:onClick="showTooltip"
-                    android:id="@+id/icon_vegetarian_info" />
+                    android:onClick="showTooltip" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_vegan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
 
                 <CheckBox
+                    android:id="@+id/cb_vegan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/preference_vegan" />
 
                 <ImageView
+                    android:id="@+id/icon_vegan_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_info"
                     android:contentDescription="@string/info_icon"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="10dp"
-                    android:onClick="showTooltip"
-                    android:id="@+id/icon_vegan_info" />
+                    android:onClick="showTooltip" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_paleo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
 
                 <CheckBox
+                    android:id="@+id/cb_paleo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/preference_paleo" />
 
                 <ImageView
+                    android:id="@+id/icon_paleo_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_info"
                     android:contentDescription="@string/info_icon"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="10dp"
-                    android:onClick="showTooltip"
-                    android:id="@+id/icon_paleo_info" />
+                    android:onClick="showTooltip" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_gluten_free"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
 
                 <CheckBox
+                    android:id="@+id/cb_gluten_free"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/preference_gluten_free" />
 
                 <ImageView
+                    android:id="@+id/icon_gluten_free_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_info"
                     android:contentDescription="@string/info_icon"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="10dp"
-                    android:onClick="showTooltip"
-                    android:id="@+id/icon_gluten_free_info" />
+                    android:onClick="showTooltip" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_low_carb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
 
                 <CheckBox
+                    android:id="@+id/cb_low_carb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/preference_lactose_free" />
+                    android:text="@string/preference_Low_Carb" />
 
                 <ImageView
+                    android:id="@+id/icon_low_carb_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_info"
                     android:contentDescription="@string/info_icon"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="10dp"
-                    android:onClick="showTooltip"
-                    android:id="@+id/icon_lactose_free_info" />
+                    android:onClick="showTooltip" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_low_fat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
 
                 <CheckBox
+                    android:id="@+id/cb_low_fat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/preference_organic" />
+                    android:text="@string/preference_Low_Fat" />
 
                 <ImageView
+                    android:id="@+id/icon_low_fat_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_info"
                     android:contentDescription="@string/info_icon"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="10dp"
-                    android:onClick="showTooltip"
-                    android:id="@+id/icon_organic_info" />
+                    android:onClick="showTooltip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_low_sodium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <CheckBox
+                    android:id="@+id/cb_low_sodium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preference_Low_Sodium" />
+
+                <ImageView
+                    android:id="@+id/icon_low_sodium_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_info"
+                    android:contentDescription="@string/info_icon"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:onClick="showTooltip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_low_sugar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <CheckBox
+                    android:id="@+id/cb_low_sugar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preference_Low_Sugar" />
+
+                <ImageView
+                    android:id="@+id/icon_low_sugar_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_info"
+                    android:contentDescription="@string/info_icon"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:onClick="showTooltip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_alcohol_free"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <CheckBox
+                    android:id="@+id/cb_alcohol_free"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preference_Alcohol_Free" />
+
+                <ImageView
+                    android:id="@+id/icon_alcohol_free_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_info"
+                    android:contentDescription="@string/info_icon"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:onClick="showTooltip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_balanced"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <CheckBox
+                    android:id="@+id/cb_balanced"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preference_Balanced" />
+
+                <ImageView
+                    android:id="@+id/icon_balanced_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_info"
+                    android:contentDescription="@string/info_icon"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:onClick="showTooltip" />
             </LinearLayout>
 
             <!-- Food Allergies -->
             <TextView
+                android:id="@+id/tv_food_allergies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -358,6 +492,7 @@
                 android:text="@string/question_food_allergies"
                 android:textSize="14sp" />
             <TextView
+                android:id="@+id/tv_instruction_health_condition_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
@@ -366,10 +501,12 @@
                 android:textSize="14sp" />
 
             <RadioGroup
+                android:id="@+id/rg_food_allergies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:id="@+id/rb_allergies_yes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
@@ -377,29 +514,19 @@
                     android:textSize="14sp" />
 
                 <RadioButton
+                    android:id="@+id/rb_allergies_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
                     android:text="@string/allergies_no"
                     android:textSize="14sp" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="@string/allergies_other"
-                    android:textSize="14sp" />
             </RadioGroup>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_medium"
-                android:hint="@string/hint_type_here"
-                android:textSize="14sp" />
 
             <!-- Food Likes -->
             <TextView
+                android:id="@+id/tv_food_likes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -408,6 +535,7 @@
                 android:textSize="14sp" />
 
             <EditText
+                android:id="@+id/et_food_likes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
@@ -416,6 +544,7 @@
 
             <!-- Food Dislikes -->
             <TextView
+                android:id="@+id/tv_food_dislikes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -424,12 +553,12 @@
                 android:textSize="14sp" />
 
             <EditText
+                android:id="@+id/et_food_dislikes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:hint="@string/hint_type_here"
                 android:textSize="14sp" />
-
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

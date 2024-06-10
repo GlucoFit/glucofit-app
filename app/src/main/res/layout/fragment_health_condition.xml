@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".view.fragment.healthconditin.HealthConditionFragment">
+    tools:context=".view.fragment.healthcondition.HealthConditionFragment">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/title_health_condition"
@@ -23,154 +23,93 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_subtitle"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_medium"
-        android:text="@string/subtitle_health_condition"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
-
-    <TextView
-        android:id="@+id/tv_instruction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_medium"
-        android:text="@string/instruction_health_condition"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_subtitle" />
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="5dp">
 
-    <CheckBox
-        android:id="@+id/cb_diabetes"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_regular"
-        android:text="@string/option_diabetes"
-        android:textAlignment="textStart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_instruction" />
+        <TextView
+            android:id="@+id/tv_history_of_diabetes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:paddingBottom="8dp"
+            android:text="Do you have a history of diabetes ?"
+            android:textSize="16sp" />
 
-    <CheckBox
-        android:id="@+id/cb_hypertension"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_regular"
-        android:text="@string/option_hypertension"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_diabetes" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/instruction_condition"
+            android:textColor="@color/grey"
+            android:textSize="14sp" />
 
-    <CheckBox
-        android:id="@+id/cb_obesity"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_regular"
-        android:text="@string/option_obesity"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_hypertension" />
+        <RadioGroup
+            android:id="@+id/rg_history_of_diabetes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <CheckBox
-        android:id="@+id/cb_metabolic_syndrome"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_regular"
-        android:text="@string/option_metabolic_syndrome"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_obesity" />
+            <RadioButton
+                android:id="@+id/rb_history_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Yes" />
 
-    <CheckBox
-        android:id="@+id/cb_digestion_issues"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_regular"
-        android:text="@string/option_digestion_issues"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_metabolic_syndrome" />
+            <RadioButton
+                android:id="@+id/rb_history_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="No" />
+        </RadioGroup>
 
-    <CheckBox
-        android:id="@+id/cb_high_cholesterol"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_regular"
-        android:text="@string/option_high_cholesterol"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_digestion_issues" />
+        <TextView
+            android:id="@+id/tv_family_history_of_diabetes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/poppins_medium"
+            android:paddingBottom="8dp"
+            android:text="Do you have a family history of diabetes ?"
+            android:textSize="16sp" />
 
-    <CheckBox
-        android:id="@+id/cb_heart_disease"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_regular"
-        android:text="@string/option_heart_disease"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_high_cholesterol" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/instruction_condition"
+            android:textColor="@color/grey"
+            android:textSize="14sp" />
 
-    <CheckBox
-        android:id="@+id/cb_special_diet"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_regular"
-        android:text="@string/option_special_diet"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_heart_disease" />
+        <RadioGroup
+            android:id="@+id/rg_family_history_of_diabetes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <CheckBox
-        android:id="@+id/cb_none"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="14dp"
-        android:fontFamily="@font/poppins_regular"
-        android:text="@string/option_none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_special_diet" />
+            <RadioButton
+                android:id="@+id/rb_family_history_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Yes" />
 
+            <RadioButton
+                android:id="@+id/rb_family_history_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="No" />
+        </RadioGroup>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

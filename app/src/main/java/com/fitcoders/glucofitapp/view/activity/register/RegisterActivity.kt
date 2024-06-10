@@ -2,6 +2,7 @@ package com.fitcoders.glucofitapp.view.activity.register
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -13,17 +14,24 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.fitcoders.glucofitapp.R
+import com.fitcoders.glucofitapp.data.UserModel
+import com.fitcoders.glucofitapp.data.UserPreference
+import com.fitcoders.glucofitapp.data.dataStore
 import com.fitcoders.glucofitapp.databinding.ActivityRegisterBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
 import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
+import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
-    private lateinit var modelFactory : ViewModelFactory
-    private val  registerViewModel: RegisterViewModel by viewModels { modelFactory }
+    private lateinit var modelFactory: ViewModelFactory
+    private val registerViewModel: RegisterViewModel by viewModels { modelFactory }
+    private lateinit var userPreference: UserPreference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -32,6 +40,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         modelFactory = ViewModelFactory.getInstance(this)
+        userPreference = UserPreference.getInstance(dataStore)
 
         binding.passwordEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -56,7 +65,6 @@ class RegisterActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
-
     }
 
     private fun setupAction() {
@@ -89,9 +97,7 @@ class RegisterActivity : AppCompatActivity() {
     private fun showToast() {
         registerViewModel.toastText.observe(this@RegisterActivity) {
             it.getContentIfNotHandled()?.let { toastText ->
-                Toast.makeText(
-                    this@RegisterActivity, toastText, Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@RegisterActivity, toastText, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -106,19 +112,33 @@ class RegisterActivity : AppCompatActivity() {
         registerViewModel.registerResponse.observe(this) { response ->
             response?.let {
                 val user = it.user
-                if (user != null) {
-                    startActivity(Intent(this, LoginActivity::class.java))
-                    finish()
+                val token = it.token // Ambil token dari respons registrasi
+                if (user != null && token != null) {
+                    // Simpan token ke UserPreference
+                    lifecycleScope.launch {
+                        userPreference.saveSession(
+                            UserModel(
+                                username = user.userName ?: "",
+                                email = user.email ?: "",
+                                token = token, // Simpan token
+                                isLogin = true
+                            )
+                        )
+                        userPreference.setAssessmentComplete() // Set assessment sebagai incomplete
+
+                        // Pindah ke AssessmentActivity setelah token disimpan
+                        startActivity(Intent(this@RegisterActivity, AssessmentActivity::class.java))
+                        finish()
+                    }
                 } else {
-                    // Handle the case where the user data is null or there's an error
                     Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show()
                 }
             } ?: run {
-                // Handle the case where the response is null
                 Toast.makeText(this, "Registration response is null. Please try again.", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     private fun setupView() {
         @Suppress("DEPRECATION")
@@ -134,24 +154,16 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun playAnimation() {
-
         val title = ObjectAnimator.ofFloat(binding.title, View.ALPHA, 1f).setDuration(100)
-        val nameTextView =
-            ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
-        val nameEditTextLayout =
-            ObjectAnimator.ofFloat(binding.nameEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val emailTextView =
-            ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
-        val emailEditTextLayout =
-            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val passwordTextView =
-            ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
-        val passwordEditTextLayout =
-            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val nameTextView = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
+        val nameEditTextLayout = ObjectAnimator.ofFloat(binding.nameEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val emailTextView = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100)
+        val emailEditTextLayout = ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val passwordTextView = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100)
+        val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val signup = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
-        val logintext = ObjectAnimator.ofFloat(binding.registertext,View.ALPHA,1f).setDuration(100)
-        val loginbutton  = ObjectAnimator.ofFloat(binding.registerbutton,View.ALPHA,1f).setDuration(100)
-
+        val logintext = ObjectAnimator.ofFloat(binding.registertext, View.ALPHA, 1f).setDuration(100)
+        val loginbutton = ObjectAnimator.ofFloat(binding.registerbutton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
             playSequentially(

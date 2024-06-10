@@ -2,8 +2,6 @@ package com.fitcoders.glucofitapp.view.fragment.profile
 
 import android.app.Application
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,6 +24,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.log
+import android.content.Intent
+import android.os.Bundle
+
+
 
 
 class ProfileFragment : Fragment() {
@@ -78,10 +80,29 @@ class ProfileFragment : Fragment() {
         .show()
 
     private fun performLogout() {
-        profileViewModel.logout() // Delegate logout to ViewModel
-        Toast.makeText(requireContext(), "Logout successful", Toast.LENGTH_SHORT).show()
-
+        // Memanggil metode logout di ProfileViewModel dan mengelola hasilnya
+        profileViewModel.logout { success, message ->
+            lifecycleScope.launch {
+                if (success) {
+                    Toast.makeText(requireContext(), "Logout successful", Toast.LENGTH_SHORT).show()
+                    // Pindah ke layar login atau layar yang sesuai setelah logout
+                    navigateToLoginScreen()
+                } else {
+                    Toast.makeText(requireContext(), message ?: "Logout failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
+
+    private fun navigateToLoginScreen() {
+        // Implementasikan navigasi ke layar login atau layar lain yang sesuai setelah logout
+        // Misalnya:
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
+
 
     companion object {
         fun newInstance() = ProfileFragment()

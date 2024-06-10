@@ -5,30 +5,52 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.data.UserModel
+import com.fitcoders.glucofitapp.data.UserPreference
+import com.fitcoders.glucofitapp.data.dataStore
 import com.fitcoders.glucofitapp.databinding.ActivityLoginBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
+import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
 import com.fitcoders.glucofitapp.view.activity.register.RegisterActivity
 import com.fitcoders.glucofitapp.view.activity.main.MainActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var modelFactory: ViewModelFactory
     private val loginViewModel: LoginViewModel by viewModels { modelFactory }
+    private lateinit var userPreference: UserPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_login)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         modelFactory = ViewModelFactory.getInstance(this)
+        userPreference = UserPreference.getInstance(dataStore)
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -40,6 +62,9 @@ class LoginActivity : AppCompatActivity() {
         setupView()
         playAnimation()
         setupAction()
+       // moveActivity()
+
+
     }
 
     private fun setupView() {
@@ -66,27 +91,134 @@ class LoginActivity : AppCompatActivity() {
                     postText()
                     showToast()
                     moveActivity()
-                    loginViewModel.login()
+                   /* observeLoginResponse()
+                    observeAssessmentStatus()*/
+
                 }
             }
         }
     }
 
-    private fun moveActivity() {
+   /* private fun moveActivity() {
         loginViewModel.loginResponse.observe(this) { response ->
-            response?.let {
-                val user = it.user
-                if (user != null) {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
+            response?.let { loginResponse ->
+                val user = loginResponse.user
+                val token = loginResponse.token
+                if (user != null && token != null) {
+                    lifecycleScope.launch {
+                        loginViewModel.saveSession(
+                            UserModel(
+                                username = user.userName ?: "",
+                                email = user.email ?: "",
+                                token = token, // Simpan token
+                                isLogin = true
+                            )
+                        )
+
+                        Log.d("logi","apakah pidah ??,username:${user.userName} ,TOKEN :${token}")
+
+                        // Langsung pindah ke MainActivity tanpa pengecekan assessment status
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    }
                 } else {
-                    Toast.makeText(this, "Login failed. Please try again.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Login gagal. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
                 }
             } ?: run {
-                Toast.makeText(this, "Login response is null. Please try again.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Respon login kosong. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }*/
+
+    private fun moveActivity() {
+        loginViewModel.loginResponse.observe(this) { response ->
+            response?.let {loginResponse ->
+                val user = loginResponse.user
+                val token = loginResponse.token
+                if (user != null && token != null) {
+                    lifecycleScope.launch {
+                        loginViewModel.saveSession(
+                            UserModel(
+                                username = user.userName ?: "",
+                                email = user.email ?: "",
+                                token = token, // Simpan token
+                                isLogin = true
+                            )
+                        )
+
+                        delay(500)
+
+                        loginViewModel.checkAssessmentStatus()
+
+                          Log.d("logi","apakah pidah ??,username:${user.userName} ,TOKEN :${token}")
+
+                        loginViewModel.assessmentStatus.observe(this@LoginActivity) {hasAssessment ->
+                            if (hasAssessment == true) {
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                            } else {
+                                startActivity(Intent(this@LoginActivity, AssessmentActivity::class.java))
+                            }
+                            finish()
+                        }
+                    }
+                } else {
+                    Toast.makeText(this, "Login gagal. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
+                }
+            } ?: run {
+                Toast.makeText(this, "Respon login kosong. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+   /* private fun observeLoginResponse() {
+        // Observe the login response
+        loginViewModel.loginResponse.observe(this) { response ->
+            response?.let { loginResponse ->
+                val user = loginResponse.user
+                val token = loginResponse.token
+
+                if (user != null && !token.isNullOrEmpty()) {
+                    lifecycleScope.launch {
+                        // Save the session with token
+                        loginViewModel.saveSession(
+                            UserModel(
+                                username = user.userName ?: "",
+                                email = user.email ?: "",
+                                token = token, // Save token
+                                isLogin = true
+                            )
+                        )
+
+                        delay(500)  // Ensure the token is stored
+
+                        // Check the assessment status if the token is valid
+                        loginViewModel.checkAssessmentStatus()
+
+                    }
+                } else {
+                    Toast.makeText(this, "Login gagal. Token tidak valid.", Toast.LENGTH_SHORT).show()
+                }
+            } ?: run {
+                Toast.makeText(this, "Respon login kosong. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun observeAssessmentStatus() {
+        loginViewModel.assessmentStatus.observe(this) { hasAssessment ->
+            if (hasAssessment != null) {
+                val intent = if (hasAssessment) {
+                    Intent(this@LoginActivity, MainActivity::class.java)
+                } else {
+                    Intent(this@LoginActivity, AssessmentActivity::class.java)
+                }
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(intent)
+                finish()
+            }
+        }
+    }
+*/
 
     private fun showToast() {
         loginViewModel.toastText.observe(this) {
@@ -107,32 +239,8 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.passwordEditText.text.toString()
         loginViewModel.postLogin(email, password)
 
-        loginViewModel.loginResponse.observe(this@LoginActivity) { response ->
-            response?.user?.let { user ->
-                val userModel = UserModel(
-                    username = user.userName ?: "",
-                    email = email,
-                    token = AUTH_KEY + response.token,
-                    isLogin = true
-                )
-                saveSession(userModel)
-            } ?: run {
-                showError("Failed to login. Please check your credentials.")
-            }
-        }
     }
 
-    private fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
-
-    private fun saveSession(session: UserModel) {
-        loginViewModel.saveSession(session)
-    }
-
-    companion object {
-        private const val AUTH_KEY = "Bearer "
-    }
 
     private fun playAnimation() {
         val title = ObjectAnimator.ofFloat(binding.title, View.ALPHA, 1f).setDuration(100)

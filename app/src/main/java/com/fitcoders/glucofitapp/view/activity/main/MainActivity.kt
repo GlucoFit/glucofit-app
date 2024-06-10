@@ -2,6 +2,7 @@ package com.fitcoders.glucofitapp.view.activity.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     private var token = ""
     private lateinit var modelfactory: ViewModelFactory
     private val mainViewModel: MainViewModel by viewModels { modelfactory }
-    private lateinit var userPreference: UserPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,21 +36,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
 
         modelfactory = ViewModelFactory.getInstance(this)
-        userPreference = UserPreference.getInstance(dataStore)
 
-        lifecycleScope.launch {
-            val isOnboardingComplete = userPreference.isOnboardingComplete().first()
-            val isLoggedIn = userPreference.getSession().first().isLogin
-
-            if (!isOnboardingComplete) {
-                startActivity(Intent(this@MainActivity, OnBoardingActivity::class.java))
-                finish()
-            } else if (!isLoggedIn) {
-                navigateToLogin()
-            } else {
-                setupUser()
-            }
-        }
+        setupUser()
     }
 
     private fun setupUser() {
@@ -89,7 +76,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }
@@ -104,7 +90,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun finish() {
         super.finish()
-        finishAffinity()  // Ensure this activity is completely closed
+        finishAffinity()
     }
 }
-

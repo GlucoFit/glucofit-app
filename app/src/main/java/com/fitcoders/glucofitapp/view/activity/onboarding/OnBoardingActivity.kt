@@ -43,7 +43,7 @@ class OnBoardingActivity : AppCompatActivity() {
         binding.button.setOnClickListener {
             lifecycleScope.launch {
                 userPreference.setOnboardingComplete()
-                startActivity(Intent(this@OnBoardingActivity, AssessmentActivity::class.java))
+                startActivity(Intent(this@OnBoardingActivity, LoginActivity::class.java))
                 finish()
             }
         }
@@ -62,5 +62,4 @@ class OnBoardingActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 }
-
 

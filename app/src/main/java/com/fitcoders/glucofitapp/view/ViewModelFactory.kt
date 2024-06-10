@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fitcoders.glucofitapp.data.AppRepository
 import com.fitcoders.glucofitapp.di.Injection
+import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentViewModel
 import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 import com.fitcoders.glucofitapp.view.activity.login.LoginViewModel
 import com.fitcoders.glucofitapp.view.activity.main.MainViewModel
@@ -33,6 +34,9 @@ class ViewModelFactory(private val repository: AppRepository) : ViewModelProvide
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(repository) as T
             }
+            modelClass.isAssignableFrom(AssessmentViewModel::class.java) -> {
+                AssessmentViewModel(repository) as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
@@ -49,7 +53,5 @@ class ViewModelFactory(private val repository: AppRepository) : ViewModelProvide
             }
             return INSTANCE as ViewModelFactory
         }
-
-
     }
 }

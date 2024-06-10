@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.data.UserPreference
 import com.fitcoders.glucofitapp.data.dataStore
+import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
 import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 import com.fitcoders.glucofitapp.view.activity.main.MainActivity
 import com.fitcoders.glucofitapp.view.activity.onboarding.OnBoardingActivity
@@ -37,6 +38,7 @@ class SplashActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val isOnboardingComplete = userPreference.isOnboardingComplete().first()
                 val isLoggedIn = userPreference.getSession().first().isLogin
+                val isInAssessment = userPreference.isInAssessment().first()
 
                 when {
                     !isOnboardingComplete -> {
@@ -45,12 +47,15 @@ class SplashActivity : AppCompatActivity() {
                     !isLoggedIn -> {
                         startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
                     }
+                    isInAssessment -> {
+                        startActivity(Intent(this@SplashActivity, AssessmentActivity::class.java))
+                    }
                     else -> {
                         startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                     }
                 }
                 finish()
             }
-        }, 2000) // 3000 milidetik = 3 det
+        }, 2000)
     }
 }

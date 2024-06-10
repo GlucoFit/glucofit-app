@@ -79,9 +79,15 @@
     <string name="preference_vegetarian">Vegetarian</string>
     <string name="preference_vegan">Vegan</string>
     <string name="preference_paleo">Paleo</string>
-    <string name="preference_gluten_free">Gluten-Free</string>
-    <string name="preference_lactose_free">Lactose-Free</string>
-    <string name="preference_organic">Organik</string>
+    <string name="preference_gluten_free">High-Fiber</string>
+    <string name="preference_High_Protein">High-Protein</string>
+    <string name="preference_Low_Carb">Low-Carb</string>
+    <string name="preference_Low_Fat">Low-Fat</string>
+    <string name="preference_Low_Sodium">Low-Sodium</string>
+    <string name="preference_Low_Sugar">Low-Sugar</string>
+    <string name="preference_Alcohol_Free">Alcohol-Free</string>
+    <string name="preference_Balanced">Balanced</string>
+
 
     <string name="question_food_allergies">Do you have allergies or intolerances to certain foods?</string>
     <string name="allergies_yes">Yes</string>
