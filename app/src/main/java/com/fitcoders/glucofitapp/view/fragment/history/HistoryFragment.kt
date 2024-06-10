@@ -20,6 +20,15 @@
     import com.arjungupta08.horizontal_calendar_date.HorizontalCalendarAdapter
     import com.arjungupta08.horizontal_calendar_date.HorizontalCalendarSetUp
     import com.fitcoders.glucofitapp.data.History
+    import com.fitcoders.glucofitapp.data.datasource.history.ScanHistoryApiDataSource
+    import com.fitcoders.glucofitapp.data.datasource.history.ScanHistoryApiDataSourceImpl
+    import com.fitcoders.glucofitapp.data.repository.ScanHistoryRepository
+    import com.fitcoders.glucofitapp.data.repository.ScanHistoryRepositoryImpl
+    import com.fitcoders.glucofitapp.service.ApiConfig
+    import com.fitcoders.glucofitapp.service.ApiService
+    import com.fitcoders.glucofitapp.utils.GenericViewModelFactory
+    import com.fitcoders.glucofitapp.utils.ResultWrapper
+    import com.fitcoders.glucofitapp.utils.proceedWhen
 
     class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListener {
 
@@ -27,31 +36,26 @@
         private lateinit var tvDateMonth: TextView
         private lateinit var ivCalendarNext: ImageView
         private lateinit var ivCalendarPrevious: ImageView
-
-        private val viewModel: HistoryViewModel by viewModels()
-        private var _binding: FragmentHistoryBinding? = null
-        private val binding get() = _binding!!
-        private var isListLayout = true
-        private lateinit var historyAdapter: HistoryAdapter
-
-        private val mockHistoryList = listOf(
-            History(1, "Sliced meat", "2021-09-01",  "12:00", "https://example.com/sliced_meat.jpg", "15 g"),
-            History(2, "Pizza", "2021-09-02", "13:00", "https://example.com/pizza.jpg", "200 g"),
-            History(3, "Burger", "2021-09-03", "14:00", "https://example.com/burger.jpg", "300 g"),
-            History(4, "Burger", "2021-09-04", "15:00", "https://example.com/burger.jpg", "300 g"),
-            History(5, "Burger", "2021-09-05", "16:00", "https://example.com/burger.jpg", "300 g")
-        )
-
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-
+        private lateinit var binding: FragmentHistoryBinding
+        private val viewModel: HistoryViewModel by viewModels {
+            val service = ApiService.invoke()
+            val ds = ScanHistoryApiDataSourceImpl(service)
+            val repo : ScanHistoryRepository = ScanHistoryRepositoryImpl(ds)
+            GenericViewModelFactory.create(HistoryViewModel(repo))
         }
+        private val historyAdapter : HistoryAdapter by lazy {
+            HistoryAdapter {
+                // item click
+            }
+        }
+        private var isListLayout = true
+
 
         override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View {
-            _binding = FragmentHistoryBinding.inflate(inflater, container, false)
+            binding = FragmentHistoryBinding.inflate(inflater, container, false)
             return binding.root
         }
 
@@ -59,7 +63,8 @@
             super.onViewCreated(view, savedInstanceState)
             val titleText: TextView = binding.root.findViewById(R.id.titleText)
             val backButton: ImageButton = binding.root.findViewById(R.id.backButton)
-
+            setupHistory()
+            getHistoryData()
             titleText.text = "Scan History"
             backButton.visibility = View.GONE
 
@@ -82,10 +87,6 @@
                 tvDateMonth.text = it
             }
 
-            historyAdapter = HistoryAdapter(mockHistoryList, isListLayout)
-            binding.recyclerViewScanHistory.layoutManager = LinearLayoutManager(context)
-            binding.recyclerViewScanHistory.adapter = historyAdapter
-
             binding.toggleButton.setOnClickListener {
                 toggleLayout()
             }
@@ -100,7 +101,6 @@
                 binding.toggleButton.setImageResource(R.drawable.ic_table)
             }
             isListLayout = !isListLayout
-            historyAdapter.setViewType(isListLayout)
         }
 
         override fun onItemClick(ddMmYy: String, dd: String, day: String) {
@@ -114,7 +114,28 @@
 
         override fun onDestroyView() {
             super.onDestroyView()
-            _binding = null
+
+        }
+
+        private fun getHistoryData(){
+            viewModel.getHistory().observe(viewLifecycleOwner){
+                it.proceedWhen(
+                    doOnSuccess = {
+                        it.payload?.let {
+                            bindHistory(it)
+                        }
+                    }
+                )
+            }
+
+        }
+        private fun bindHistory(data : List<History>){
+            historyAdapter.submitData(data)
+        }
+        private fun setupHistory(){
+            binding.recyclerViewScanHistory.apply{
+                adapter = historyAdapter
+            }
         }
 
         companion object {

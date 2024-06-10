@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.ksp)
     id ("kotlin-parcelize")
 }
 
@@ -67,6 +68,10 @@ dependencies {
     implementation ("com.github.ArjunGupta08:Horizontal-CalendarDate-With-Click-listener:1.1.0")
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
+
+    // Coil
+    implementation(libs.coil)
+    implementation(libs.koin.android)
 
     //Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.")

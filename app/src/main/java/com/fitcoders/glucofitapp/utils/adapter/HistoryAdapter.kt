@@ -1,77 +1,103 @@
 package com.fitcoders.glucofitapp.utils.adapter
+
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.bumptech.glide.Glide
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.data.History
+import com.fitcoders.glucofitapp.databinding.FragmentHistoryBinding
+import com.fitcoders.glucofitapp.databinding.ItemScanListBinding
+import com.fitcoders.glucofitapp.utils.ResultWrapper
+import kotlinx.coroutines.flow.Flow
+import java.text.SimpleDateFormat
+import java.util.*
 
-class HistoryAdapter(private var historyList: List<History>, private var isListView: Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HistoryAdapter(
+    private val itemClick: (History) -> Unit,
+//    private val listMode: Int,
+//    private var isListView: Boolean
+) : RecyclerView.Adapter<HistoryAdapter.ItemHistoryViewHolder>() {
 
-        private val VIEW_TYPE_LIST = 1
-        private val VIEW_TYPE_GRID = 2
+    private val VIEW_TYPE_LIST = 1
+    private val VIEW_TYPE_GRID = 2
+    private val dataDiffer =
+        AsyncListDiffer(
+            this,
+            object : DiffUtil.ItemCallback<History>() {
+                override fun areItemsTheSame(
+                    oldItem: History,
+                    newItem: History
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
 
-        inner class HorizontalCalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-/*          val dateMonth: TextView = itemView.findViewById(R.id.tv_date_month)
-            val calendarNext: ImageView = itemView.findViewById(R.id.iv_calendar_next)
-            val calendarPrevious: ImageView = itemView.findViewById(R.id.iv_calendar_previous)*/
-            val horizontalCalendar: RecyclerView = itemView.findViewById(R.id.recyclerView)
-        }
+                override fun areContentsTheSame(
+                    oldItem: History,
+                    newItem: History
+                ): Boolean {
+                    return oldItem.hashCode() == newItem.hashCode()
+                }
+            }
+        )
 
-        inner class HistoryListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val foodImage: ImageView = itemView.findViewById(R.id.avatarImageView)
-            val foodName: TextView = itemView.findViewById(R.id.food_name)
-            val scanDate: TextView = itemView.findViewById(R.id.scan_date)
-            val scanTime: TextView = itemView.findViewById(R.id.scan_time)
-            var sugarWeight: TextView = itemView.findViewById(R.id.sugar_weight)
-        }
+    fun submitData(data: List<History>) {
+        dataDiffer.submitList(data)
+    }
 
-        inner class HistoryGridViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val foodImage: ImageView = itemView.findViewById(R.id.food_image)
-            val foodName: TextView = itemView.findViewById(R.id.food_name)
-            val scanDate: TextView = itemView.findViewById(R.id.scan_date)
-            val scanTime: TextView = itemView.findViewById(R.id.scan_time)
-            var sugarWeight: TextView = itemView.findViewById(R.id.sugar_weight)
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHistoryViewHolder {
+        val binding = ItemScanListBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
 
-        override fun getItemViewType(position: Int): Int {
-            return if (isListView) VIEW_TYPE_LIST else VIEW_TYPE_GRID
-        }
+        return ItemHistoryViewHolder(binding, itemClick)
+    }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return if (viewType == VIEW_TYPE_LIST) {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_scan_list, parent, false)
-                HistoryListViewHolder(view)
-            } else {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_scan_grid, parent, false)
-                HistoryGridViewHolder(view)
+    override fun onBindViewHolder(holder: ItemHistoryViewHolder, position: Int) {
+        holder.bindView(dataDiffer.currentList[position])
+    }
+
+    override fun getItemCount(): Int = dataDiffer.currentList.size
+
+    class ItemHistoryViewHolder(
+        private val binding: ItemScanListBinding,
+        val itemClick: (History) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bindView(item: History) {
+            with(item) {
+                binding.avatarImageView.load(item.objectImageUrl) {
+                    crossfade(true)
+                }
+                binding.foodName.text = item.objectName
+                binding.sugarWeight.text = item.objectSugar.toString()
+                binding.scanDate.text = item.createdAt
+                binding.scanTime.text = item.createdAt
+                itemView.setOnClickListener { itemClick(this) }
             }
         }
+//        private fun formatCreatedAt(createdAt: String): Pair<String, String> {
+//            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+//            val date = inputFormat.parse(createdAt)
+//
+//            val dateFormat = SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault())
+//            val timeFormat = SimpleDateFormat("HH.mm 'WIB'", Locale.getDefault())
+//
+//            val formattedDate = dateFormat.format(date)
+//            val formattedTime = timeFormat.format(date)
+//
+//            return Pair(formattedDate, formattedTime)
+//        }
+    }
 
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val history = historyList[position]
-            if (holder is HistoryListViewHolder) {
-                holder.foodName.text = history.foodName
-                holder.scanDate.text = history.date
-                holder.scanTime.text = history.time
-                holder.sugarWeight.text = history.sugarWeight
-                Glide.with(holder.itemView.context).load(history.imageUrl).into(holder.foodImage)
-            } else if (holder is HistoryGridViewHolder) {
-                holder.foodName.text = history.foodName
-                holder.scanDate.text = history.date
-                holder.scanTime.text = history.time
-                holder.sugarWeight.text = history.sugarWeight
-                Glide.with(holder.itemView.context).load(history.imageUrl).into(holder.foodImage)
-            }
-        }
 
-        override fun getItemCount(): Int = historyList.size
-
-        fun setViewType(isListView: Boolean) {
-            this.isListView = isListView
-            notifyDataSetChanged()
-        }
 }

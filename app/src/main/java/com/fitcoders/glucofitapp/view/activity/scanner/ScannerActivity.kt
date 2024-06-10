@@ -64,8 +64,7 @@ class ScannerActivity : AppCompatActivity() {
         }
 
         // Uncomment and implement analyze button functionality if needed
-        /*
-        binding.analyzeButton.setOnClickListener {
+/*        binding.analyzeButton.setOnClickListener {
             initImageUri?.let {
                 val intent = Intent(this, ScannerResultActivity::class.java)
                 croppedImageUri?.let { uri ->
@@ -75,8 +74,7 @@ class ScannerActivity : AppCompatActivity() {
             } ?: run {
                 showToast(getString(R.string.image_classifier_failed))
             }
-        }
-        */
+        }*/
     }
 
     private fun createImageFile(): File {
