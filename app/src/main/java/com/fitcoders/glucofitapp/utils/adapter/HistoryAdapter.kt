@@ -4,11 +4,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.bumptech.glide.Glide
 
 import com.fitcoders.glucofitapp.databinding.ItemScanGridBinding
 import com.fitcoders.glucofitapp.databinding.ItemScanListBinding
 import com.fitcoders.glucofitapp.response.DataItem
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class HistoryAdapter(
     private val itemClick: (DataItem) -> Unit,
@@ -85,17 +90,33 @@ class HistoryAdapter(
 
         fun bindView(item: DataItem) {
             with(binding) {
-                // Load the image using Glide
-                Glide.with(avatarImageView.context)
-                    .load(item.objectImageUrl)
-                    .into(avatarImageView)
-
+                avatarImageView.load(item.objectImageUrl) {
+                    crossfade(true)
+                }
                 foodName.text = item.objectName
                 sugarWeight.text = item.objectSugar.toString()
-                scanDate.text = item.createdAt
-                scanTime.text = item.createdAt
+                // Konversi waktu dari UTC ke waktu lokal
+                val localCreatedAt = convertUtcToLocalTime(item.createdAt ?: "")
+                scanDate.text = localCreatedAt
+                scanTime.text = localCreatedAt
                 itemView.setOnClickListener { itemClick(item) }
             }
+        }
+
+        fun convertUtcToLocalTime(utcTime: String): String {
+            // Format waktu yang diberikan dalam UTC
+            val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            utcFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            // Parse waktu dalam UTC
+            val date: Date? = utcFormat.parse(utcTime)
+
+            // Format waktu untuk zona waktu lokal
+            val localFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            localFormat.timeZone = TimeZone.getDefault() // Set ke zona waktu lokal perangkat
+
+            // Konversi dan kembalikan waktu dalam format zona waktu lokal
+            return date?.let { localFormat.format(it) } ?: utcTime
         }
     }
 
@@ -107,17 +128,35 @@ class HistoryAdapter(
 
         fun bindView(item: DataItem) {
             with(binding) {
-                // Load the image using Glide
-                Glide.with(foodImage.context)
-                    .load(item.objectImageUrl)
-                    .into(foodImage)
-
+                foodImage.load(item.objectImageUrl) {
+                    crossfade(true)
+                }
                 foodName.text = item.objectName
-                scanDate.text = item.createdAt
-                scanTime.text = item.createdAt
+                // Konversi waktu dari UTC ke waktu lokal
+                val localCreatedAt = convertUtcToLocalTime(item.createdAt ?: "")
+                scanDate.text = localCreatedAt
+                scanTime.text = localCreatedAt
                 sugarWeight.text = item.objectSugar.toString()
                 itemView.setOnClickListener { itemClick(item) }
             }
         }
+
+        fun convertUtcToLocalTime(utcTime: String): String {
+            // Format waktu yang diberikan dalam UTC
+            val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            utcFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+            // Parse waktu dalam UTC
+            val date: Date? = utcFormat.parse(utcTime)
+
+            // Format waktu untuk zona waktu lokal
+            val localFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            localFormat.timeZone = TimeZone.getDefault() // Set ke zona waktu lokal perangkat
+
+            // Konversi dan kembalikan waktu dalam format zona waktu lokal
+            return date?.let { localFormat.format(it) } ?: utcTime
+        }
     }
+
+   
 }

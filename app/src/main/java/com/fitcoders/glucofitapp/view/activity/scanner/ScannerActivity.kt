@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -67,19 +68,21 @@ class ScannerActivity : AppCompatActivity() {
             }
         }
 
-
         binding.analyzeButton.setOnClickListener {
+            Log.d("ScannerActivity", "Analyze button clicked")
             initImageUri?.let {
                 val intent = Intent(this, ScannerResultActivity::class.java)
                 croppedImageUri?.let { uri ->
                     intent.putExtra(ScannerResultActivity.IMAGE_URI, uri.toString())
+                    Log.d("ScannerActivity", "Starting ScannerResultActivity with URI: $uri")
+                    startActivity(intent)
                 } ?: showToast(getString(R.string.image_classifier_failed))
-                startActivity(intent)
             } ?: run {
                 showToast(getString(R.string.image_classifier_failed))
             }
         }
     }
+
 
     private fun createImageFile(): File {
         val fileName = "IMG_${System.currentTimeMillis()}"

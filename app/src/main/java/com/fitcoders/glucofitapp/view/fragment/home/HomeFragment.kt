@@ -78,9 +78,9 @@ class HomeFragment : Fragment() {
         }
 
         // Set up RecyclerView with mock data
-        foodAdapter = FoodAdapter(mockFoodList, isListLayout)
+      /*  foodAdapter = FoodAdapter(mockFoodList, isListLayout)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = foodAdapter
+        binding.recyclerView.adapter = foodAdapter*/
     }
 
     private fun toggleLayout() {
