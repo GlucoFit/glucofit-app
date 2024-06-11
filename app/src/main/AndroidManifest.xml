@@ -31,9 +31,9 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
+        <!--<activity
             android:name=".view.activity.scanner.ScannerResultActivity"
-            android:exported="false" />
+            android:exported="false" />-->
         <activity
             android:name=".view.activity.scanner.ScannerActivity"
             android:exported="false" />

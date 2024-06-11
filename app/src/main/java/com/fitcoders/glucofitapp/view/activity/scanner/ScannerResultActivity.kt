@@ -1,75 +1,56 @@
-/*
 package com.fitcoders.glucofitapp.view.activity.scanner
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.fitcoders.glucofitapp.databinding.ActivityScannerResultBinding
-import com.fitcoders.glucofitapp.data.HistoryDatabase
-import com.fitcoders.glucofitapp.data.History
+import com.fitcoders.glucofitapp.service.ApiConfig
+import com.fitcoders.glucofitapp.response.PostHistoryScanResponse
 import com.fitcoders.glucofitapp.data.helper.ImageClassifierHelper
-import com.fitcoders.glucofitapp.view.fragment.history.HistoryFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.tensorflow.lite.task.vision.classifier.Classifications
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ScannerResultActivity : AppCompatActivity() {
 
-    */
-/* Initialize variable binding *//*
-
     private lateinit var binding: ActivityScannerResultBinding
 
-    */
-/* Initialize companion object IMAGE_URI, RESULT_TEXT, and REQUEST_HISTORY_UPDATE *//*
-
     companion object {
-        const val IMAGE_URI = "image_url"
-        const val RESULT_TEXT = "result_text"
-        const val REQUEST_HISTORY_UPDATE = 1
+        const val IMAGE_URI = "image_uri"
+        const val IMAGE_SIZE = 224
+        const val OUTPUT_SIZE = 3
     }
-
-    */
-/* Override the onCreate function *//*
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScannerResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        */
-/* Initialize the variable imageUriString with the image URI *//*
-
         val imageUriString = intent.getStringExtra(IMAGE_URI)
         if (imageUriString != null) {
-            */
-/* check if the image URI is not null, then show the image *//*
-
             val imageUri = Uri.parse(imageUriString)
             showImage(imageUri)
-
-            */
-/* Initialize the variable imageClassifierHelper with the ImageClassifierHelper *//*
 
             val imageClassifierHelper = ImageClassifierHelper(
                 context = this,
                 classifierListener = object : ImageClassifierHelper.ClassifierListener {
-                    */
-/* Implement the onError function *//*
-
                     override fun onError(errorMsg: String) {
-                        showToast("Error")
+                        showToast("Error: $errorMsg")
                     }
-
-                    */
-/* Implement the onResults function *//*
 
                     override fun onResults(results: List<Classifications>?, inferenceTime: Long) {
                         results?.let { showResults(it) }
@@ -81,102 +62,80 @@ class ScannerResultActivity : AppCompatActivity() {
             finish()
         }
 
-        */
-/* When the save button is clicked, it will save the history *//*
-
         binding.saveButton.setOnClickListener {
             val result = binding.resultText.text.toString()
-
-            if (intent.getStringExtra(IMAGE_URI) == null) {
+            if (imageUriString != null) {
+                saveHistory(Uri.parse(imageUriString), result)
+            } else {
                 showToast("No image URI provided")
                 finish()
-            } else {
-                saveHistory(Uri.parse(imageUriString), result)
-                showToast("Data saved")
             }
         }
     }
-
-    */
-/* Implement the onActivityResult function *//*
 
     private fun showImage(uri: Uri) {
         binding.resultImage.setImageURI(uri)
     }
 
-    */
-/* MoveToHistory function is used to move to the history activity *//*
+    @SuppressLint("SetTextI18n")
+    private fun showResults(results: List<Classifications>) {
+        val topResult = results[0].categories[0]
+        val label = topResult.label
+        val score = topResult.score
 
-    private fun moveToHistory(imageUri: Uri, result: String) {
-        */
-/* Create an intent to move to the history activity *//*
+        fun Float.formatToString(): String {
+            return String.format("%.2f%%", this * 100)
+        }
 
-        val intent = Intent(this, HistoryFragment::class.java)
-        intent.putExtra(RESULT_TEXT, result)
-        intent.putExtra(IMAGE_URI, imageUri.toString())
-        setResult(RESULT_OK, intent)
-        startActivity(intent)
-        finish()
+        binding.resultText.text = "$label ${score.formatToString()}"
     }
-
-    */
-/* SaveHistory function is used to save the history *//*
 
     private fun saveHistory(imageUri: Uri, result: String) {
         if (result.isNotEmpty()) {
-            */
-/* Save the image to the cache directory *//*
+            val file = File(cacheDir, "image.jpg")
+            contentResolver.openInputStream(imageUri)?.use { inputStream ->
+                FileOutputStream(file).use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
 
-            val fileName = "cropped_image_${System.currentTimeMillis()}.jpg"
-            val destinationUri = Uri.fromFile(File(cacheDir, fileName))
-            contentResolver.openInputStream(imageUri)?.use { input ->
-                FileOutputStream(File(cacheDir, fileName)).use { output ->
-                    input.copyTo(output)
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+            val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+            val objectName = RequestBody.create("text/plain".toMediaTypeOrNull(), result)
+            val objectSugar = RequestBody.create("text/plain".toMediaTypeOrNull(), calculateSugarLevel(result).toString())
+
+/*            CoroutineScope(Dispatchers.IO).launch {
+                withContext(Dispatchers.Main) {
+                    ApiConfig.instance.postScan(body, objectName, objectSugar).enqueue(object : Callback<PostHistoryScanResponse> {
+                        override fun onResponse(call: Call<PostHistoryScanResponse>, response: Response<PostHistoryScanResponse>) {
+                            if (response.isSuccessful) {
+                                val responseData = response.body()
+                                responseData?.let {
+                                    showToast("Data saved: ${it.message}")
+                                    // Optionally, show more details about the saved data
+                                }
+                            } else {
+                                showToast("Failed to save data")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<PostHistoryScanResponse>, t: Throwable) {
+                            showToast("API call failed: ${t.message}")
+                        }
+                    })
                 }
-            }
-            val history = History(imageURL = destinationUri.toString(), result = result)
-            CoroutineScope(Dispatchers.IO).launch {
-                withContext(Dispatchers.IO) {
-                    val database = HistoryDatabase.getDatabase(applicationContext)
-                    try {
-                        database.HistoryDao().insertData(history)
-                        moveToHistory(destinationUri, result)
-                    } catch (e: Exception) {
-                        showToast("Failed to save data!")
-                    }
-                }
-            }
+            }*/
         } else {
             showToast("Failed to save data!")
         }
     }
 
-    */
-/* ShowResults function is used to show the results *//*
-
-    @SuppressLint("SetTextI18n")
-    private fun showResults(results: List<Classifications>) {
-        val topResult = results[0]
-        val label = topResult.categories[0].label
-        val score = topResult.categories[0].score
-
-        */
-/* Format the score to string *//*
-
-        fun Float.formatToString(): String {
-            return String.format("%.2f%%", this * 100)
-        }
-        binding.resultText.text = "$label ${score.formatToString()}"
+    private fun calculateSugarLevel(result: String): Int {
+        // Implement your logic to calculate sugar level based on the result
+        return 0 // Placeholder value
     }
 
-    */
-/* ShowToast function is used to show the toast message *//*
-
     private fun showToast(message: String) {
-        */
-/* Show the toast message *//*
-
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
-*/

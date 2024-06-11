@@ -128,4 +128,23 @@
     <string name="String_judul">nama makanan</string>
     <string name="String_deskripsi">deskripsi</string>
     <string name="result">Analysis Results</string>
+    <string name="tips">Tips</string>
+    <string name="_1">1.</string>
+    <string name="tip1">Take a photo from an angle that shows the entire food.</string>
+    <string name="_2">2.</string>
+    <string name="tip2">Make sure the lighting is sufficient so that all the details of the food are clearly visible.</string>
+    <string name="_3">3.</string>
+    <string name="tip3">Avoid shadows or overly bright light that can distract from the photo.</string>
+    <string name="_4">4.</string>
+    <string name="tip4">Use a neutral background to avoid visual distractions.</string>
+    <string name="_5">5.</string>
+    <string name="tip5">Do not cut off parts of the food when taking/inserting photos.</string>
+    <string name="_6">6.</string>
+    <string name="tip6">Make sure the camera is steady to avoid blurry photos.</string>
+    <string name="_7">7.</string>
+    <string name="tip7">If the food is soupy, make sure the contents are visible in the photo.</string>
+    <string name="_8">8.</string>
+    <string name="tip8">If the analysis result is wrong, try inserting the photo from a different angle.</string>
+    <string name="_9">9.</string>
+    <string name="tip9">Thank you for using the GlucoFit app!</string>
 </resources>

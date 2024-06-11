@@ -5,12 +5,14 @@ import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.LogoutResponse
+import com.fitcoders.glucofitapp.response.PostHistoryScanResponse
 import com.fitcoders.glucofitapp.response.RegisterResponse
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import java.io.File
 
 interface ApiService {
     @FormUrlEncoded
@@ -36,7 +38,15 @@ interface ApiService {
     fun getScanHistory(
     ): Call<HistoryScanResponse>
 
-     @FormUrlEncoded
+    @FormUrlEncoded
+    @POST("/scan/upload")
+    fun postScan(
+        @Field("image") image: File,
+        @Field("objectName") objectName: String,
+        @Field("objectSugar") objectSugar: String
+    ): Call<PostHistoryScanResponse>
+
+    @FormUrlEncoded
     @POST("assessments")
     fun postAssessment(
         @Field("name") name: String,

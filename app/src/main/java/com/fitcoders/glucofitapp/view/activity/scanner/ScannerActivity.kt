@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,11 +27,13 @@ class ScannerActivity : AppCompatActivity() {
     private var initImageUri: Uri? = null
     private var croppedImageUri: Uri? = null
     private lateinit var photoUri: Uri
+    private lateinit var previewImageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScannerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        previewImageView = findViewById(R.id.previewImageView)
 
         setupUI()
         setupListeners()
@@ -41,6 +44,7 @@ class ScannerActivity : AppCompatActivity() {
         val backButton: ImageButton = findViewById(R.id.backButton)
 
         titleText.text = getString(R.string.scanner_title)
+        backButton.visibility = ImageButton.VISIBLE
 
         backButton.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
@@ -63,8 +67,8 @@ class ScannerActivity : AppCompatActivity() {
             }
         }
 
-        // Uncomment and implement analyze button functionality if needed
-/*        binding.analyzeButton.setOnClickListener {
+
+        binding.analyzeButton.setOnClickListener {
             initImageUri?.let {
                 val intent = Intent(this, ScannerResultActivity::class.java)
                 croppedImageUri?.let { uri ->
@@ -74,7 +78,7 @@ class ScannerActivity : AppCompatActivity() {
             } ?: run {
                 showToast(getString(R.string.image_classifier_failed))
             }
-        }*/
+        }
     }
 
     private fun createImageFile(): File {
@@ -180,13 +184,13 @@ class ScannerActivity : AppCompatActivity() {
     }
 
     private fun showCroppedImage(uri: Uri) {
-        binding.previewImageView.setImageURI(uri)
+        previewImageView.setImageURI(uri)
         croppedImageUri = uri
     }
 
     private fun showImage() {
         initImageUri?.let { uri ->
-            binding.previewImageView.setImageURI(uri)
+            previewImageView.setImageURI(uri)
         } ?: showToast(getString(R.string.image_classifier_failed))
     }
 
