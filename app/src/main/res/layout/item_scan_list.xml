@@ -72,7 +72,19 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/scan_time"
             app:layout_constraintTop_toTopOf="@+id/trash_icon"
-            tools:text="15 g" />
+            tools:text="15" />
+
+        <TextView
+            android:id="@+id/sugar_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/sugar_weight"
+            app:layout_constraintTop_toTopOf="@+id/trash_icon"
+            tools:text="g" />
+
 
         <ImageView
             android:id="@+id/trash_icon"

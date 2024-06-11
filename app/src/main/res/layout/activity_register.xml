@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orange"
+    android:background="@color/black"
     tools:context=".view.activity.register.RegisterActivity">
 
     <ProgressBar
@@ -39,11 +39,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-
                 android:layout_marginTop="12dp"
                 android:alpha="0"
                 android:text="@string/usernsme"
-                android:textColor="@color/black"
+                android:textColor="@color/text_color_dark_secondary"
+                android:fontFamily="@font/poppins_regular"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView"
                 tools:alpha="100" />
@@ -78,7 +78,8 @@
                 android:alpha="0"
                 android:layout_marginTop="8dp"
                 android:text="@string/email"
-                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/text_color_dark_secondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:alpha="100" />
@@ -114,7 +115,8 @@
                 android:layout_marginTop="8dp"
                 android:alpha="0"
                 android:text="@string/password"
-                android:textColor="@color/black"
+                android:textColor="@color/text_color_dark_secondary"
+                android:fontFamily="@font/poppins_regular"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout"
                 tools:alpha="100" />
@@ -146,12 +148,14 @@
             <Button
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
                 android:alpha="0"
-                android:backgroundTint="@color/orange"
+                android:backgroundTint="@color/black"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="18sp"
                 android:text="@string/login"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -170,19 +174,21 @@
                     android:layout_marginStart="92dp"
                     android:layout_marginTop="30dp"
                     android:text="@string/registerText"
+                    android:fontFamily="@font/poppins_regular"
                     android:textAlignment="center"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
                 <TextView
-                    android:id="@+id/registerbutton"
+                    android:id="@+id/signinButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="30dp"
                     android:text="@string/registerButton"
                     android:textAlignment="center"
-                    android:textColor="@color/orange"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/black"
                     app:layout_constraintStart_toEndOf="@+id/registertext"
                     app:layout_constraintTop_toTopOf="@+id/registertext" />
 
@@ -200,7 +206,8 @@
         android:gravity="start"
         android:text="@string/tatleregister"
         android:textAlignment="textStart"
-        android:textColor="@color/black"
+        android:textColor="@color/text_color_dark_primary"
+        android:fontFamily="@font/poppins_semi_bold"
         android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -216,7 +223,8 @@
         android:layout_marginEnd="32dp"
         android:gravity="start"
         android:text="@string/description"
-        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_regular"
+        android:textColor="@color/text_color_dark_secondary"
         android:textIsSelectable="true"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

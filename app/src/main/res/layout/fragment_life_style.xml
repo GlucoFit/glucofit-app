@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:background="@color/light_theme_primary"
     tools:context=".view.fragment.lifestyle.LifeStyleFragment">
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="Life Stlys"
+        android:text="Life Stlye"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="14sp"
         android:textStyle="bold"

@@ -90,11 +90,14 @@ class HistoryAdapter(
 
         fun bindView(item: DataItem) {
             with(binding) {
-                avatarImageView.load(item.objectImageUrl) {
-                    crossfade(true)
-                }
+                // Load the image using Glide
+                Glide.with(avatarImageView.context)
+                    .load(item.objectImageUrl)
+                    .into(avatarImageView)
+
                 foodName.text = item.objectName
                 sugarWeight.text = item.objectSugar.toString()
+                sugarUnit.text = "g"
                 // Konversi waktu dari UTC ke waktu lokal
                 val localCreatedAt = convertUtcToLocalTime(item.createdAt ?: "")
                 scanDate.text = localCreatedAt
@@ -128,14 +131,17 @@ class HistoryAdapter(
 
         fun bindView(item: DataItem) {
             with(binding) {
-                foodImage.load(item.objectImageUrl) {
-                    crossfade(true)
-                }
+                // Load the image using Glide
+                Glide.with(foodImage.context)
+                    .load(item.objectImageUrl)
+                    .into(foodImage)
+
                 foodName.text = item.objectName
                 // Konversi waktu dari UTC ke waktu lokal
                 val localCreatedAt = convertUtcToLocalTime(item.createdAt ?: "")
                 scanDate.text = localCreatedAt
                 scanTime.text = localCreatedAt
+                sugarUnit.text = "g"
                 sugarWeight.text = item.objectSugar.toString()
                 itemView.setOnClickListener { itemClick(item) }
             }
@@ -158,5 +164,5 @@ class HistoryAdapter(
         }
     }
 
-   
+
 }

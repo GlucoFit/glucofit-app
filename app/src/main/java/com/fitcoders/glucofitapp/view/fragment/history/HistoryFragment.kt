@@ -154,19 +154,19 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
         // Update emoji berdasarkan jumlah gula yang dikonsumsi
         when {
             intakeGula <= 0 -> {
-                emojiImageView.setImageResource(R.drawable.ic_happy) // Emoji senang untuk gula 0 atau negatif
+                emojiImageView.setImageResource(R.drawable.ic_happy_small) // Emoji senang untuk gula 0 atau negatif
             }
             intakeGula in 1..(maxSugar / 2) -> {
-                emojiImageView.setImageResource(R.drawable.ic_good) // Emoji baik untuk gula antara 1 dan setengah dari max
+                emojiImageView.setImageResource(R.drawable.ic_good_small) // Emoji baik untuk gula antara 1 dan setengah dari max
             }
             intakeGula in (maxSugar / 2 + 1) until maxSugar -> {
-                emojiImageView.setImageResource(R.drawable.ic_angry) // Emoji marah untuk gula antara setengah max dan max
+                emojiImageView.setImageResource(R.drawable.ic_angry_small) // Emoji marah untuk gula antara setengah max dan max
             }
             intakeGula >= maxSugar -> {
-                emojiImageView.setImageResource(R.drawable.ic_angry) // Emoji marah untuk gula melebihi atau sama dengan max
+                emojiImageView.setImageResource(R.drawable.ic_angry_small) // Emoji marah untuk gula melebihi atau sama dengan max
             }
             else -> {
-                emojiImageView.setImageResource(R.drawable.ic_happy) // Emoji default jika tidak ada kondisi yang cocok
+                emojiImageView.setImageResource(R.drawable.ic_happy_small) // Emoji default jika tidak ada kondisi yang cocok
             }
         }
     }

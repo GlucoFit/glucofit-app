@@ -24,11 +24,11 @@
         android:layout_width="346dp"
         android:layout_height="72dp"
         android:layout_marginTop="36dp"
+        android:fontFamily="@font/poppins_semi_bold"
         android:gravity="center_horizontal"
         android:text="@string/title_menu_1"
         android:textAlignment="center"
         android:textSize="28dp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
@@ -37,6 +37,8 @@
         android:layout_width="336dp"
         android:layout_height="55dp"
         android:layout_marginTop="24dp"
+        android:fontFamily="@font/poppins_regular"
+        android:textColor="@color/text_color_light_secondary"
         android:gravity="center_horizontal"
         android:text="@string/desc_menu_1"
         android:textAlignment="center"
@@ -59,9 +61,9 @@
         android:layout_marginTop="36dp"
         android:gravity="center_horizontal"
         android:text="@string/title_menu_2"
+        android:fontFamily="@font/poppins_semi_bold"
         android:textAlignment="center"
         android:textSize="28dp"
-        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image" />
 
@@ -71,6 +73,8 @@
         android:layout_height="55dp"
         android:layout_marginTop="28dp"
         android:gravity="center_horizontal"
+        android:fontFamily="@font/poppins_regular"
+        android:textColor="@color/text_color_light_secondary"
         android:text="@string/desc_menu_2"
         android:textAlignment="center"
         app:layout_constraintStart_toEndOf="parent"
@@ -92,9 +96,9 @@
         android:layout_marginTop="36dp"
         android:gravity="center_horizontal"
         android:text="@string/title_menu_3"
+        android:fontFamily="@font/poppins_semi_bold"
         android:textAlignment="center"
         android:textSize="28dp"
-        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image1" />
 
@@ -105,6 +109,8 @@
         android:layout_marginTop="28dp"
         android:gravity="center_horizontal"
         android:text="@string/desc_menu_3"
+        android:fontFamily="@font/poppins_regular"
+        android:textColor="@color/text_color_light_secondary"
         android:textAlignment="center"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title1" />
@@ -121,7 +127,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
         app:srcCompat="@drawable/ic_circle_24"
-        app:tint="@color/orange" />
+        app:tint="@color/black" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/menu2"
@@ -137,7 +143,7 @@
         app:layout_constraintTop_toTopOf="@+id/menu1"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_circle_24"
-        app:tint="@color/orange" />
+        app:tint="@color/black" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/menu3"
@@ -151,15 +157,16 @@
         app:layout_constraintTop_toTopOf="@+id/menu2"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_circle_24"
-        app:tint="@color/orange" />
+        app:tint="@color/black" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="81dp"
-        android:layout_height="34dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:alpha="1"
-        android:backgroundTint="@color/orange"
+        android:backgroundTint="@color/black"
         android:text="@string/learn_now"
+        android:fontFamily="@font/poppins_regular"
         app:layout_constraintBottom_toTopOf="@+id/image1"
         app:layout_constraintStart_toEndOf="parent" />
 

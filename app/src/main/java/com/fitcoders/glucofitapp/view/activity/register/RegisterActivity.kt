@@ -22,6 +22,7 @@ import com.fitcoders.glucofitapp.data.dataStore
 import com.fitcoders.glucofitapp.databinding.ActivityRegisterBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
+import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
@@ -60,6 +61,11 @@ class RegisterActivity : AppCompatActivity() {
                 // No action needed
             }
         })
+
+        binding.signinButton.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
 
         setupView()
         setupAction()
@@ -162,7 +168,7 @@ class RegisterActivity : AppCompatActivity() {
         val passwordEditTextLayout = ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val signup = ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
         val logintext = ObjectAnimator.ofFloat(binding.registertext, View.ALPHA, 1f).setDuration(100)
-        val loginbutton = ObjectAnimator.ofFloat(binding.registerbutton, View.ALPHA, 1f).setDuration(100)
+        val loginbutton = ObjectAnimator.ofFloat(binding.signinButton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
             playSequentially(

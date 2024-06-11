@@ -2,7 +2,7 @@
     <string name="app_name">Glucofit App</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="login">Masuk</string>
+    <string name="login">Login</string>
     <string name="usernsme">Username</string>
     <string name="registerText">Already have an account?</string>
     <string name="registerButton">Sign In</string>
