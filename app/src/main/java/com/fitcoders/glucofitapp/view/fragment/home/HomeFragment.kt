@@ -1,5 +1,6 @@
 package com.fitcoders.glucofitapp.view.fragment.home
 
+import android.content.Intent
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import com.fitcoders.glucofitapp.data.Food
 import com.fitcoders.glucofitapp.databinding.FragmentHomeBinding
 import com.fitcoders.glucofitapp.utils.adapter.FoodAdapter
 import com.fitcoders.glucofitapp.view.ViewModelFactory
+import com.fitcoders.glucofitapp.view.activity.scanner.ScannerActivity
 import com.fitcoders.glucofitapp.view.fragment.profile.ProfileViewModel
 
 class HomeFragment : Fragment() {
@@ -68,8 +70,13 @@ class HomeFragment : Fragment() {
 
         binding.scanButton.setOnClickListener {
             // Contoh scan button, update nilai intakeGula dengan hasil scan
-            val updatedIntakeGula = intakeGula + 95 // Misalnya ini nilai yang diperbarui dari scan
-            updateEmojiAndText(updatedIntakeGula)
+          /*  val updatedIntakeGula = intakeGula + 95 // Misalnya ini nilai yang diperbarui dari scan
+            updateEmojiAndText(updatedIntakeGula)*/
+
+            val intent = Intent(requireContext(), ScannerActivity::class.java)
+            // Start the new activity
+            startActivity(intent)
+
         }
 
         binding.toggleButton.setOnClickListener {

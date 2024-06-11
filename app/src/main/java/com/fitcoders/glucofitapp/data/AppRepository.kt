@@ -8,17 +8,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
+import com.fitcoders.glucofitapp.response.DataItem
+import com.fitcoders.glucofitapp.response.HistoryScanResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.LogoutResponse
 import com.fitcoders.glucofitapp.response.RegisterResponse
 import com.fitcoders.glucofitapp.service.ApiService
 import com.fitcoders.glucofitapp.utils.Event
-import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
-import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 
 class AppRepository private constructor(private val pref: UserPreference, private val apiService: ApiService) {
@@ -40,6 +44,9 @@ class AppRepository private constructor(private val pref: UserPreference, privat
 
     private val _assessmentStatus = MutableLiveData<Boolean?>()
     val assessmentStatus: MutableLiveData<Boolean?> = _assessmentStatus
+
+    private val _scanHistoryResponse = MutableLiveData<Result<List<DataItem>>>()
+    val scanHistoryResponse: LiveData<Result<List<DataItem>>> = _scanHistoryResponse
 
 
     fun pRegister(userName: String, email: String, password: String) {
@@ -204,6 +211,70 @@ class AppRepository private constructor(private val pref: UserPreference, privat
             }
         })
     }
+
+
+    // Method untuk mengambil data scan history berdasarkan tanggal
+    fun fetchScanHistoryByDate(date: String) {
+        Log.d("AppRepository", "Fetching scan history for date: $date")
+        _isLoading.value = true
+        val client = apiService.getScanHistory()
+
+        client.enqueue(object : Callback<HistoryScanResponse> {
+            override fun onResponse(
+                call: Call<HistoryScanResponse>,
+                response: Response<HistoryScanResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val scanHistory = response.body()?.data ?: emptyList()
+                    // Log contoh createdAt
+                    scanHistory.forEach { item ->
+                        Log.d("AppRepository", "CreatedAt: ${item?.createdAt}")
+                    }
+                    // Filter data berdasarkan tanggal yang diberikan
+                    val filteredHistory = scanHistory.filter { item ->
+                        // Konversi createdAt dari UTC ke waktu lokal
+                        val localCreatedAt = item?.createdAt?.let { convertUtcToLocalTime(it) }
+                        // Log konversi waktu lokal
+                        Log.d("AppRepository", "Local CreatedAt: $localCreatedAt")
+                        // Filter berdasarkan tanggal lokal yang diberikan
+                        localCreatedAt?.startsWith(date) == true
+                    }
+                    Log.d("AppRepository", "Filtered history size: ${filteredHistory.size}")
+                    _scanHistoryResponse.value = Result.success(filteredHistory.filterNotNull())
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("AppRepository", "Error fetching history: ${response.code()} - ${response.message()}, Body: $errorBody")
+                    _toastText.value = Event("Error: ${response.code()} ${response.message()}. Body: $errorBody")
+                }
+            }
+
+            override fun onFailure(call: Call<HistoryScanResponse>, t: Throwable) {
+                _isLoading.value = false
+                Log.e("AppRepository", "Failure fetching history: ${t.message}")
+                _scanHistoryResponse.value = Result.failure(t)
+                _toastText.value = Event("Failure: ${t.message}")
+            }
+        })
+    }
+
+    // Fungsi untuk mengonversi waktu dari UTC ke waktu lokal
+    private fun convertUtcToLocalTime(utcTime: String): String {
+        // Format waktu yang diberikan dalam UTC
+        val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        utcFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+        // Parse waktu dalam UTC
+        val date: Date? = utcFormat.parse(utcTime)
+
+        // Format waktu untuk zona waktu lokal
+        val localFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) // Gunakan format tanggal saja untuk pencocokan
+        localFormat.timeZone = TimeZone.getDefault() // Set ke zona waktu lokal perangkat
+
+        // Konversi dan kembalikan waktu dalam format zona waktu lokal
+        return date?.let { localFormat.format(it) } ?: utcTime
+    }
+
 
 
 

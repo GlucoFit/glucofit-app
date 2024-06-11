@@ -1,103 +1,123 @@
-package com.fitcoders.glucofitapp.utils.adapter
-
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.bumptech.glide.Glide
-import com.fitcoders.glucofitapp.R
-import com.fitcoders.glucofitapp.data.History
-import com.fitcoders.glucofitapp.databinding.FragmentHistoryBinding
+
+import com.fitcoders.glucofitapp.databinding.ItemScanGridBinding
 import com.fitcoders.glucofitapp.databinding.ItemScanListBinding
-import com.fitcoders.glucofitapp.utils.ResultWrapper
-import kotlinx.coroutines.flow.Flow
-import java.text.SimpleDateFormat
-import java.util.*
+import com.fitcoders.glucofitapp.response.DataItem
 
 class HistoryAdapter(
-    private val itemClick: (History) -> Unit,
-//    private val listMode: Int,
-//    private var isListView: Boolean
-) : RecyclerView.Adapter<HistoryAdapter.ItemHistoryViewHolder>() {
+    private val itemClick: (DataItem) -> Unit,
+    private var isGridView: Boolean = false // Parameter to toggle between list and grid view
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val VIEW_TYPE_LIST = 1
-    private val VIEW_TYPE_GRID = 2
-    private val dataDiffer =
-        AsyncListDiffer(
-            this,
-            object : DiffUtil.ItemCallback<History>() {
-                override fun areItemsTheSame(
-                    oldItem: History,
-                    newItem: History
-                ): Boolean {
-                    return oldItem.id == newItem.id
-                }
+    companion object {
+        private const val VIEW_TYPE_LIST = 1
+        private const val VIEW_TYPE_GRID = 2
+    }
 
-                override fun areContentsTheSame(
-                    oldItem: History,
-                    newItem: History
-                ): Boolean {
-                    return oldItem.hashCode() == newItem.hashCode()
-                }
+    private val dataDiffer = AsyncListDiffer(
+        this,
+        object : DiffUtil.ItemCallback<DataItem>() {
+            override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+                return oldItem.id == newItem.id
             }
-        )
 
-    fun submitData(data: List<History>) {
+            override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+                return oldItem == newItem
+            }
+        }
+    )
+
+    fun submitList(data: List<DataItem>) {
         dataDiffer.submitList(data)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHistoryViewHolder {
-        val binding = ItemScanListBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-
-        return ItemHistoryViewHolder(binding, itemClick)
+    fun setViewType(isGridView: Boolean) {
+        this.isGridView = isGridView
+        notifyDataSetChanged() // Notify the adapter to refresh the layout
     }
 
-    override fun onBindViewHolder(holder: ItemHistoryViewHolder, position: Int) {
-        holder.bindView(dataDiffer.currentList[position])
+    override fun getItemViewType(position: Int): Int {
+        return if (isGridView) VIEW_TYPE_GRID else VIEW_TYPE_LIST
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            VIEW_TYPE_GRID -> {
+                val binding = ItemScanGridBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                ItemHistoryGridViewHolder(binding, itemClick)
+            }
+            else -> {
+                val binding = ItemScanListBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                ItemHistoryListViewHolder(binding, itemClick)
+            }
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = dataDiffer.currentList[position]
+        when (holder) {
+            is ItemHistoryListViewHolder -> holder.bindView(item)
+            is ItemHistoryGridViewHolder -> holder.bindView(item)
+        }
     }
 
     override fun getItemCount(): Int = dataDiffer.currentList.size
 
-    class ItemHistoryViewHolder(
+    // ViewHolder for List View
+    class ItemHistoryListViewHolder(
         private val binding: ItemScanListBinding,
-        val itemClick: (History) -> Unit
+        private val itemClick: (DataItem) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bindView(item: History) {
-            with(item) {
-                binding.avatarImageView.load(item.objectImageUrl) {
-                    crossfade(true)
-                }
-                binding.foodName.text = item.objectName
-                binding.sugarWeight.text = item.objectSugar.toString()
-                binding.scanDate.text = item.createdAt
-                binding.scanTime.text = item.createdAt
-                itemView.setOnClickListener { itemClick(this) }
+        fun bindView(item: DataItem) {
+            with(binding) {
+                // Load the image using Glide
+                Glide.with(avatarImageView.context)
+                    .load(item.objectImageUrl)
+                    .into(avatarImageView)
+
+                foodName.text = item.objectName
+                sugarWeight.text = item.objectSugar.toString()
+                scanDate.text = item.createdAt
+                scanTime.text = item.createdAt
+                itemView.setOnClickListener { itemClick(item) }
             }
         }
-//        private fun formatCreatedAt(createdAt: String): Pair<String, String> {
-//            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-//            val date = inputFormat.parse(createdAt)
-//
-//            val dateFormat = SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault())
-//            val timeFormat = SimpleDateFormat("HH.mm 'WIB'", Locale.getDefault())
-//
-//            val formattedDate = dateFormat.format(date)
-//            val formattedTime = timeFormat.format(date)
-//
-//            return Pair(formattedDate, formattedTime)
-//        }
     }
 
+    // ViewHolder for Grid View
+    class ItemHistoryGridViewHolder(
+        private val binding: ItemScanGridBinding,
+        private val itemClick: (DataItem) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
+        fun bindView(item: DataItem) {
+            with(binding) {
+                // Load the image using Glide
+                Glide.with(foodImage.context)
+                    .load(item.objectImageUrl)
+                    .into(foodImage)
+
+                foodName.text = item.objectName
+                scanDate.text = item.createdAt
+                scanTime.text = item.createdAt
+                sugarWeight.text = item.objectSugar.toString()
+                itemView.setOnClickListener { itemClick(item) }
+            }
+        }
+    }
 }

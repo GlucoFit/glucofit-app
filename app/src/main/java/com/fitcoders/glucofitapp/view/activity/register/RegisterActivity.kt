@@ -22,7 +22,6 @@ import com.fitcoders.glucofitapp.data.dataStore
 import com.fitcoders.glucofitapp.databinding.ActivityRegisterBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.assessment.AssessmentActivity
-import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
