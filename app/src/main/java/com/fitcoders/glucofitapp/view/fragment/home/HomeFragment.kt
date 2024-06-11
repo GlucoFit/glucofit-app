@@ -1,12 +1,16 @@
 package com.fitcoders.glucofitapp.view.fragment.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fitcoders.glucofitapp.R
@@ -15,7 +19,6 @@ import com.fitcoders.glucofitapp.databinding.FragmentHomeBinding
 import com.fitcoders.glucofitapp.utils.adapter.FoodAdapter
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.scanner.ScannerActivity
-import com.fitcoders.glucofitapp.view.fragment.profile.ProfileViewModel
 
 class HomeFragment : Fragment() {
 
@@ -29,7 +32,7 @@ class HomeFragment : Fragment() {
     // Data Mock
     private val mockFoodList = listOf(
         Food(1, "Sliced meat", "sliced meat and potatoes", "https://example.com/sliced_meat.jpg", "15 g"),
-        Food(2, "Pizza", "Cheesy pizza with a variety of toppings","https://example.com/pizza.jpg", "200 g"),
+        Food(2, "Pizza", "Cheesy pizza with a variety of toppings", "https://example.com/pizza.jpg", "200 g"),
         Food(3, "Burger", "Juicy burger with fresh lettuce and tomato", "https://example.com/burger.jpg", "300 g"),
         Food(4, "Burger", "Juicy burger with fresh lettuce and tomato", "https://example.com/burger.jpg", "300 g"),
         Food(5, "Burger", "Juicy burger with fresh lettuce and tomato", "https://example.com/burger.jpg", "300 g")
@@ -59,29 +62,25 @@ class HomeFragment : Fragment() {
             binding.name.text = user.username
         }
 
-        // Set up RecyclerView with mock data
-        /*foodAdapter = FoodAdapter(mockFoodList, isListLayout)
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = foodAdapter*/
-
-        // Set default values
-        val intakeGula: Int = 4 // Misalnya ini nilai awalnya
-        updateEmojiAndText(intakeGula)
+        // Ambil dan pantau perubahan data gula hari ini
+        homeViewModel.fetchTodaySugarIntake()
+        homeViewModel.todaySugarIntake.observe(viewLifecycleOwner, Observer { totalSugar ->
+            updateEmojiAndText(totalSugar)
+        })
 
         binding.scanButton.setOnClickListener {
-            // Contoh scan button, update nilai intakeGula dengan hasil scan
-          /*  val updatedIntakeGula = intakeGula + 95 // Misalnya ini nilai yang diperbarui dari scan
-            updateEmojiAndText(updatedIntakeGula)*/
-
             val intent = Intent(requireContext(), ScannerActivity::class.java)
-            // Start the new activity
             startActivity(intent)
-
         }
 
         binding.toggleButton.setOnClickListener {
             toggleLayout()
         }
+
+        // Set up RecyclerView with mock data
+        foodAdapter = FoodAdapter(mockFoodList, isListLayout)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = foodAdapter
     }
 
     private fun toggleLayout() {
@@ -96,26 +95,38 @@ class HomeFragment : Fragment() {
         foodAdapter.setViewType(isListLayout)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateEmojiAndText(intakeGula: Int) {
-        binding.sugarAmount.text = intakeGula.toString()
-        val minSugar = 0
-        val maxSugar = 100
-        val rageSugar = (maxSugar / 2)
-        val percentage = (intakeGula.toDouble() / maxSugar) * 100
-        binding.sugarPercentage.text = "${percentage.toInt()}% / $maxSugar g"
 
+        // Perbarui total gula pada TextView dengan ID @+id/sugarAmount
+        val sugarAmountTextView: TextView = binding.sugarAmount
+        sugarAmountTextView.text = intakeGula.toString()
+
+        // Ambil nilai maksimum gula dari TextView
+        val maxSugarTextView: TextView = binding.sugarPercentage // Ubah ke ID TextView yang benar untuk max gula
+        val maxSugarString = maxSugarTextView.text.toString().replace(" g", "").trim()
+        val maxSugar = maxSugarString.toIntOrNull() ?: 2000 // Default ke 100 jika parsing gagal
+
+        val percentage = (intakeGula.toDouble() / maxSugar) * 100
+        binding.sugarPercentage.text = "${percentage.toInt()}% "
+        binding.tvSugarIntakeMax.text= "/ ${maxSugar} g"
+
+        // Update emoji berdasarkan jumlah gula yang dikonsumsi
         when {
-            intakeGula < minSugar -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_happy)
+            intakeGula <= 0 -> {
+                binding.emojiFace.setImageResource(R.drawable.ic_happy) // Emoji senang untuk gula 0 atau negatif
             }
-            intakeGula in rageSugar until maxSugar -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_good)
+            intakeGula in 1..(maxSugar / 2) -> {
+                binding.emojiFace.setImageResource(R.drawable.ic_good) // Emoji baik untuk gula antara 1 dan setengah dari max
+            }
+            intakeGula in (maxSugar / 2 + 1) until maxSugar -> {
+                binding.emojiFace.setImageResource(R.drawable.ic_angry) // Emoji marah untuk gula antara setengah max dan max
             }
             intakeGula >= maxSugar -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_angry)
+                binding.emojiFace.setImageResource(R.drawable.ic_angry) // Emoji marah untuk gula melebihi atau sama dengan max
             }
             else -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_happy)
+                binding.emojiFace.setImageResource(R.drawable.ic_happy) // Emoji default jika tidak ada kondisi yang cocok
             }
         }
     }
