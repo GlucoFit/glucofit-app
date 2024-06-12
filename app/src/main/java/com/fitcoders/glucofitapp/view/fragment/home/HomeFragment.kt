@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
 
     // Data Mock
     private val mockFoodList = listOf(
-        Food(1, "Sliced meat", "sliced meat and potatoes", "https://example.com/sliced_meat.jpg", "15 g"),
+        Food(1, "Sliced meat", "sliced meat and potatoes", "https://storage.googleapis.com/glucofit-test-bucket/user-image/1718111185545_2_food1.png", "15"),
         Food(2, "Pizza", "Cheesy pizza with a variety of toppings", "https://example.com/pizza.jpg", "200 g"),
         Food(3, "Burger", "Juicy burger with fresh lettuce and tomato", "https://example.com/burger.jpg", "300 g"),
         Food(4, "Burger", "Juicy burger with fresh lettuce and tomato", "https://example.com/burger.jpg", "300 g"),
@@ -78,9 +78,9 @@ class HomeFragment : Fragment() {
         }
 
         // Set up RecyclerView with mock data
-      /*  foodAdapter = FoodAdapter(mockFoodList, isListLayout)
+        foodAdapter = FoodAdapter(mockFoodList, isListLayout)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = foodAdapter*/
+        binding.recyclerView.adapter = foodAdapter
     }
 
     private fun toggleLayout() {
@@ -114,19 +114,19 @@ class HomeFragment : Fragment() {
         // Update emoji berdasarkan jumlah gula yang dikonsumsi
         when {
             intakeGula <= 0 -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_happy) // Emoji senang untuk gula 0 atau negatif
+                binding.emojiFace.setImageResource(R.drawable.ic_happy_large) // Emoji senang untuk gula 0 atau negatif
             }
             intakeGula in 1..(maxSugar / 2) -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_good) // Emoji baik untuk gula antara 1 dan setengah dari max
+                binding.emojiFace.setImageResource(R.drawable.ic_good_large) // Emoji baik untuk gula antara 1 dan setengah dari max
             }
             intakeGula in (maxSugar / 2 + 1) until maxSugar -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_angry) // Emoji marah untuk gula antara setengah max dan max
+                binding.emojiFace.setImageResource(R.drawable.ic_angry_large) // Emoji marah untuk gula antara setengah max dan max
             }
             intakeGula >= maxSugar -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_angry) // Emoji marah untuk gula melebihi atau sama dengan max
+                binding.emojiFace.setImageResource(R.drawable.ic_angry_large) // Emoji marah untuk gula melebihi atau sama dengan max
             }
             else -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_happy) // Emoji default jika tidak ada kondisi yang cocok
+                binding.emojiFace.setImageResource(R.drawable.ic_happy_large) // Emoji default jika tidak ada kondisi yang cocok
             }
         }
     }
