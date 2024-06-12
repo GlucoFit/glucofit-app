@@ -20,6 +20,7 @@ viewpager2 = "1.1.0"
 tensorflowLiteSupport = "0.1.0"
 tensorflowLiteMetadata = "0.1.0"
 coil = "2.6.0"
+runtimeAndroid = "1.6.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,6 +44,7 @@ coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 
 #Koin
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

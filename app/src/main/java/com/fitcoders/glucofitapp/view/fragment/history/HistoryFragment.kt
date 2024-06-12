@@ -108,9 +108,10 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
         }
     }
 
-    private fun observeViewModel() {
+/*    private fun observeViewModel() {
         historyViewModel.scanHistoryResponse.observe(viewLifecycleOwner) { result ->
             result.onSuccess { dataItems ->
+                hideEmptyView()
                 // Tampilkan data yang difilter ke RecyclerView
                 bindHistory(dataItems)
                 // Hitung total objectSugar dan tampilkan di UI
@@ -124,6 +125,47 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
             }
         }
 
+    }*/
+
+    private fun observeViewModel() {
+        historyViewModel.scanHistoryResponse.observe(viewLifecycleOwner) { result ->
+            result.onSuccess { dataItems ->
+                if (dataItems.isEmpty()) {
+                    // Jika tidak ada data, tampilkan tampilan kosong
+                    bindHistory(dataItems)
+                    // Hitung total objectSugar dan tampilkan di UI
+                    val totalSugar = historyViewModel.calculateTotalSugar(dataItems)
+                    displayTotalSugar(totalSugar)
+                    // Update emoji dan teks berdasarkan total gula
+                    updateEmojiAndText(totalSugar)
+                    showEmptyView()
+                } else {
+                    // Jika ada data, sembunyikan tampilan kosong dan tampilkan data ke RecyclerView
+                    hideEmptyView()
+                    bindHistory(dataItems)
+                    // Hitung total objectSugar dan tampilkan di UI
+                    val totalSugar = historyViewModel.calculateTotalSugar(dataItems)
+                    displayTotalSugar(totalSugar)
+                    // Update emoji dan teks berdasarkan total gula
+                    updateEmojiAndText(totalSugar)
+                }
+            }.onFailure { exception ->
+                // Tangani kegagalan, misalnya dengan menampilkan pesan kesalahan
+                Log.e("HistoryFragment", "Error fetching history: ${exception.message}")
+                // Jika terjadi kesalahan, tampilkan tampilan kosong
+                showEmptyView()
+            }
+        }
+    }
+
+    private fun showEmptyView() {
+        binding.recyclerViewScanHistory.visibility = View.GONE
+        binding.emptyImageView.visibility = View.VISIBLE // Tampilkan gambar atau teks kosong
+    }
+
+    private fun hideEmptyView() {
+        binding.recyclerViewScanHistory.visibility = View.VISIBLE
+        binding.emptyImageView.visibility = View.GONE // Sembunyikan gambar atau teks kosong
     }
 
     private fun bindHistory(data: List<DataItem>) {

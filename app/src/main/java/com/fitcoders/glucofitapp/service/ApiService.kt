@@ -3,6 +3,7 @@ package com.fitcoders.glucofitapp.service
 import com.fitcoders.glucofitapp.response.HistoryScanResponse
 import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
+import com.fitcoders.glucofitapp.response.DataFoodResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.LogoutResponse
 import com.fitcoders.glucofitapp.response.PostHistoryScanResponse
@@ -12,6 +13,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import java.io.File
 
 interface ApiService {
@@ -68,6 +70,11 @@ interface ApiService {
     @POST("auth/logout")
     fun logout(
    ): Call<LogoutResponse>
+
+    @GET("scan/food/{name}")
+    fun getFoodInfoByLabel(
+        @Path("name") label: String
+    ): Call<DataFoodResponse>
 
 
 

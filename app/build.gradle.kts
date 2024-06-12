@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.viewpager2)
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.metadata)
+    implementation(libs.androidx.runtime.android)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
+import com.fitcoders.glucofitapp.response.DataFoodResponse
 import com.fitcoders.glucofitapp.response.DataItem
 import com.fitcoders.glucofitapp.response.HistoryScanResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
@@ -47,6 +48,14 @@ class AppRepository private constructor(private val pref: UserPreference, privat
 
     private val _scanHistoryResponse = MutableLiveData<Result<List<DataItem>>>()
     val scanHistoryResponse: LiveData<Result<List<DataItem>>> = _scanHistoryResponse
+
+    // LiveData untuk klasifikasi gambar
+    private val _classificationResult = MutableLiveData<String>()
+    val classificationResult: LiveData<String> = _classificationResult
+
+    // LiveData untuk informasi makanan
+    private val _foodInfo = MutableLiveData<DataFoodResponse?>()
+    val foodInfo: MutableLiveData<DataFoodResponse?> = _foodInfo
 
 
     fun pRegister(userName: String, email: String, password: String) {
@@ -275,6 +284,30 @@ class AppRepository private constructor(private val pref: UserPreference, privat
         return date?.let { localFormat.format(it) } ?: utcTime
     }
 
+
+    // Fungsi untuk memanggil API berdasarkan label makanan
+    // Fungsi untuk memanggil API berdasarkan label makanan
+    fun fetchFoodInfoByLabel(label: String) {
+        _isLoading.value = true
+        val call = apiService.getFoodInfoByLabel(label)
+        call.enqueue(object : Callback<DataFoodResponse> {
+            override fun onResponse(call: Call<DataFoodResponse>, response: Response<DataFoodResponse>) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _foodInfo.postValue(response.body())
+                } else {
+                    _foodInfo.postValue(null) // Null atau data default jika gagal
+                    _toastText.postValue(Event("Failed to fetch food info: ${response.message()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<DataFoodResponse>, t: Throwable) {
+                _isLoading.value = false
+                _foodInfo.postValue(null) // Null atau data default jika gagal
+                _toastText.postValue(Event("API call failed: ${t.message}"))
+            }
+        })
+    }
 
 
 

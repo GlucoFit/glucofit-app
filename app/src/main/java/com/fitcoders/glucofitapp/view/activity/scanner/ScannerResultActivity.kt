@@ -4,14 +4,23 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.fitcoders.glucofitapp.databinding.ActivityScannerResultBinding
 import com.fitcoders.glucofitapp.data.helper.ImageClassifierHelper
+import com.fitcoders.glucofitapp.service.ApiConfig
+import com.fitcoders.glucofitapp.view.ViewModelFactory
 import org.tensorflow.lite.task.vision.classifier.Classifications
+import retrofit2.Callback
 
 class ScannerResultActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityScannerResultBinding
+    private val scanViewModel: ScanViewModel by viewModels {
+        // Buat ViewModel dengan factory
+        ViewModelFactory.getInstance(application)
+    }
 
     companion object {
         const val IMAGE_URI = "image_uri"
@@ -26,20 +35,7 @@ class ScannerResultActivity : AppCompatActivity() {
         if (imageUriString != null) {
             val imageUri = Uri.parse(imageUriString)
             showImage(imageUri)
-
-            val imageClassifierHelper = ImageClassifierHelper(
-                context = this,
-                classifierListener = object : ImageClassifierHelper.ClassifierListener {
-                    override fun onError(errorMsg: String) {
-                        showToast("Error: $errorMsg")
-                    }
-
-                    override fun onResults(results: List<Classifications>?, inferenceTime: Long) {
-                        results?.let { showResults(it) }
-                    }
-                }
-            )
-            imageClassifierHelper.classifyImage(imageUri)
+            scanViewModel.classifyImage(imageUri, this)
         } else {
             finish()
         }
@@ -53,23 +49,24 @@ class ScannerResultActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+        // Observasi hasil klasifikasi
+        scanViewModel.classificationResult.observe(this, Observer { label ->
+            binding.resultText.text = label
+        })
+
+        // Observasi informasi makanan dari API
+        scanViewModel.foodInfo.observe(this, Observer { foodInfo ->
+            if (foodInfo != null) {
+                binding.resultTextSugar.text = "Sugar content: ${foodInfo.sugar}g"
+            } else {
+                binding.resultTextSugar.text = "Failed to fetch food info"
+            }
+        })
     }
 
     private fun showImage(uri: Uri) {
         binding.resultImage.setImageURI(uri)
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun showResults(results: List<Classifications>) {
-        // Ambil kategori dengan probabilitas tertinggi dari hasil klasifikasi
-        val topResult = results[0].categories.maxByOrNull { it.score }
-        topResult?.let {
-            val label = it.label
-            val score = it.score
-
-            // Tampilkan hanya label dari hasil klasifikasi
-            binding.resultText.text = label
-        }
     }
 
     private fun saveHistory(imageUri: Uri, result: String) {

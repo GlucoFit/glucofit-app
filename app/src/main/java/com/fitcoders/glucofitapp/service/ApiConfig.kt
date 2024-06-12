@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit
 
 class ApiConfig {
     companion object {
+
         fun getApiService(preferences: UserPreference): ApiService {
             val loggingInterceptor =
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)

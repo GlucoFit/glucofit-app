@@ -29,6 +29,15 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_marginBottom="16dp"/>
 
+        <TextView
+            android:id="@+id/result_text_sugar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/result"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginBottom="16dp"/>
+
         <Button
             android:id="@+id/saveButton"
             android:layout_width="match_parent"
