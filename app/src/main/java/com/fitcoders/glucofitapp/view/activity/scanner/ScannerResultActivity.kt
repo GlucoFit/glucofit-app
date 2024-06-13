@@ -12,13 +12,12 @@ import com.fitcoders.glucofitapp.data.helper.ImageClassifierHelper
 import com.fitcoders.glucofitapp.service.ApiConfig
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import org.tensorflow.lite.task.vision.classifier.Classifications
-import retrofit2.Callback
 
 class ScannerResultActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityScannerResultBinding
     private val scanViewModel: ScanViewModel by viewModels {
-        // Buat ViewModel dengan factory
+        // Initialize the ViewModel using a factory method
         ViewModelFactory.getInstance(application)
     }
 
@@ -31,38 +30,100 @@ class ScannerResultActivity : AppCompatActivity() {
         binding = ActivityScannerResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Get the image URI from the intent extras
         val imageUriString = intent.getStringExtra(IMAGE_URI)
-        if (imageUriString != null) {
-            val imageUri = Uri.parse(imageUriString)
+
+        imageUriString?.let {
+            val imageUri = Uri.parse(it)
             showImage(imageUri)
+
+            // Using ViewModel to classify the image
             scanViewModel.classifyImage(imageUri, this)
-        } else {
+
+            // Using ImageClassifierHelper to classify the image
+            val imageClassifierHelper = ImageClassifierHelper(
+                context = this,
+                classifierListener = object : ImageClassifierHelper.ClassifierListener {
+                    override fun onError(errorMsg: String) {
+                        showToast("Error: $errorMsg")
+                    }
+
+                    override fun onResults(results: List<Classifications>?, inferenceTime: Long) {
+                        results?.let { showResults(it) }
+                    }
+                }
+            )
+            imageClassifierHelper.classifyImage(imageUri)
+        } ?: run {
+            showToast("No image URI provided")
             finish()
         }
 
+        // Save button click listener to save history
         binding.saveButton.setOnClickListener {
             val result = binding.resultText.text.toString()
-            if (imageUriString != null) {
-                saveHistory(Uri.parse(imageUriString), result)
-            } else {
+            imageUriString?.let {
+                saveHistory(Uri.parse(it), result)
+            } ?: run {
                 showToast("No image URI provided")
                 finish()
             }
         }
 
-        // Observasi hasil klasifikasi
-        scanViewModel.classificationResult.observe(this, Observer { label ->
-            binding.resultText.text = label
-        })
-
-        // Observasi informasi makanan dari API
+        // Observe food information from the API and display sugar data
         scanViewModel.foodInfo.observe(this, Observer { foodInfo ->
-            if (foodInfo != null) {
-                binding.resultTextSugar.text = "Sugar content: ${foodInfo.sugar}g"
+            if (foodInfo != null && foodInfo.sugar != null) {
+                val sugarItems = foodInfo.sugar // List of SugarItem?
+                // Filter not null items and extract sugar values
+                val sugarValues = sugarItems.filterNotNull().mapNotNull { it.sugar }
+                val sugarInfo = sugarValues.joinToString(separator = ", ") { "${it}g" } // Join sugar values with commas
+                binding.resultTextSugar.text = "Sugar content: $sugarInfo" // Display sugar content
             } else {
-                binding.resultTextSugar.text = "Failed to fetch food info"
+                binding.resultTextSugar.text = "No sugar data available or failed to fetch food info"
             }
         })
+
+    }
+
+ /*   override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityScannerResultBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val imageUriString = intent.getStringExtra(IMAGE_URI)
+        imageUriString?.let {
+            val imageUri = Uri.parse(it)
+            showImage(imageUri)
+
+            scanViewModel.classifyImage(imageUri, this)
+        } ?: run {
+            showToast("No image URI provided")
+            finish()
+        }
+
+        scanViewModel.foodInfo.observe(this, Observer { foodInfo ->
+            if (foodInfo != null && foodInfo.sugar != null) {
+                val sugarItems = foodInfo.sugar // List of SugarItem?
+                // Filter not null items and extract sugar values
+                val sugarValues = sugarItems.filterNotNull().mapNotNull { it.sugar }
+                val sugarInfo = sugarValues.joinToString(separator = ", ") { "${it}g" } // Join sugar values with commas
+                binding.resultTextSugar.text = "Sugar content: $sugarInfo" // Display sugar content
+            } else {
+                binding.resultTextSugar.text = "No sugar data available or failed to fetch food info"
+            }
+        })
+    }*/
+    @SuppressLint("SetTextI18n")
+    private fun showResults(results: List<Classifications>) {
+        if (results.isNotEmpty() && results[0].categories.isNotEmpty()) {
+            val topResult = results[0].categories[0]
+            val label = topResult.label
+            val score = topResult.score.formatToString()
+
+            binding.resultText.text = "$label ${score}"
+        } else {
+            binding.resultText.text = "No classification results available"
+        }
     }
 
     private fun showImage(uri: Uri) {
@@ -70,10 +131,15 @@ class ScannerResultActivity : AppCompatActivity() {
     }
 
     private fun saveHistory(imageUri: Uri, result: String) {
-        // Placeholder untuk menyimpan riwayat klasifikasi
+        // Placeholder for saving the classification history
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    // Extension function to format score as a percentage string
+    private fun Float.formatToString(): String {
+        return String.format("%.2f%%", this * 100)
     }
 }

@@ -8,10 +8,13 @@ data class DataFoodResponse(
 	val message: String? = null,
 
 	@field:SerializedName("sugar")
-	val sugar: Sugar? = null
+	val sugar: List<SugarItem?>? = null
 )
 
-data class Sugar(
+data class SugarItem(
+
+	@field:SerializedName("datasetLabel")
+	val datasetLabel: String? = null,
 
 	@field:SerializedName("createdAt")
 	val createdAt: String? = null,

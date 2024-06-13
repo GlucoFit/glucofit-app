@@ -1,12 +1,13 @@
-import android.util.Log
+package com.fitcoders.glucofitapp.utils.adapter
+
+
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.bumptech.glide.Glide
-
 import com.fitcoders.glucofitapp.databinding.ItemScanGridBinding
 import com.fitcoders.glucofitapp.databinding.ItemScanListBinding
 import com.fitcoders.glucofitapp.response.DataItem
@@ -15,8 +16,10 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
+
 class HistoryAdapter(
     private val itemClick: (DataItem) -> Unit,
+    private val itemDelete: (DataItem) -> Unit, // Correct type for delete action
     private var isGridView: Boolean = false // Parameter to toggle between list and grid view
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -59,7 +62,7 @@ class HistoryAdapter(
                     parent,
                     false
                 )
-                ItemHistoryGridViewHolder(binding, itemClick)
+                ItemHistoryGridViewHolder(binding, itemClick, itemDelete) // Pass delete action
             }
             else -> {
                 val binding = ItemScanListBinding.inflate(
@@ -67,7 +70,7 @@ class HistoryAdapter(
                     parent,
                     false
                 )
-                ItemHistoryListViewHolder(binding, itemClick)
+                ItemHistoryListViewHolder(binding, itemClick, itemDelete) // Pass delete action
             }
         }
     }
@@ -85,7 +88,8 @@ class HistoryAdapter(
     // ViewHolder for List View
     class ItemHistoryListViewHolder(
         private val binding: ItemScanListBinding,
-        private val itemClick: (DataItem) -> Unit
+        private val itemClick: (DataItem) -> Unit,
+        private val itemDelete: (DataItem) -> Unit // Correct type for delete action
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(item: DataItem) {
@@ -98,27 +102,32 @@ class HistoryAdapter(
                 foodName.text = item.objectName
                 sugarWeight.text = item.objectSugar.toString()
                 sugarUnit.text = "g"
-                // Konversi waktu dari UTC ke waktu lokal
+                // Convert UTC time to local time
                 val localCreatedAt = convertUtcToLocalTime(item.createdAt ?: "")
                 scanDate.text = localCreatedAt
                 scanTime.text = localCreatedAt
+
+                // Handle item click
                 itemView.setOnClickListener { itemClick(item) }
+
+                // Handle delete click
+                trashIcon.setOnClickListener { itemDelete(item) } // Correct delete action
             }
         }
 
-        fun convertUtcToLocalTime(utcTime: String): String {
-            // Format waktu yang diberikan dalam UTC
+        private fun convertUtcToLocalTime(utcTime: String): String {
+            // Format time provided in UTC
             val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
             utcFormat.timeZone = TimeZone.getTimeZone("UTC")
 
-            // Parse waktu dalam UTC
+            // Parse time in UTC
             val date: Date? = utcFormat.parse(utcTime)
 
-            // Format waktu untuk zona waktu lokal
+            // Format time for local time zone
             val localFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            localFormat.timeZone = TimeZone.getDefault() // Set ke zona waktu lokal perangkat
+            localFormat.timeZone = TimeZone.getDefault() // Set to device's local time zone
 
-            // Konversi dan kembalikan waktu dalam format zona waktu lokal
+            // Convert and return time in local format
             return date?.let { localFormat.format(it) } ?: utcTime
         }
     }
@@ -126,7 +135,8 @@ class HistoryAdapter(
     // ViewHolder for Grid View
     class ItemHistoryGridViewHolder(
         private val binding: ItemScanGridBinding,
-        private val itemClick: (DataItem) -> Unit
+        private val itemClick: (DataItem) -> Unit,
+        private val itemDelete: (DataItem) -> Unit // Correct type for delete action
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(item: DataItem) {
@@ -137,32 +147,36 @@ class HistoryAdapter(
                     .into(foodImage)
 
                 foodName.text = item.objectName
-                // Konversi waktu dari UTC ke waktu lokal
+                // Convert UTC time to local time
                 val localCreatedAt = convertUtcToLocalTime(item.createdAt ?: "")
                 scanDate.text = localCreatedAt
                 scanTime.text = localCreatedAt
                 sugarUnit.text = "g"
                 sugarWeight.text = item.objectSugar.toString()
+
+                // Handle item click
                 itemView.setOnClickListener { itemClick(item) }
+
+
+                // Handle delete click
+                trashIcon.setOnClickListener { itemDelete(item) } // Correct delete action
             }
         }
 
-        fun convertUtcToLocalTime(utcTime: String): String {
-            // Format waktu yang diberikan dalam UTC
+        private fun convertUtcToLocalTime(utcTime: String): String {
+            // Format time provided in UTC
             val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
             utcFormat.timeZone = TimeZone.getTimeZone("UTC")
 
-            // Parse waktu dalam UTC
+            // Parse time in UTC
             val date: Date? = utcFormat.parse(utcTime)
 
-            // Format waktu untuk zona waktu lokal
+            // Format time for local time zone
             val localFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            localFormat.timeZone = TimeZone.getDefault() // Set ke zona waktu lokal perangkat
+            localFormat.timeZone = TimeZone.getDefault() // Set to device's local time zone
 
-            // Konversi dan kembalikan waktu dalam format zona waktu lokal
+            // Convert and return time in local format
             return date?.let { localFormat.format(it) } ?: utcTime
         }
     }
-
-
 }

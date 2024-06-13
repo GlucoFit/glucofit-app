@@ -4,11 +4,13 @@ import com.fitcoders.glucofitapp.response.HistoryScanResponse
 import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
 import com.fitcoders.glucofitapp.response.DataFoodResponse
+import com.fitcoders.glucofitapp.response.DeleteResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.LogoutResponse
 import com.fitcoders.glucofitapp.response.PostHistoryScanResponse
 import com.fitcoders.glucofitapp.response.RegisterResponse
 import retrofit2.Call
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -71,11 +73,14 @@ interface ApiService {
     fun logout(
    ): Call<LogoutResponse>
 
-    @GET("scan/food/{name}")
+    @GET("scan/label/{datasetLabel}")
     fun getFoodInfoByLabel(
-        @Path("name") label: String
+        @Path("datasetLabel") label: String
     ): Call<DataFoodResponse>
 
+    @DELETE("scan/history/{id}")
+     fun deleteScanHistoryById(@Path("id") id: Int
+    ): Call<DeleteResponse>
 
 
 }

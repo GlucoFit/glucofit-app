@@ -91,8 +91,8 @@ class ScannerActivity : AppCompatActivity() {
     }
 
     private fun uCropUtils(sourceUri: Uri) {
-        val maxWidth = 3000
-        val maxHeight = 3000
+        val maxWidth = 4000
+        val maxHeight = 4000
         val fileName = "${System.currentTimeMillis()}.jpg"
         val destinationUri = Uri.fromFile(File(cacheDir, fileName))
         UCrop.of(sourceUri, destinationUri)
@@ -198,6 +198,6 @@ class ScannerActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 1001
+        private const val CAMERA_PERMISSION_REQUEST_CODE = 101
     }
 }

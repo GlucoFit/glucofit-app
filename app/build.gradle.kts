@@ -40,46 +40,49 @@ android {
         viewBinding = true
         mlModelBinding = true
     }
-}
 
-dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.legacy.support.v4)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.roundedImageView)
-    implementation(libs.androidx.viewpager2)
-    implementation(libs.tensorflow.lite.support)
-    implementation(libs.tensorflow.lite.metadata)
-    implementation(libs.androidx.runtime.android)
+    dependencies {
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+        implementation(libs.androidx.core.ktx)
+        implementation(libs.androidx.appcompat)
+        implementation(libs.material)
+        implementation(libs.androidx.activity)
+        implementation(libs.androidx.constraintlayout)
+        implementation(libs.androidx.legacy.support.v4)
+        implementation(libs.androidx.lifecycle.livedata.ktx)
+        implementation(libs.androidx.lifecycle.viewmodel.ktx)
+        implementation(libs.androidx.fragment.ktx)
+        implementation(libs.roundedImageView)
+        implementation(libs.androidx.viewpager2)
+        implementation(libs.tensorflow.lite.support)
+        implementation(libs.tensorflow.lite.metadata)
+        implementation(libs.androidx.runtime.android)
 
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation ("de.hdodenhof:circleimageview:3.1.0")
-    implementation ("com.github.yalantis:ucrop:2.2.8-native")
-    implementation ("com.github.ArjunGupta08:Horizontal-CalendarDate-With-Click-listener:1.1.0")
-    implementation ("androidx.datastore:datastore-preferences:1.0.0")
-    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+        testImplementation(libs.junit)
+        androidTestImplementation(libs.androidx.junit)
+        androidTestImplementation(libs.androidx.espresso.core)
 
-    // Coil
-    implementation(libs.coil)
-    implementation(libs.koin.android)
+        implementation("com.github.bumptech.glide:glide:4.16.0")
+        implementation("de.hdodenhof:circleimageview:3.1.0")
+        implementation("com.github.yalantis:ucrop:2.2.8-native")
+        implementation("com.github.ArjunGupta08:Horizontal-CalendarDate-With-Click-listener:1.1.0")
+        implementation("androidx.datastore:datastore-preferences:1.0.0")
+        implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-    //Retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+        // Coil
+        implementation(libs.coil)
+        implementation(libs.koin.android)
 
-    implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
-    implementation("org.tensorflow:tensorflow-lite-metadata:0.4.4")
-    implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.4")
+        //Retrofit
+        implementation("com.squareup.retrofit2:retrofit:2.9.")
+        implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+        implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+
+
+        implementation("org.tensorflow:tensorflow-lite:2.10.0")
+        implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+        implementation("org.tensorflow:tensorflow-lite-metadata:0.4.4")
+        implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.4")
+    }
 }

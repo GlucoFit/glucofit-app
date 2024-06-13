@@ -5,13 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fitcoders.glucofitapp.data.AppRepository
 import com.fitcoders.glucofitapp.response.DataItem
-import com.fitcoders.glucofitapp.utils.Event
+import com.fitcoders.glucofitapp.response.DeleteResponse
 import kotlinx.coroutines.launch
 
 class HistoryViewModel(private val repository: AppRepository) : ViewModel() {
 
 
     val scanHistoryResponse: LiveData<Result<List<DataItem>>> get() = repository.scanHistoryResponse
+
+    val deleteResponse: LiveData<DeleteResponse?> get() = repository.deleteResponse
 
     // Method to trigger fetching scan history
     /*fun fetchScanHistory() {
@@ -25,10 +27,15 @@ class HistoryViewModel(private val repository: AppRepository) : ViewModel() {
             repository.fetchScanHistoryByDate(date)
         }
     }
-
     // Method untuk menghitung total objectSugar
     fun calculateTotalSugar(data: List<DataItem>): Int {
         return data.sumOf { it.objectSugar ?: 0 }
+    }
+
+    fun deleteScanHistoryById(id: Int) {
+        viewModelScope.launch {
+            repository.deleteScanHistoryById(id)
+        }
     }
 
 

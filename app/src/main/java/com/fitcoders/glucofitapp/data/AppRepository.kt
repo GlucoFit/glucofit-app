@@ -10,6 +10,7 @@ import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
 import com.fitcoders.glucofitapp.response.DataFoodResponse
 import com.fitcoders.glucofitapp.response.DataItem
+import com.fitcoders.glucofitapp.response.DeleteResponse
 import com.fitcoders.glucofitapp.response.HistoryScanResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.LogoutResponse
@@ -49,13 +50,13 @@ class AppRepository private constructor(private val pref: UserPreference, privat
     private val _scanHistoryResponse = MutableLiveData<Result<List<DataItem>>>()
     val scanHistoryResponse: LiveData<Result<List<DataItem>>> = _scanHistoryResponse
 
-    // LiveData untuk klasifikasi gambar
-    private val _classificationResult = MutableLiveData<String>()
-    val classificationResult: LiveData<String> = _classificationResult
 
     // LiveData untuk informasi makanan
     private val _foodInfo = MutableLiveData<DataFoodResponse?>()
     val foodInfo: MutableLiveData<DataFoodResponse?> = _foodInfo
+
+    private val _deleteResponse = MutableLiveData<DeleteResponse?>()
+    val deleteResponse: LiveData<DeleteResponse?> = _deleteResponse
 
 
     fun pRegister(userName: String, email: String, password: String) {
@@ -308,6 +309,34 @@ class AppRepository private constructor(private val pref: UserPreference, privat
             }
         })
     }
+
+    fun deleteScanHistoryById(id: Int) {
+        _isLoading.value = true
+        val call = apiService.deleteScanHistoryById(id)
+
+        call.enqueue(object : Callback<DeleteResponse> {
+            override fun onResponse(call: Call<DeleteResponse>, response: Response<DeleteResponse>) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _deleteResponse.value = response.body()
+                    _toastText.value = Event("Scan history deleted successfully")
+                    Log.d(TAG, "Deleted scan history with ID: $id")
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _toastText.value = Event("Failed to delete scan history: ${response.code()} ${response.message()}. Body: $errorBody")
+                    Log.e(TAG, "Error deleting scan history: ${response.code()} - ${response.message()}, Body: $errorBody")
+                }
+            }
+
+            override fun onFailure(call: Call<DeleteResponse>, t: Throwable) {
+                _isLoading.value = false
+                _toastText.value = Event("Failure: ${t.message}")
+                Log.e(TAG, "Failure deleting scan history: ${t.message}")
+            }
+        })
+    }
+
+
 
 
 

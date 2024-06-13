@@ -8,20 +8,19 @@ import android.os.Build
 import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.Log
-import com.fitcoders.glucofitapp.R
+import org.tensorflow.lite.support.common.ops.NormalizeOp
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.task.core.BaseOptions
 import org.tensorflow.lite.task.vision.classifier.Classifications
 import org.tensorflow.lite.task.vision.classifier.ImageClassifier
-import java.lang.IllegalStateException
-
+import java.io.IOException
 
 class ImageClassifierHelper(
     val threshold: Float = 0.2f,
     var maxResults: Int = 3,
-    val modelName: String = "model_buat_metadata.tflite",
+    val modelName: String = "mobilenet_v1.tflite",
     val context: Context,
     val classifierListener: ClassifierListener?
 ) {
@@ -44,16 +43,21 @@ class ImageClassifierHelper(
             setupImageClassifier()
         }
 
+        // Konversi URI ke Bitmap
         val bitmap = uriToBitmap(imageUri)
+
+        // Buat TensorImage dari Bitmap
         val tensorImage = TensorImage.fromBitmap(bitmap)
 
-        // Proses gambar sesuai dengan ukuran yang diperlukan model
+        // Proses gambar: resize dan normalisasi
         val imageProcessor = ImageProcessor.Builder()
             .add(ResizeOp(224, 224, ResizeOp.ResizeMethod.NEAREST_NEIGHBOR))
+            .add(NormalizeOp(0.0f, 1.0f)) // Normalisasi nilai piksel antara 0 dan 1
             .build()
 
         val processedImage = imageProcessor.process(tensorImage)
 
+        // Jalankan inferensi
         var inferenceTime = SystemClock.uptimeMillis()
         val results = imageClassifier?.classify(processedImage)
         inferenceTime = SystemClock.uptimeMillis() - inferenceTime
@@ -61,7 +65,6 @@ class ImageClassifierHelper(
         if (results.isNullOrEmpty()) {
             classifierListener?.onError("Classification returned no results.")
         } else {
-            Log.d(TAGIMAGE, "Classification Results: $results")
             classifierListener?.onResults(results, inferenceTime)
         }
     }
@@ -80,14 +83,10 @@ class ImageClassifierHelper(
                 modelName,
                 optionsBuilder.build()
             )
-        } catch (e: IllegalStateException) {
+        } catch (e: IOException) {
             val errorMessage = "Failed to load model: ${e.message}"
             classifierListener?.onError(errorMessage)
-            Log.e(TAGIMAGE, errorMessage)
-        } catch (e: Exception) {
-            val errorMessage = "Unexpected error: ${e.message}"
-            classifierListener?.onError(errorMessage)
-            Log.e(TAGIMAGE, errorMessage)
+            Log.e(TAG, errorMessage)
         }
     }
 
@@ -101,6 +100,6 @@ class ImageClassifierHelper(
     }
 
     companion object {
-        private const val TAGIMAGE = "ImageClassifierHelperModified"
+        private const val TAG = "ImageClassifierHelper"
     }
 }
