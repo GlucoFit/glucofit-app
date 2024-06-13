@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fitcoders.glucofitapp.R
-import com.fitcoders.glucofitapp.data.Food
 import com.fitcoders.glucofitapp.databinding.FragmentHomeBinding
 import com.fitcoders.glucofitapp.utils.adapter.FoodAdapter
 import com.fitcoders.glucofitapp.view.ViewModelFactory
@@ -29,15 +28,6 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels { modelFactory }
     private var isListLayout = true
     private lateinit var foodAdapter: FoodAdapter
-
-    // Data Mock
-    private val mockFoodList = listOf(
-        Food(1, "Sliced meat", "sliced meat and potatoes", "https://storage.googleapis.com/glucofit-test-bucket/user-image/1718111185545_2_food1.png", "15"),
-        Food(2, "Pizza", "Cheesy pizza with a variety of toppings", "https://example.com/pizza.jpg", "200 g"),
-        Food(3, "Burger", "Juicy burger with fresh lettuce and tomato", "https://example.com/burger.jpg", "300 g"),
-        Food(4, "Burger", "Juicy burger with fresh lettuce and tomato", "https://example.com/burger.jpg", "300 g"),
-        Food(5, "Burger", "Juicy burger with fresh lettuce and tomato", "https://example.com/burger.jpg", "300 g")
-    )
 
     companion object {
         fun newInstance() = HomeFragment()
@@ -74,27 +64,16 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.toggleButton.setOnClickListener {
+/*        binding.toggleButton.setOnClickListener {
             toggleLayout()
-        }
+        }*/
 
-        // Set up RecyclerView with mock data
-        foodAdapter = FoodAdapter(mockFoodList, isListLayout)
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = foodAdapter
     }
 
-    private fun toggleLayout() {
-        if (isListLayout) {
-            binding.recyclerView.layoutManager = GridLayoutManager(context, 2)
-            binding.toggleButton.setImageResource(R.drawable.ic_window)
-        } else {
-            binding.recyclerView.layoutManager = LinearLayoutManager(context)
-            binding.toggleButton.setImageResource(R.drawable.ic_table)
-        }
+/*    private fun toggleLayout() {
         isListLayout = !isListLayout
-        foodAdapter.setViewType(isListLayout)
-    }
+        FoodAdapter.setViewType(isListLayout)
+    }*/
 
     @SuppressLint("SetTextI18n")
     private fun updateEmojiAndText(intakeGula: Int) {

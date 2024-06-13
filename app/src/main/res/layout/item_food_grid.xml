@@ -39,7 +39,7 @@
             tools:text="Sliced meat" />
 
         <TextView
-            android:id="@+id/food_description"
+            android:id="@+id/calories"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -49,16 +49,16 @@
             app:layout_constraintTop_toBottomOf="@id/food_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="sliced meat and potatoes" />
+            tools:text="45.687 Cal" />
 
         <TextView
-            android:id="@+id/food_weight"
+            android:id="@+id/sugar_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins_regular"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/food_description"
+            app:layout_constraintTop_toBottomOf="@id/calories"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="15 g" />
@@ -69,7 +69,7 @@
             android:layout_height="24dp"
             android:layout_marginTop="8dp"
             android:src="@drawable/ic_heart"
-            app:layout_constraintTop_toBottomOf="@id/food_weight"
+            app:layout_constraintTop_toBottomOf="@id/sugar_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

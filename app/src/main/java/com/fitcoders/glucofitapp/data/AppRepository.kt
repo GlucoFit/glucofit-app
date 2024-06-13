@@ -11,9 +11,12 @@ import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
 import com.fitcoders.glucofitapp.response.DataFoodResponse
 import com.fitcoders.glucofitapp.response.DataItem
 import com.fitcoders.glucofitapp.response.DeleteResponse
+import com.fitcoders.glucofitapp.response.FoodDetails
 import com.fitcoders.glucofitapp.response.HistoryScanResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.LogoutResponse
+import com.fitcoders.glucofitapp.response.RecommendationResponse
+import com.fitcoders.glucofitapp.response.RecommendationResponseItem
 import com.fitcoders.glucofitapp.response.RegisterResponse
 import com.fitcoders.glucofitapp.service.ApiService
 import com.fitcoders.glucofitapp.utils.Event
@@ -49,6 +52,9 @@ class AppRepository private constructor(private val pref: UserPreference, privat
 
     private val _scanHistoryResponse = MutableLiveData<Result<List<DataItem>>>()
     val scanHistoryResponse: LiveData<Result<List<DataItem>>> = _scanHistoryResponse
+
+    private val _recommendationResponse = MutableLiveData<Result<List<RecommendationResponseItem>>>()
+    val recommendationResponse: LiveData<Result<List<RecommendationResponseItem>>> = _recommendationResponse
 
 
     // LiveData untuk informasi makanan
@@ -337,7 +343,33 @@ class AppRepository private constructor(private val pref: UserPreference, privat
     }
 
 
+    fun getRecommendation() {
+        _isLoading.value = true
+        val call = apiService.getRecommendations()
 
+        call.enqueue(object : Callback<RecommendationResponse> {
+            override fun onResponse(
+                call: Call<RecommendationResponse>,
+                response: Response<RecommendationResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val recommendations = response.body()?.recommendationResponse ?: emptyList()
+                    _recommendationResponse.value = Result.success(recommendations.filterNotNull())
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _toastText.value = Event("Error: ${response.code()} ${response.message()}. Body: $errorBody")
+                    _recommendationResponse.value = Result.failure(Throwable("Failed to fetch recommendations"))
+                }
+            }
+
+            override fun onFailure(call: Call<RecommendationResponse>, t: Throwable) {
+                _isLoading.value = false
+                _toastText.value = Event("Failure: ${t.message}")
+                _recommendationResponse.value = Result.failure(t)
+            }
+        })
+    }
 
 
 

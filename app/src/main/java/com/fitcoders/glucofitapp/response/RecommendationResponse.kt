@@ -2,13 +2,13 @@ package com.fitcoders.glucofitapp.response
 
 import com.google.gson.annotations.SerializedName
 
-data class RecondationResponse(
+data class RecommendationResponse(
 
-	@field:SerializedName("RecondationResponse")
-	val recondationResponse: List<RecondationResponseItem?>? = null
+	@field:SerializedName("RecommendationResponse")
+	val recommendationResponse: List<RecommendationResponseItem?>? = null
 )
 
-data class RecondationResponseItem(
+data class RecommendationResponseItem(
 
 	@field:SerializedName("diet_labels")
 	val dietLabels: String? = null,
@@ -17,10 +17,10 @@ data class RecondationResponseItem(
 	val recipeName: String? = null,
 
 	@field:SerializedName("compatibility_score")
-	val compatibilityScore: Any? = null,
+	val compatibilityScore: Float? = null,
 
 	@field:SerializedName("food_details")
-	val foodDetails: Any? = null
+	val foodDetails: List<FoodDetails>? = null
 )
 
 data class FoodDetails(
@@ -29,7 +29,7 @@ data class FoodDetails(
 	val recipeName: String? = null,
 
 	@field:SerializedName("sugarContent")
-	val sugarContent: Any? = null,
+	val sugarContent: Float? = null,
 
 	@field:SerializedName("instructionUrl")
 	val instructionUrl: String? = null,
@@ -53,7 +53,7 @@ data class FoodDetails(
 	val id: Int? = null,
 
 	@field:SerializedName("calories")
-	val calories: Any? = null,
+	val calories: Float? = null,
 
 	@field:SerializedName("updatedAt")
 	val updatedAt: String? = null

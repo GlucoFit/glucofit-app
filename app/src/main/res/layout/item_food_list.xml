@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/avatarImageView"
+            android:id="@+id/food_image"
             android:layout_width="149dp"
             android:layout_height="117dp"
             android:layout_marginStart="16dp"
@@ -30,37 +30,37 @@
             android:layout_height="24dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/avatarImageView"
+            android:layout_toEndOf="@id/food_image"
             android:fontFamily="@font/poppins_regular"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/avatarImageView"
+            app:layout_constraintStart_toEndOf="@+id/food_image"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Food Name" />
 
         <TextView
-            android:id="@+id/food_description"
+            android:id="@+id/calories"
             android:layout_width="108dp"
             android:layout_height="24dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="5dp"
-            android:layout_toEndOf="@id/avatarImageView"
+            android:layout_toEndOf="@id/food_image"
             android:fontFamily="@font/poppins_regular"
             android:textColor="@color/gray"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/avatarImageView"
+            app:layout_constraintStart_toEndOf="@+id/food_image"
             app:layout_constraintTop_toBottomOf="@+id/food_name"
             tools:text="Food Description" />
 
         <TextView
-            android:id="@+id/food_weight"
+            android:id="@+id/sugar_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginStart="24dp"
             android:fontFamily="@font/poppins_regular"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/food_description"
-            app:layout_constraintStart_toEndOf="@id/avatarImageView"
+            app:layout_constraintTop_toBottomOf="@id/calories"
+            app:layout_constraintStart_toEndOf="@id/food_image"
             tools:text="15 g" />
 
         <ImageView

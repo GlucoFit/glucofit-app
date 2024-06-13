@@ -1,9 +1,15 @@
 package com.fitcoders.glucofitapp.data
 
-data class Food(//sementara data nya
+data class Food(
     val id: Int,
-    val name: String,
-    val description: String,
+    val recipeUri: String,
+    val recipeName: String,
+    val calories: Float,
+    val sugarContent: Float,
+    val dietLabels: String,
+    val ingredients: String,
     val imageUrl: String,
-    val weight: String,
+    val instructionUrl: String,
+    val createdAt: String,
+    val updatedAt: String,
 )

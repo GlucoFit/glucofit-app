@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.fitcoders.glucofitapp.data.AppRepository
 import com.fitcoders.glucofitapp.data.UserModel
 import com.fitcoders.glucofitapp.response.DataItem
+import com.fitcoders.glucofitapp.response.RecommendationResponseItem
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -17,6 +18,9 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
 
     private val _todaySugarIntake = MutableLiveData<Int>()
     val todaySugarIntake: LiveData<Int> get() = _todaySugarIntake
+
+    private val _recommendationResponse = MutableLiveData<Result<List<RecommendationResponseItem>>>()
+    val recommendationResponse: LiveData<Result<List<RecommendationResponseItem>>> = _recommendationResponse
 
     fun getSession(): LiveData<UserModel> {
         return repository.getSession()
@@ -46,6 +50,12 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
 
     private fun calculateTotalSugar(dataItems: List<DataItem>): Int {
         return dataItems.sumOf { it.objectSugar ?: 0 }
+    }
+
+    fun fetchRecommendations() {
+        viewModelScope.launch {
+            repository.getRecommendation()
+        }
     }
 }
 

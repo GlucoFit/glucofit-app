@@ -1,32 +1,45 @@
 package com.fitcoders.glucofitapp.utils.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.fitcoders.glucofitapp.databinding.ItemFoodGridBinding
+import com.fitcoders.glucofitapp.databinding.ItemFoodListBinding
+import com.fitcoders.glucofitapp.response.FoodDetails
 import com.bumptech.glide.Glide
-import com.fitcoders.glucofitapp.R
-import com.fitcoders.glucofitapp.data.Food
 
-class FoodAdapter(private var foodList: List<Food>, private var isListView: Boolean) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FoodAdapter(
+    private val itemClick: (FoodDetails) -> Unit,
+    private var isListView: Boolean = false
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val VIEW_TYPE_LIST = 1
-    private val VIEW_TYPE_GRID = 2
-
-    inner class FoodListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val foodImage: ImageView = itemView.findViewById(R.id.avatarImageView)
-        val foodName: TextView = itemView.findViewById(R.id.food_name)
-        val foodDescription: TextView = itemView.findViewById(R.id.food_description)
+    companion object {
+        private const val VIEW_TYPE_LIST = 1
+        private const val VIEW_TYPE_GRID = 2
     }
 
-    inner class FoodGridViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val foodImage: ImageView = itemView.findViewById(R.id.food_image)
-        val foodName: TextView = itemView.findViewById(R.id.food_name)
-        val foodDescription: TextView = itemView.findViewById(R.id.food_description)
-        val foodWeight: TextView = itemView.findViewById(R.id.food_weight)
-        val favoriteIcon: ImageView = itemView.findViewById(R.id.favorite_icon)
+    private val foodDiffer = AsyncListDiffer(
+        this,
+        object : DiffUtil.ItemCallback<FoodDetails>() {
+            override fun areItemsTheSame(oldItem: FoodDetails, newItem: FoodDetails): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: FoodDetails, newItem: FoodDetails): Boolean {
+                return oldItem == newItem
+            }
+        }
+    )
+
+    fun submitList(data: List<FoodDetails>) {
+        foodDiffer.submitList(data)
+    }
+
+    fun setViewType(isListView: Boolean) {
+        this.isListView = isListView
+        notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -34,33 +47,69 @@ class FoodAdapter(private var foodList: List<Food>, private var isListView: Bool
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == VIEW_TYPE_LIST) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_food_list, parent, false)
-            FoodListViewHolder(view)
-        } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_food_grid, parent, false)
-            FoodGridViewHolder(view)
+        return when (viewType) {
+            VIEW_TYPE_GRID -> {
+                val binding = ItemFoodGridBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                FoodGridViewHolder(binding, itemClick)
+            }
+            else -> {
+                val binding = ItemFoodListBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                FoodListViewHolder(binding, itemClick)
+            }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val food = foodList[position]
-        if (holder is FoodListViewHolder) {
-            holder.foodName.text = food.name
-            holder.foodDescription.text = food.description
-            Glide.with(holder.itemView.context).load(food.imageUrl).into(holder.foodImage)
-        } else if (holder is FoodGridViewHolder) {
-            holder.foodName.text = food.name
-            holder.foodDescription.text = food.description
-            holder.foodWeight.text = food.weight
-            Glide.with(holder.itemView.context).load(food.imageUrl).into(holder.foodImage)
+        val item = foodDiffer.currentList[position]
+        when (holder) {
+            is FoodListViewHolder -> holder.bindView(item)
+            is FoodGridViewHolder -> holder.bindView(item)
         }
     }
 
-    override fun getItemCount(): Int = foodList.size
+    override fun getItemCount(): Int = foodDiffer.currentList.size
 
-    fun setViewType(isListView: Boolean) {
-        this.isListView = isListView
-        notifyDataSetChanged()
+    // ViewHolder for list view
+    class FoodListViewHolder(
+        private val binding: ItemFoodListBinding,
+        private val itemClick: (FoodDetails) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bindView(item: FoodDetails) {
+            with(binding) {
+                Glide.with(itemView.context)
+                    .load(item.imageUrl)
+                    .into(foodImage)
+                foodName.text = item.recipeName
+                calories.text = item.calories.toString()
+                sugarContent.text = item.sugarContent.toString()
+                itemView.setOnClickListener { itemClick(item) }
+            }
+        }
+    }
+
+    // ViewHolder for grid view
+    class FoodGridViewHolder(
+        private val binding: ItemFoodGridBinding,
+        private val itemClick: (FoodDetails) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bindView(item: FoodDetails) {
+            with(binding) {
+                Glide.with(itemView.context)
+                    .load(item.imageUrl)
+                    .into(foodImage)
+                foodName.text = item.recipeName
+                calories.text = item.calories.toString()
+                sugarContent.text = item.sugarContent.toString()
+                itemView.setOnClickListener { itemClick(item) }
+            }
+        }
     }
 }

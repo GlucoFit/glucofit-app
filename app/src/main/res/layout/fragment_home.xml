@@ -223,7 +223,7 @@
 
             <!-- Food Recommendation RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/food_recommendation_recycler_view"
                 tools:listitem="@layout/item_food_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
