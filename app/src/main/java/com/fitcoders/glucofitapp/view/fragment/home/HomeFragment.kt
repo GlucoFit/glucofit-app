@@ -18,6 +18,7 @@ import com.fitcoders.glucofitapp.data.Food
 import com.fitcoders.glucofitapp.databinding.FragmentHomeBinding
 import com.fitcoders.glucofitapp.utils.adapter.FoodAdapter
 import com.fitcoders.glucofitapp.view.ViewModelFactory
+import com.fitcoders.glucofitapp.view.activity.fooddetail.FoodDetailActivity
 import com.fitcoders.glucofitapp.view.activity.scanner.ScannerActivity
 
 class HomeFragment : Fragment() {

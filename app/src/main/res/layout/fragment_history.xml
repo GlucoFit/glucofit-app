@@ -114,17 +114,6 @@
                     android:src="@drawable/ic_window" />
             </LinearLayout>
 
-            <!-- Tambahkan ImageView untuk tampilan kosong -->
-            <ImageView
-                android:id="@+id/emptyImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/iamge2"
-            android:contentDescription="@null"
-            android:visibility="gone"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="30dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 tools:listitem="@layout/item_scan_list"
@@ -135,9 +124,47 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="30dp"
+                android:visibility="gone"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:nestedScrollingEnabled="false" />
+
+            <LinearLayout
+                android:id="@+id/ll_scan_not_found"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <ImageView
+                    android:id="@+id/iv_scan_not_found"
+                    android:layout_width="134dp"
+                    android:layout_height="136dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_not_found"
+                    android:contentDescription="@null"
+                    android:layout_marginTop="60dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Looks like you"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="haven't scanned any food today!"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

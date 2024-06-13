@@ -99,12 +99,17 @@
     <string name="question_food_dislikes">Do you have a food or ingredient you don\'t like?</string>
 
     <!--  informasi toolip-->
-    <string name="toolip_vetarian">Makanan yang tidak mengandung daging atau produk-produk hewani.</string>
-    <string name="toolip_vegan">Makanan yang tidak mengandung produk hewani sama sekali, termasuk daging, susu, telur, dan produk-produk susu.</string>
-    <string name="toolip_paleo">Makanan yang meniru pola makan manusia zaman prasejarah, fokus pada daging, ikan, sayuran, buah-buahan, kacang-kacangan, dan biji-bijian.</string>
-    <string name="toolip_gluten">Makanan yang tidak mengandung gluten, protein yang ditemukan dalam gandum, jelai, dan gandum hitam.</string>
-    <string name="toolip_lactose">Makanan yang tidak mengandung laktosa, gula alami yang ditemukan dalam susu dan produk susu.</string>
-    <string name="toolip_organik">Makanan yang diproduksi tanpa menggunakan pestisida atau bahan kimia sintetis</string>
+    <string name="toolip_vetarian">Excludes meat, fish, and poultry but includes plant-based foods, dairy products, and eggs.</string>
+    <string name="toolip_vegan">Excludes all animal products, including meat, dairy, eggs, and honey, focusing on plant-based foods.</string>
+    <string name="toolip_paleo">Focuses on foods presumed to be available to Paleolithic humans, including lean meats, fish, fruits, vegetables, nuts, and seeds, while excluding processed foods, grains, legumes, and dairy.</string>
+    <string name="tooltip_high_fiber">Emphasizes foods rich in dietary fiber, such as fruits, vegetables, whole grains, and legumes, to promote digestive health.</string>
+    <string name="tooltip_high_protein">Prioritizes foods high in protein, such as lean meats, fish, eggs, dairy products, legumes, nuts, and seeds, to support muscle growth and repair.</string>
+    <string name="tooltip_low_carb">Limits carbohydrate intake, focusing on protein and fat-rich foods, and often includes vegetables, meat, fish, eggs, and dairy, while excluding or reducing grains, starchy vegetables, and sugary foods.</string>
+    <string name="tooltip_low_fat">Restricts fat intake, emphasizing lean proteins, fruits, vegetables, and whole grains, while reducing consumption of fatty foods, oils, and dairy products.</string>
+    <string name="tooltip_low_sodium">Aims to reduce sodium intake to manage blood pressure and heart health, focusing on fresh, unprocessed foods and minimizing salt usage.</string>
+    <string name="tooltip_low_sugar">Limits the intake of added sugars and high-sugar foods, focusing on whole, unprocessed foods like vegetables, fruits, lean proteins, and whole grains.</string>
+    <string name="tooltip_alcohol_free">Avoids all forms of alcohol, focusing on non-alcoholic beverages and foods.</string>
+    <string name="tooltip_balanced">Incorporates a variety of food groups in moderate amounts, aiming for a balanced intake of carbohydrates, proteins, and fats to support overall health</string>
     <string name="searchbar_hint">Search</string>
     <string name="profil_title">Profil</string>
 
@@ -147,4 +152,5 @@
     <string name="tip8">If the analysis result is wrong, try inserting the photo from a different angle.</string>
     <string name="_9">9.</string>
     <string name="tip9">Thank you for using the GlucoFit app!</string>
+    <string name="food_detail_title">Detail</string>
 </resources>

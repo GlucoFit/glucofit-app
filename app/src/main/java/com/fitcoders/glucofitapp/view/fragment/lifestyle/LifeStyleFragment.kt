@@ -50,14 +50,29 @@ class LifeStyleFragment : Fragment() {
         binding.iconPaleoInfo.setOnClickListener {
             showTooltip(it, getString(R.string.toolip_vegan))
         }
-        binding.iconGlutenFreeInfo.setOnClickListener {
-            showTooltip(it, getString(R.string.toolip_gluten))
+        binding.iconHighFiberInfo.setOnClickListener {
+            showTooltip(it, getString(R.string.tooltip_high_fiber))
+        }
+        binding.iconHighProteinInfo.setOnClickListener {
+            showTooltip(it, getString(R.string.tooltip_high_protein))
+        }
+        binding.iconLowCarbInfo.setOnClickListener {
+            showTooltip(it, getString(R.string.tooltip_low_carb))
         }
         binding.iconLowFatInfo.setOnClickListener {
-            showTooltip(it, getString(R.string.toolip_lactose))
+            showTooltip(it, getString(R.string.tooltip_low_fat))
         }
-        binding.iconLowFatInfo.setOnClickListener {
-            showTooltip(it, getString(R.string.toolip_organik))
+        binding.iconLowSodiumInfo.setOnClickListener {
+            showTooltip(it, getString(R.string.tooltip_low_sodium))
+        }
+        binding.iconLowSugarInfo.setOnClickListener {
+            showTooltip(it, getString(R.string.tooltip_low_sugar))
+        }
+        binding.iconAlcoholFreeInfo.setOnClickListener {
+            showTooltip(it, getString(R.string.tooltip_alcohol_free))
+        }
+        binding.iconBalancedInfo.setOnClickListener {
+            showTooltip(it, getString(R.string.tooltip_balanced))
         }
     }
 
@@ -78,7 +93,7 @@ class LifeStyleFragment : Fragment() {
         val isRadioGroup3Checked = binding.rgExerciseFrequency.checkedRadioButtonId != -1
         val isRadioGroup4Checked = binding.rgFoodAllergies.checkedRadioButtonId != -1
         val isCheckboxChecked = binding.cbVegetarian.isChecked || binding.cbVegan.isChecked || binding.cbPaleo.isChecked ||
-                binding.cbGlutenFree.isChecked || binding.cbLowCarb.isChecked || binding.cbLowFat.isChecked ||
+                binding.cbHighFiber.isChecked || binding.cbHighProtein.isChecked || binding.cbLowCarb.isChecked || binding.cbLowFat.isChecked ||
                 binding.cbLowSodium.isChecked || binding.cbLowSugar.isChecked || binding.cbAlcoholFree.isChecked ||
                 binding.cbBalanced.isChecked
 
@@ -94,7 +109,8 @@ class LifeStyleFragment : Fragment() {
         binding.cbVegetarian.setOnCheckedChangeListener { _, _ -> checkValidation() }
         binding.cbVegan.setOnCheckedChangeListener { _, _ -> checkValidation() }
         binding.cbPaleo.setOnCheckedChangeListener { _, _ -> checkValidation() }
-        binding.cbGlutenFree.setOnCheckedChangeListener { _, _ -> checkValidation() }
+        binding.cbHighFiber.setOnCheckedChangeListener { _, _ -> checkValidation() }
+        binding.cbHighProtein.setOnCheckedChangeListener { _, _ -> checkValidation() }
         binding.cbLowCarb.setOnCheckedChangeListener { _, _ -> checkValidation() }
         binding.cbLowFat.setOnCheckedChangeListener { _, _ -> checkValidation() }
         binding.cbLowSodium.setOnCheckedChangeListener { _, _ -> checkValidation() }
@@ -136,7 +152,8 @@ class LifeStyleFragment : Fragment() {
         if (binding.cbVegetarian.isChecked) selectedDietaryPreferences.add("Vegetarian")
         if (binding.cbVegan.isChecked) selectedDietaryPreferences.add("Vegan")
         if (binding.cbPaleo.isChecked) selectedDietaryPreferences.add("Paleo")
-        if (binding.cbGlutenFree.isChecked) selectedDietaryPreferences.add("Gluten Free")
+        if (binding.cbHighFiber.isChecked) selectedDietaryPreferences.add("High Fiber")
+        if (binding.cbHighProtein.isChecked) selectedDietaryPreferences.add("High Protein")
         if (binding.cbLowCarb.isChecked) selectedDietaryPreferences.add("Low Carb")
         if (binding.cbLowFat.isChecked) selectedDietaryPreferences.add("Low Fat")
         if (binding.cbLowSodium.isChecked) selectedDietaryPreferences.add("Low Sodium")

@@ -149,12 +149,12 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
 
     private fun showEmptyView() {
         binding.recyclerViewScanHistory.visibility = View.GONE
-        binding.emptyImageView.visibility = View.VISIBLE // Show empty view
+        binding.llScanNotFound.visibility = View.VISIBLE // Show empty view
     }
 
     private fun hideEmptyView() {
         binding.recyclerViewScanHistory.visibility = View.VISIBLE
-        binding.emptyImageView.visibility = View.GONE // Hide empty view
+        binding.llScanNotFound.visibility = View.GONE // Hide empty view
     }
 
     private fun bindHistory(data: List<DataItem>) {

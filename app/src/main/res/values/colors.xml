@@ -22,4 +22,6 @@
 
     <color name="light_theme_secondary">#FFFFFF</color>
     <color name="dark_theme_secondary">#171719</color>
+
+    <color name="food_gradient_start">#80F6F6F8</color>
 </resources>

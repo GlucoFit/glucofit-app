@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/instruction_condition"
-                android:textColor="@color/grey"
+                android:textColor="@color/text_color_light_secondary"
                 android:textSize="14sp" />
 
             <RadioGroup
@@ -68,7 +68,7 @@
                     android:id="@+id/rb_sweet_consumption_everyday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/sweet_consumption_everyday"
                     android:textSize="14sp" />
 
@@ -76,7 +76,7 @@
                     android:id="@+id/rb_sweet_consumption_5_6_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/sweet_consumption_5_6_times"
                     android:textSize="14sp" />
 
@@ -84,7 +84,7 @@
                     android:id="@+id/rb_sweet_consumption_3_4_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/sweet_consumption_3_4_times"
                     android:textSize="14sp" />
 
@@ -92,7 +92,7 @@
                     android:id="@+id/rb_sweet_consumption_1_2_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/sweet_consumption_1_2_times"
                     android:textSize="14sp" />
 
@@ -100,7 +100,7 @@
                     android:id="@+id/rb_sweet_consumption_rarely"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/sweet_consumption_rarely"
                     android:textSize="14sp" />
             </RadioGroup>
@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/instruction_condition"
-                android:textColor="@color/grey"
+                android:textColor="@color/text_color_light_secondary"
                 android:textSize="14sp" />
 
             <RadioGroup
@@ -132,7 +132,7 @@
                     android:id="@+id/rb_sugar_intake_less_1_teaspoon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/sugar_intake_less_1_teaspoon"
                     android:textSize="14sp" />
 
@@ -140,13 +140,15 @@
                     android:id="@+id/rb_sugar_intake_1_2_teaspoons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="14sp"
                     android:text="@string/sugar_intake_1_2_teaspoons" />
 
                 <RadioButton
                     android:id="@+id/rb_sugar_intake_2_3_teaspoons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/sugar_intake_2_3_teaspoons"
                     android:textSize="14sp" />
 
@@ -154,7 +156,7 @@
                     android:id="@+id/rb_sugar_intake_more_3_teaspoons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/sugar_intake_more_3_teaspoons"
                     android:textSize="14sp" />
             </RadioGroup>
@@ -174,7 +176,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/instruction_condition"
-                android:textColor="@color/grey"
+                android:textColor="@color/text_color_light_secondary"
                 android:textSize="14sp" />
 
             <RadioGroup
@@ -186,7 +188,7 @@
                     android:id="@+id/rb_exercise_frequency_everyday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/exercise_frequency_everyday"
                     android:textSize="14sp" />
 
@@ -194,7 +196,7 @@
                     android:id="@+id/rb_exercise_frequency_5_6_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/exercise_frequency_5_6_times"
                     android:textSize="14sp" />
 
@@ -202,7 +204,7 @@
                     android:id="@+id/rb_exercise_frequency_3_4_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/exercise_frequency_3_4_times"
                     android:textSize="14sp" />
 
@@ -210,7 +212,7 @@
                     android:id="@+id/rb_exercise_frequency_1_2_times"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/exercise_frequency_1_2_times"
                     android:textSize="14sp" />
 
@@ -218,7 +220,7 @@
                     android:id="@+id/rb_exercise_frequency_rarely"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/exercise_frequency_rarely"
                     android:textSize="14sp" />
             </RadioGroup>
@@ -239,7 +241,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/instruction_health_condition"
-                android:textColor="@color/grey"
+                android:textColor="@color/text_color_light_secondary"
                 android:textSize="14sp" />
 
             <LinearLayout
@@ -253,7 +255,8 @@
                     android:id="@+id/cb_vegetarian"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/preference_vegetarian" />
+                    android:text="@string/preference_vegetarian"
+                    android:fontFamily="@font/poppins_regular"/>
 
                 <ImageView
                     android:id="@+id/icon_vegetarian_info"
@@ -277,7 +280,8 @@
                     android:id="@+id/cb_vegan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/preference_vegan" />
+                    android:text="@string/preference_vegan"
+                    android:fontFamily="@font/poppins_regular"/>
 
                 <ImageView
                     android:id="@+id/icon_vegan_info"
@@ -301,6 +305,7 @@
                     android:id="@+id/cb_paleo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/preference_paleo" />
 
                 <ImageView
@@ -315,20 +320,46 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_gluten_free"
+                android:id="@+id/ll_high_fiber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp">
 
                 <CheckBox
-                    android:id="@+id/cb_gluten_free"
+                    android:id="@+id/cb_high_fiber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/preference_gluten_free" />
 
                 <ImageView
-                    android:id="@+id/icon_gluten_free_info"
+                    android:id="@+id/icon_high_fiber_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_info"
+                    android:contentDescription="@string/info_icon"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:onClick="showTooltip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_high_protein"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <CheckBox
+                    android:id="@+id/cb_high_protein"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preference_High_Protein"
+                    android:fontFamily="@font/poppins_regular"/>
+
+                <ImageView
+                    android:id="@+id/icon_high_protein_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_info"
@@ -349,7 +380,8 @@
                     android:id="@+id/cb_low_carb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/preference_Low_Carb" />
+                    android:text="@string/preference_Low_Carb"
+                    android:fontFamily="@font/poppins_regular"/>
 
                 <ImageView
                     android:id="@+id/icon_low_carb_info"
@@ -373,7 +405,8 @@
                     android:id="@+id/cb_low_fat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/preference_Low_Fat" />
+                    android:text="@string/preference_Low_Fat"
+                    android:fontFamily="@font/poppins_regular"/>
 
                 <ImageView
                     android:id="@+id/icon_low_fat_info"
@@ -397,7 +430,8 @@
                     android:id="@+id/cb_low_sodium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/preference_Low_Sodium" />
+                    android:text="@string/preference_Low_Sodium"
+                    android:fontFamily="@font/poppins_regular"/>
 
                 <ImageView
                     android:id="@+id/icon_low_sodium_info"
@@ -421,7 +455,8 @@
                     android:id="@+id/cb_low_sugar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/preference_Low_Sugar" />
+                    android:text="@string/preference_Low_Sugar"
+                    android:fontFamily="@font/poppins_regular"/>
 
                 <ImageView
                     android:id="@+id/icon_low_sugar_info"
@@ -445,7 +480,8 @@
                     android:id="@+id/cb_alcohol_free"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/preference_Alcohol_Free" />
+                    android:text="@string/preference_Alcohol_Free"
+                    android:fontFamily="@font/poppins_regular"/>
 
                 <ImageView
                     android:id="@+id/icon_alcohol_free_info"
@@ -469,7 +505,8 @@
                     android:id="@+id/cb_balanced"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/preference_Balanced" />
+                    android:text="@string/preference_Balanced"
+                    android:fontFamily="@font/poppins_regular"/>
 
                 <ImageView
                     android:id="@+id/icon_balanced_info"
@@ -497,7 +534,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/instruction_health_condition"
-                android:textColor="@color/grey"
+                android:textColor="@color/text_color_light_secondary"
                 android:textSize="14sp" />
 
             <RadioGroup
@@ -509,7 +546,7 @@
                     android:id="@+id/rb_allergies_yes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/allergies_yes"
                     android:textSize="14sp" />
 
@@ -517,7 +554,7 @@
                     android:id="@+id/rb_allergies_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/allergies_no"
                     android:textSize="14sp" />
 
@@ -538,7 +575,8 @@
                 android:id="@+id/et_food_likes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_medium"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/text_color_light_secondary"
                 android:hint="@string/hint_type_here"
                 android:textSize="14sp" />
 
@@ -556,7 +594,8 @@
                 android:id="@+id/et_food_dislikes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_medium"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/text_color_light_secondary"
                 android:hint="@string/hint_type_here"
                 android:textSize="14sp" />
         </LinearLayout>
