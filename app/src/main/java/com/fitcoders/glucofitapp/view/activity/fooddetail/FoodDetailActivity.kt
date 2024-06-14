@@ -1,9 +1,12 @@
 package com.fitcoders.glucofitapp.view.activity.fooddetail
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -70,6 +73,26 @@ class FoodDetailActivity : AppCompatActivity() {
                 "• $ingredient"
             }
             binding.ingridients.text = formattedIngredients
+
+            binding.enjoyYourMeal.setOnClickListener { _ ->
+                // Check if the instruction URL is valid
+                it.instructionUrl?.let { url ->
+                    if (url.isNotEmpty()) {
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse(url)
+                        }
+                        try {
+                            startActivity(intent)
+                        } catch (e: ActivityNotFoundException) {
+                            Toast.makeText(this, "No browser found to open the URL", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(this, "Instruction URL is empty", Toast.LENGTH_SHORT).show()
+                    }
+                } ?: run {
+                    Toast.makeText(this, "No instruction URL available", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

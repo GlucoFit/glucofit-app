@@ -5,6 +5,8 @@ import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
 import com.fitcoders.glucofitapp.response.DataFoodResponse
 import com.fitcoders.glucofitapp.response.DeleteResponse
+import com.fitcoders.glucofitapp.response.GetAssesmantResponse
+import com.fitcoders.glucofitapp.response.GetUserResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.LogoutResponse
 import com.fitcoders.glucofitapp.response.PostHistoryScanResponse
@@ -86,6 +88,14 @@ interface ApiService {
 
      @GET("recommendations/me")
      fun getRecommendations(): Call<List<RecommendationResponseItem>>
+
+    @GET("users/me")
+    fun getUser(): Call<GetUserResponse>
+
+    @GET("assessments/result")
+    fun getAssessments(): Call<GetAssesmantResponse>
+
+
 
 }
 

@@ -12,6 +12,8 @@ import com.fitcoders.glucofitapp.response.DataFoodResponse
 import com.fitcoders.glucofitapp.response.DataItem
 import com.fitcoders.glucofitapp.response.DeleteResponse
 import com.fitcoders.glucofitapp.response.FoodDetails
+import com.fitcoders.glucofitapp.response.GetAssesmantResponse
+import com.fitcoders.glucofitapp.response.GetUserResponse
 import com.fitcoders.glucofitapp.response.HistoryScanResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.LogoutResponse
@@ -56,13 +58,17 @@ class AppRepository private constructor(private val pref: UserPreference, privat
     private val _recommendationResponse = MutableLiveData<Result<List<RecommendationResponseItem>>>()
     val recommendationResponse: LiveData<Result<List<RecommendationResponseItem>>> = _recommendationResponse
 
+    private val _assessmentResponse = MutableLiveData<GetAssesmantResponse?>()
+    val assessmentResponse: LiveData<GetAssesmantResponse?> = _assessmentResponse
 
-    // LiveData untuk informasi makanan
     private val _foodInfo = MutableLiveData<DataFoodResponse?>()
     val foodInfo: MutableLiveData<DataFoodResponse?> = _foodInfo
 
     private val _deleteResponse = MutableLiveData<DeleteResponse?>()
     val deleteResponse: LiveData<DeleteResponse?> = _deleteResponse
+
+    private val _userResponse = MutableLiveData<GetUserResponse?>()
+    val userResponse: LiveData<GetUserResponse?> = _userResponse
 
 
     fun pRegister(userName: String, email: String, password: String) {
@@ -387,6 +393,51 @@ class AppRepository private constructor(private val pref: UserPreference, privat
             }
         })
     }
+    //user me
+    fun fetchUserData() {
+        _isLoading.value = true
+        val client = apiService.getUser()
+
+        client.enqueue(object : Callback<GetUserResponse> {
+            override fun onResponse(call: Call<GetUserResponse>, response: Response<GetUserResponse>) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _userResponse.value = response.body()
+                } else {
+                    _toastText.value = Event("Failed to fetch user data: ${response.code()} ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
+                _isLoading.value = false
+                _toastText.value = Event("Error: ${t.message}")
+            }
+        })
+    }
+    //get assesment
+    fun fetchAssessments() {
+        _isLoading.value = true
+        val client = apiService.getAssessments()
+
+        client.enqueue(object : Callback<GetAssesmantResponse> {
+            override fun onResponse(call: Call<GetAssesmantResponse>, response: Response<GetAssesmantResponse>) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _assessmentResponse.value = response.body()
+                } else {
+                    _assessmentResponse.value = null
+                    _toastText.value = Event("Failed to fetch assessment data: ${response.code()} ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<GetAssesmantResponse>, t: Throwable) {
+                _isLoading.value = false
+                _assessmentResponse.value = null
+                _toastText.value = Event("Error: ${t.message}")
+            }
+        })
+    }
+
 
 
 
