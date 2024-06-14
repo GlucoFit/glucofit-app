@@ -26,22 +26,23 @@
 
         <TextView
             android:id="@+id/food_name"
-            android:layout_width="108dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="24dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@id/food_image"
             android:fontFamily="@font/poppins_regular"
+            android:maxLines="2"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/food_image"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Food Name" />
+            tools:text="testing buat penamaan panjangs skajdekjakj aldjlkawjlkjda ldjlawjld  sekali" />
 
         <TextView
             android:id="@+id/calories"
-            android:layout_width="39dp"
-            android:layout_height="22dp"
-            android:layout_marginStart="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/food_image"
             android:fontFamily="@font/poppins_regular"
@@ -49,7 +50,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/food_image"
             app:layout_constraintTop_toBottomOf="@+id/food_name"
-            tools:text="Food Description" />
+            tools:text="Food Calories" />
 
         <TextView
             android:id="@+id/sugar_unit_calory"
@@ -67,7 +68,7 @@
             android:id="@+id/sugar_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins_regular"
             android:textStyle="bold"

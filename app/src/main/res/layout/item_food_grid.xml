@@ -38,54 +38,63 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Sliced meat" />
 
-        <TextView
-            android:id="@+id/calories"
-            android:layout_width="56dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="4dp"
-            android:fontFamily="@font/poppins_regular"
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+
+        <LinearLayout
+            android:id="@+id/calories_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/food_name"
-            tools:text="45.687" />
-
-
-        <TextView
-            android:id="@+id/sugar_unit_calory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_regular"
-
-            android:textColor="@color/gray"
-            android:layout_marginStart="5dp"
-            app:layout_constraintStart_toEndOf="@+id/calories"
-            app:layout_constraintTop_toTopOf="@+id/calories"
-            tools:text="g" />
-
-        <TextView
-            android:id="@+id/sugar_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/poppins_regular"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/calories"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="15" />
+            android:layout_marginTop="8dp">
 
-        <TextView
-            android:id="@+id/sugar_unit"
+            <TextView
+                android:id="@+id/calories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/gray"
+                tools:text="45.687" />
+
+            <TextView
+                android:id="@+id/sugar_unit_calory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/gray"
+                android:layout_marginStart="5dp"
+                tools:text="g" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sugar_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:fontFamily="@font/poppins_regular"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/sugar_content"
-            app:layout_constraintTop_toTopOf="@+id/sugar_content"
-            tools:text="g" />
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/calories_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp">
+            <TextView
+                android:id="@+id/sugar_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:textStyle="bold"
+                tools:text="15" />
+
+            <TextView
+                android:id="@+id/sugar_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/poppins_regular"
+                android:textStyle="bold"
+                tools:text="g" />
+        </LinearLayout>
+
+
 
         <ImageView
             android:id="@+id/favorite_icon"
@@ -93,7 +102,7 @@
             android:layout_height="24dp"
             android:layout_marginTop="8dp"
             android:src="@drawable/ic_heart"
-            app:layout_constraintTop_toBottomOf="@id/sugar_content"
+            app:layout_constraintTop_toBottomOf="@id/sugar_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
