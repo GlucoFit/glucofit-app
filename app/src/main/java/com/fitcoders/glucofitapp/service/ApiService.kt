@@ -10,6 +10,7 @@ import com.fitcoders.glucofitapp.response.LogoutResponse
 import com.fitcoders.glucofitapp.response.PostHistoryScanResponse
 import com.fitcoders.glucofitapp.response.RegisterResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponse
+import com.fitcoders.glucofitapp.response.RecommendationResponseItem
 import retrofit2.Call
 import retrofit2.http.DELETE
 import retrofit2.http.Field
@@ -83,9 +84,8 @@ interface ApiService {
      fun deleteScanHistoryById(@Path("id") id: Int
     ): Call<DeleteResponse>
 
-    @GET("recommendations/me")
-    fun getRecommendations(
-    ): Call<RecommendationResponse>
+     @GET("recommendations/me")
+     fun getRecommendations(): Call<List<RecommendationResponseItem>>
 
 }
 

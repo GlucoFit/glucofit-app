@@ -1,6 +1,7 @@
 package com.fitcoders.glucofitapp.view.fragment.home
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -27,7 +29,18 @@ class HomeFragment : Fragment() {
     private lateinit var modelFactory: ViewModelFactory
     private val homeViewModel: HomeViewModel by viewModels { modelFactory }
     private var isListLayout = true
-    private lateinit var foodAdapter: FoodAdapter
+
+    private val foodAdapter: FoodAdapter by lazy {
+        FoodAdapter(
+            { item ->
+                // Aksi ketika item diklik, misalnya membuka detail makanan
+                val intent = Intent(requireContext(), FoodDetailActivity::class.java)
+                intent.putExtra("foodDetails", item)
+                startActivity(intent)
+            },
+            isListView = isListLayout
+        )
+    }
 
     companion object {
         fun newInstance() = HomeFragment()
@@ -49,13 +62,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupRecyclerView()
+
         homeViewModel.getSession().observe(viewLifecycleOwner) { user ->
             binding.name.text = user.username
         }
 
-        // Ambil dan pantau perubahan data gula hari ini
+        observeViewModel()
+
         homeViewModel.fetchTodaySugarIntake()
-        homeViewModel.todaySugarIntake.observe(viewLifecycleOwner, Observer { totalSugar ->
+        homeViewModel.todaySugarIntake.observe(viewLifecycleOwner, { totalSugar ->
             updateEmojiAndText(totalSugar)
         })
 
@@ -64,49 +80,82 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
-/*        binding.toggleButton.setOnClickListener {
+        binding.toggleButton.setOnClickListener {
             toggleLayout()
-        }*/
-
+        }
     }
 
-/*    private fun toggleLayout() {
+    private fun setupRecyclerView() {
+        binding.foodRecommendationRecyclerView.apply {
+            adapter = foodAdapter
+            layoutManager = if (isListLayout) {
+                LinearLayoutManager(context)
+            } else {
+                GridLayoutManager(context, 2)
+            }
+        }
+    }
+
+    private fun observeViewModel() {
+        homeViewModel.fetchRecommendations()
+        homeViewModel.recommendationResponse.observe(viewLifecycleOwner) { result ->
+            result.onSuccess { recommendations ->
+                Log.d(TAG, "Recommendations received: ${recommendations.size}")
+
+                // Mengatur daftar item ke adapter
+                val foodList = recommendations.mapNotNull { it.foodDetails }
+                Log.d(TAG, "Food list generated for adapter: ${foodList.size}")
+                foodAdapter.submitList(foodList)
+            }.onFailure { exception ->
+                Log.e(TAG, "Error fetching recommendations", exception)
+                Toast.makeText(requireContext(), "Failed to load recommendations: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun toggleLayout() {
         isListLayout = !isListLayout
-        FoodAdapter.setViewType(isListLayout)
-    }*/
+        foodAdapter.setViewType(isListLayout)
+
+        binding.foodRecommendationRecyclerView.layoutManager = if (isListLayout) {
+            LinearLayoutManager(context)
+        } else {
+            GridLayoutManager(context, 2)
+        }
+
+        binding.toggleButton.setImageResource(
+            if (isListLayout) R.drawable.ic_window else R.drawable.ic_table
+        )
+    }
 
     @SuppressLint("SetTextI18n")
     private fun updateEmojiAndText(intakeGula: Int) {
-
-        // Perbarui total gula pada TextView dengan ID @+id/sugarAmount
         val sugarAmountTextView: TextView = binding.sugarAmount
         sugarAmountTextView.text = intakeGula.toString()
 
-        // Ambil nilai maksimum gula dari TextView
-        val maxSugarTextView: TextView = binding.sugarPercentage // Ubah ke ID TextView yang benar untuk max gula
+        val maxSugarTextView: TextView = binding.sugarPercentage
         val maxSugarString = maxSugarTextView.text.toString().replace(" g", "").trim()
-        val maxSugar = maxSugarString.toIntOrNull() ?: 2000 // Default ke 100 jika parsing gagal
+        val maxSugar = maxSugarString.toIntOrNull() ?: 2000
 
         val percentage = (intakeGula.toDouble() / maxSugar) * 100
         binding.sugarPercentage.text = "${percentage.toInt()}% "
-        binding.tvSugarIntakeMax.text= "/ ${maxSugar} g"
+        binding.tvSugarIntakeMax.text = "/ ${maxSugar} g"
 
-        // Update emoji berdasarkan jumlah gula yang dikonsumsi
         when {
             intakeGula <= 0 -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_happy_large) // Emoji senang untuk gula 0 atau negatif
+                binding.emojiFace.setImageResource(R.drawable.ic_happy_large)
             }
             intakeGula in 1..(maxSugar / 2) -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_good_large) // Emoji baik untuk gula antara 1 dan setengah dari max
+                binding.emojiFace.setImageResource(R.drawable.ic_good_large)
             }
             intakeGula in (maxSugar / 2 + 1) until maxSugar -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_angry_large) // Emoji marah untuk gula antara setengah max dan max
+                binding.emojiFace.setImageResource(R.drawable.ic_angry_large)
             }
             intakeGula >= maxSugar -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_angry_large) // Emoji marah untuk gula melebihi atau sama dengan max
+                binding.emojiFace.setImageResource(R.drawable.ic_angry_large)
             }
             else -> {
-                binding.emojiFace.setImageResource(R.drawable.ic_happy_large) // Emoji default jika tidak ada kondisi yang cocok
+                binding.emojiFace.setImageResource(R.drawable.ic_happy_large)
             }
         }
     }
@@ -116,3 +165,5 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
+
+

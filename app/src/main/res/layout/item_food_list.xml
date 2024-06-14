@@ -39,8 +39,8 @@
 
         <TextView
             android:id="@+id/calories"
-            android:layout_width="108dp"
-            android:layout_height="24dp"
+            android:layout_width="39dp"
+            android:layout_height="22dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="5dp"
             android:layout_toEndOf="@id/food_image"
@@ -52,16 +52,39 @@
             tools:text="Food Description" />
 
         <TextView
+            android:id="@+id/sugar_unit_calory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:textStyle="bold"
+            android:textColor="@color/gray"
+            android:layout_marginStart="5dp"
+            app:layout_constraintStart_toEndOf="@+id/calories"
+            app:layout_constraintTop_toTopOf="@+id/calories"
+            tools:text="g" />
+
+        <TextView
             android:id="@+id/sugar_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins_regular"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/calories"
             app:layout_constraintStart_toEndOf="@id/food_image"
-            tools:text="15 g" />
+            app:layout_constraintTop_toBottomOf="@id/calories"
+            tools:text="15" />
+
+        <TextView
+            android:id="@+id/sugar_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/sugar_content"
+            app:layout_constraintTop_toTopOf="@+id/sugar_content"
+            tools:text="g" />
 
         <ImageView
             android:id="@+id/favorite_icon"

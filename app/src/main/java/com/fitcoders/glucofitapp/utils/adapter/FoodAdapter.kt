@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 
 class FoodAdapter(
     private val itemClick: (FoodDetails) -> Unit,
-    private var isListView: Boolean = false
+    private var isListView: Boolean = true // Default set to true for list view
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -89,7 +89,9 @@ class FoodAdapter(
                     .into(foodImage)
                 foodName.text = item.recipeName
                 calories.text = item.calories.toString()
+                sugarUnitCalory.text= "Cal"
                 sugarContent.text = item.sugarContent.toString()
+                sugarUnit.text = "g"
                 itemView.setOnClickListener { itemClick(item) }
             }
         }
@@ -107,7 +109,9 @@ class FoodAdapter(
                     .into(foodImage)
                 foodName.text = item.recipeName
                 calories.text = item.calories.toString()
+                sugarUnitCalory.text= "Cal"
                 sugarContent.text = item.sugarContent.toString()
+                sugarUnit.text = "g"
                 itemView.setOnClickListener { itemClick(item) }
             }
         }

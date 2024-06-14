@@ -292,7 +292,7 @@ class AppRepository private constructor(private val pref: UserPreference, privat
     }
 
 
-    // Fungsi untuk memanggil API berdasarkan label makanan
+
     // Fungsi untuk memanggil API berdasarkan label makanan
     fun fetchFoodInfoByLabel(label: String) {
         _isLoading.value = true
@@ -347,29 +347,49 @@ class AppRepository private constructor(private val pref: UserPreference, privat
         _isLoading.value = true
         val call = apiService.getRecommendations()
 
-        call.enqueue(object : Callback<RecommendationResponse> {
+        Log.d(TAG, "Starting API call to get recommendations")
+
+        call.enqueue(object : Callback<List<RecommendationResponseItem>> {
             override fun onResponse(
-                call: Call<RecommendationResponse>,
-                response: Response<RecommendationResponse>
+                call: Call<List<RecommendationResponseItem>>,
+                response: Response<List<RecommendationResponseItem>>
             ) {
                 _isLoading.value = false
+
+                Log.d(TAG, "API Response Code: ${response.code()}")
+                Log.d(TAG, "API Response Message: ${response.message()}")
+
                 if (response.isSuccessful) {
-                    val recommendations = response.body()?.recommendationResponse ?: emptyList()
+                    val recommendations = response.body() ?: emptyList()
+
+                    Log.d(TAG, "Number of recommendations received: ${recommendations.size}")
+
                     _recommendationResponse.value = Result.success(recommendations.filterNotNull())
                 } else {
                     val errorBody = response.errorBody()?.string()
+
+                    Log.e(TAG, "Failed to fetch recommendations. Error code: ${response.code()}")
+                    Log.e(TAG, "Error message: ${response.message()}")
+                    Log.e(TAG, "Error body: $errorBody")
+
+                    _recommendationResponse.value = Result.failure(Throwable("Failed to fetch recommendations. Error code: ${response.code()}. Message: ${response.message()}. Body: $errorBody"))
                     _toastText.value = Event("Error: ${response.code()} ${response.message()}. Body: $errorBody")
-                    _recommendationResponse.value = Result.failure(Throwable("Failed to fetch recommendations"))
                 }
             }
 
-            override fun onFailure(call: Call<RecommendationResponse>, t: Throwable) {
+            override fun onFailure(call: Call<List<RecommendationResponseItem>>, t: Throwable) {
                 _isLoading.value = false
-                _toastText.value = Event("Failure: ${t.message}")
+
+                Log.e(TAG, "API call to fetch recommendations failed", t)
+
                 _recommendationResponse.value = Result.failure(t)
+                _toastText.value = Event("Failure: ${t.message}")
             }
         })
     }
+
+
+
 
 
 
@@ -385,10 +405,7 @@ class AppRepository private constructor(private val pref: UserPreference, privat
         pref.login()
     }
 
-   /* suspend fun logout() {
-        pref.logout()
-        Log.d("AppRepository", "Logout called")
-    }*/
+
 
     companion object {
         private const val TAG = "AppRepository"

@@ -8,6 +8,7 @@
     android:layout_gravity="center_horizontal">
 
     <TextView
+        android:id="@+id/nama_label"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="Vegetarian"

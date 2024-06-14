@@ -8,8 +8,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityFoodDetailBinding
+import com.fitcoders.glucofitapp.response.FoodDetails
+import com.fitcoders.glucofitapp.utils.adapter.DietLabelsAdapter
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.main.MainActivity
 
@@ -23,7 +27,9 @@ class FoodDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         modelFactory = ViewModelFactory.getInstance(this)
+
         setupUI()
+        displayFoodDetails()
     }
 
     private fun setupUI() {
@@ -34,7 +40,36 @@ class FoodDetailActivity : AppCompatActivity() {
         backButton.visibility = ImageButton.VISIBLE
 
         backButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            finish() // Go back to the previous activity
+        }
+    }
+
+    private fun displayFoodDetails() {
+        // Get the FoodDetails object passed from the previous activity
+        val foodDetails: FoodDetails? = intent.getParcelableExtra("foodDetails")
+
+        // Update the UI with the food details
+        foodDetails?.let {
+            // Load the image
+            Glide.with(this).load(it.imageUrl).into(binding.foodImage)
+
+            // Set text views
+            binding.foodName.text = it.recipeName
+            binding.sugarContent.text = "${it.sugarContent}"
+            binding.calories.text = "${it.calories}"
+            //binding.ingridientsTitle.text = it.ingredients
+           // binding.dietLabelsTitle.text = it.dietLabels
+
+            // Display diet labels
+            val dietLabels = it.dietLabels?.split(", ") ?: emptyList()
+            val dietLabelsAdapter = DietLabelsAdapter(dietLabels, this)
+            binding.dietLabelsRecyclerView.adapter = dietLabelsAdapter
+
+            // Format ingredients into a list with bullet points
+            val formattedIngredients = it.ingredients?.split(", ")?.joinToString("\n") { ingredient ->
+                "• $ingredient"
+            }
+            binding.ingridients.text = formattedIngredients
         }
     }
 }

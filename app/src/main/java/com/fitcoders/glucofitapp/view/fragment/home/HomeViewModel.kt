@@ -19,8 +19,10 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
     private val _todaySugarIntake = MutableLiveData<Int>()
     val todaySugarIntake: LiveData<Int> get() = _todaySugarIntake
 
-    private val _recommendationResponse = MutableLiveData<Result<List<RecommendationResponseItem>>>()
-    val recommendationResponse: LiveData<Result<List<RecommendationResponseItem>>> = _recommendationResponse
+    val recommendationResponse: LiveData<Result<List<RecommendationResponseItem>>>
+        get() = repository.recommendationResponse
+
+
 
     fun getSession(): LiveData<UserModel> {
         return repository.getSession()

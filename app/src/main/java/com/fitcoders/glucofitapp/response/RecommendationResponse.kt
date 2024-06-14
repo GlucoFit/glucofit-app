@@ -1,6 +1,8 @@
 package com.fitcoders.glucofitapp.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 data class RecommendationResponse(
 
@@ -17,44 +19,44 @@ data class RecommendationResponseItem(
 	val recipeName: String? = null,
 
 	@field:SerializedName("compatibility_score")
-	val compatibilityScore: Float? = null,
+	val compatibilityScore: Any? = null,
 
 	@field:SerializedName("food_details")
-	val foodDetails: List<FoodDetails>? = null
+	val foodDetails: FoodDetails? = null
 )
-
+@Parcelize
 data class FoodDetails(
 
-	@field:SerializedName("recipeName")
-	val recipeName: String? = null,
-
-	@field:SerializedName("sugarContent")
-	val sugarContent: Float? = null,
-
-	@field:SerializedName("instructionUrl")
-	val instructionUrl: String? = null,
-
-	@field:SerializedName("recipeUri")
-	val recipeUri: String? = null,
-
-	@field:SerializedName("createdAt")
-	val createdAt: String? = null,
-
-	@field:SerializedName("dietLabels")
-	val dietLabels: String? = null,
-
-	@field:SerializedName("imageUrl")
-	val imageUrl: String? = null,
-
-	@field:SerializedName("ingredients")
-	val ingredients: String? = null,
-
-	@field:SerializedName("id")
+	@SerializedName("id")
 	val id: Int? = null,
 
-	@field:SerializedName("calories")
+	@SerializedName("recipeUri")
+	val recipeUri: String? = null,
+
+	@SerializedName("recipeName")
+	val recipeName: String? = null,
+
+	@SerializedName("calories")
 	val calories: Float? = null,
 
-	@field:SerializedName("updatedAt")
+	@SerializedName("sugarContent")
+	val sugarContent: Float? = null,
+
+	@SerializedName("dietLabels")
+	val dietLabels: String? = null,
+
+	@SerializedName("ingredients")
+	val ingredients: String? = null,
+
+	@SerializedName("imageUrl")
+	val imageUrl: String? = null,
+
+	@SerializedName("instructionUrl")
+	val instructionUrl: String? = null,
+
+	@SerializedName("createdAt")
+	val createdAt: String? = null,
+
+	@SerializedName("updatedAt")
 	val updatedAt: String? = null
-)
+): Parcelable
