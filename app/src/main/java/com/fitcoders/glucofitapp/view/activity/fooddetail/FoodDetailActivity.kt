@@ -74,7 +74,7 @@ class FoodDetailActivity : AppCompatActivity() {
             }
             binding.ingridients.text = formattedIngredients
 
-            binding.enjoyYourMeal.setOnClickListener { _ ->
+            binding.jumpToInstructions.setOnClickListener { _ ->
                 // Check if the instruction URL is valid
                 it.instructionUrl?.let { url ->
                     if (url.isNotEmpty()) {

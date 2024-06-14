@@ -28,8 +28,8 @@ import kotlinx.coroutines.withContext
 import kotlin.math.log
 import android.content.Intent
 import android.os.Bundle
-
-
+import com.fitcoders.glucofitapp.view.activity.profile.account.AccountActivity
+import com.fitcoders.glucofitapp.view.activity.profile.password.PasswordActivity
 
 
 class ProfileFragment : Fragment() {
@@ -71,6 +71,16 @@ class ProfileFragment : Fragment() {
         // Setting click listener for logout button
         binding.btnLogout.setOnClickListener {
             showAlertDialog()
+        }
+
+        binding.account.setOnClickListener {
+            val intent = Intent(requireContext(), AccountActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.password.setOnClickListener {
+            val intent = Intent(requireContext(), PasswordActivity::class.java)
+            startActivity(intent)
         }
     }
 
