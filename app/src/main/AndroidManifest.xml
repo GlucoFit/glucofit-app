@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -25,6 +24,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GlucofitApp"
         tools:targetApi="31">
+        <activity
+            android:name=".view.activity.profile.selfassessmentresult.SelfAssessmentResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.profile.password.PasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.profile.account.AccountActivity"
+            android:exported="false" />
         <activity
             android:name=".view.activity.fooddetail.FoodDetailActivity"
             android:exported="false" />
