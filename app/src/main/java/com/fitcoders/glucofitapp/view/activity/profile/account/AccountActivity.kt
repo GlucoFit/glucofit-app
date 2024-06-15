@@ -1,5 +1,6 @@
 package com.fitcoders.glucofitapp.view.activity.profile.account
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityAccountBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
+import com.fitcoders.glucofitapp.view.activity.login.LoginActivity
 
 class AccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAccountBinding
@@ -88,15 +90,21 @@ class AccountActivity : AppCompatActivity() {
             }
         })
 
-
         // Mengamati perubahan dalam delete user response
         accountViewModel.deleteUserResponse.observe(this, Observer { response ->
             if (response != null) {
                 Toast.makeText(this, "Account deleted successfully", Toast.LENGTH_SHORT).show()
-                finish() // Tutup aktivitas setelah penghapusan berhasil
+                navigateToLogin() // Panggil metode untuk membuka halaman login
             } else {
                 Toast.makeText(this, "Failed to delete account", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish() // Menutup aktivitas saat ini
     }
 }
