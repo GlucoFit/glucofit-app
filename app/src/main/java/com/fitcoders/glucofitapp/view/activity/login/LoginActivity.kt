@@ -96,36 +96,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-   /* private fun moveActivity() {
-        loginViewModel.loginResponse.observe(this) { response ->
-            response?.let { loginResponse ->
-                val user = loginResponse.user
-                val token = loginResponse.token
-                if (user != null && token != null) {
-                    lifecycleScope.launch {
-                        loginViewModel.saveSession(
-                            UserModel(
-                                username = user.userName ?: "",
-                                email = user.email ?: "",
-                                token = token, // Simpan token
-                                isLogin = true
-                            )
-                        )
 
-                        Log.d("logi","apakah pidah ??,username:${user.userName} ,TOKEN :${token}")
-
-                        // Langsung pindah ke MainActivity tanpa pengecekan assessment status
-                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                        finish()
-                    }
-                } else {
-                    Toast.makeText(this, "Login gagal. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
-                }
-            } ?: run {
-                Toast.makeText(this, "Respon login kosong. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }*/
 
     private fun moveActivity() {
         loginViewModel.loginResponse.observe(this) { response ->
@@ -166,6 +137,35 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+/*    private fun moveActivity() {
+        loginViewModel.loginResponse.observe(this) { response ->
+            response?.let { loginResponse ->
+                val user = loginResponse.user
+                val token = loginResponse.token
+                if (user != null && token != null) {
+                    lifecycleScope.launch {
+                        loginViewModel.saveSession(
+                            UserModel(
+                               *//* username = user.userName ?: "",
+                                email = user.email ?: "",*//*
+                                token = token, // Simpan token
+                                isLogin = true
+                            )
+                        )
+
+                        // Langsung pindah ke MainActivity tanpa pengecekan assessment status
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    }
+                } else {
+                    Toast.makeText(this, "Login gagal. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
+                }
+            } ?: run {
+                Toast.makeText(this, "Respon login kosong. Silakan coba lagi.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }*/
 
    /* private fun observeLoginResponse() {
         // Observe the login response

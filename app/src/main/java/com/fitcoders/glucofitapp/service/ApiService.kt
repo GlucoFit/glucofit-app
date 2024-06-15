@@ -14,11 +14,13 @@ import com.fitcoders.glucofitapp.response.RegisterResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponseItem
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import java.io.File
 
@@ -94,6 +96,18 @@ interface ApiService {
 
     @GET("assessments/result")
     fun getAssessments(): Call<GetAssesmantResponse>
+
+    @PUT("users/me/email")
+    fun updateEmail(@Body emailUpdate: Map<String, String>): Call<GetUserResponse>
+
+    @PUT("users/me/username")
+    fun updateUsername(@Body usernameUpdate: Map<String, String>): Call<GetUserResponse>
+
+    @PUT("users/me/password")
+    fun updatePassword(@Body passwordUpdate: Map<String, String>): Call<GetUserResponse>
+
+    @DELETE("users/me")
+    fun deleteUser(): Call<DeleteResponse>
 
 
 

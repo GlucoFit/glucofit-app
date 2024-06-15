@@ -7,18 +7,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fitcoders.glucofitapp.data.AppRepository
 import com.fitcoders.glucofitapp.data.UserModel
+import com.fitcoders.glucofitapp.response.GetUserResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.utils.Event
 import kotlinx.coroutines.launch
 
 class ProfileViewModel (private val repository: AppRepository) : ViewModel() {
 
+    // LiveData untuk menampung respons data pengguna dari repository
+    val userResponse: LiveData<GetUserResponse?> get() = repository.userResponse
+    val isLoading: LiveData<Boolean> get() = repository.isLoading
+    val toastText: LiveData<Event<String>> get() = repository.toastText
 
-    private val _logoutStatus = MutableLiveData<Boolean>()
-    val logoutStatus: LiveData<Boolean> get() = _logoutStatus
-
-    private val _logoutMessage = MutableLiveData<String?>()
-    val logoutMessage: MutableLiveData<String?> get() = _logoutMessage
 
     fun logout(onLogoutResult: (Boolean, String?) -> Unit) {
         viewModelScope.launch {
@@ -28,9 +28,10 @@ class ProfileViewModel (private val repository: AppRepository) : ViewModel() {
         }
     }
 
-    fun getSession(): LiveData<UserModel> {
-        return repository.getSession()
+    fun fetchUserData() {
+        viewModelScope.launch {
+            repository.fetchUserData()
+        }
     }
-
 
 }

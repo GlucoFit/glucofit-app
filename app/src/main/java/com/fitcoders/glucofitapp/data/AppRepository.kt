@@ -70,6 +70,18 @@ class AppRepository private constructor(private val pref: UserPreference, privat
     private val _userResponse = MutableLiveData<GetUserResponse?>()
     val userResponse: LiveData<GetUserResponse?> = _userResponse
 
+    private val _updateEmailResponse = MutableLiveData<GetUserResponse?>()
+    val updateEmailResponse: LiveData<GetUserResponse?> = _updateEmailResponse
+
+    private val _updateUsernameResponse = MutableLiveData<GetUserResponse?>()
+    val updateUsernameResponse: LiveData<GetUserResponse?> = _updateUsernameResponse
+
+    private val _updatePasswordResponse = MutableLiveData<GetUserResponse?>()
+    val updatePasswordResponse: LiveData<GetUserResponse?> = _updatePasswordResponse
+
+    private val _deleteUserResponse = MutableLiveData<DeleteResponse?>()
+    val deleteUserResponse: LiveData<DeleteResponse?> = _deleteUserResponse
+
 
     fun pRegister(userName: String, email: String, password: String) {
         _isLoading.value = true
@@ -438,10 +450,102 @@ class AppRepository private constructor(private val pref: UserPreference, privat
         })
     }
 
+    // Fungsi untuk memperbarui email
+    fun updateEmail(email: String) {
+        val emailUpdate = mapOf("email" to email)
+        val client = apiService.updateEmail(emailUpdate)
+
+        client.enqueue(object : Callback<GetUserResponse> {
+            override fun onResponse(call: Call<GetUserResponse>, response: Response<GetUserResponse>) {
+                if (response.isSuccessful) {
+                    _updateEmailResponse.value = response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _updateEmailResponse.value = null
+                    Log.e("UpdateEmail", "Error: $errorBody")
+                }
+            }
+
+            override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
+                _updateEmailResponse.value = null
+                Log.e("UpdateEmail", "Failure: ${t.message}")
+            }
+        })
+    }
+
+    // Fungsi untuk memperbarui username
+    fun updateUsername(userName: String) {
+        val usernameUpdate = mapOf("userName" to userName)
+        Log.d("UpdateUsername", "Sending payload: $usernameUpdate")
+
+        val client = apiService.updateUsername(usernameUpdate)
+
+        client.enqueue(object : Callback<GetUserResponse> {
+            override fun onResponse(call: Call<GetUserResponse>, response: Response<GetUserResponse>) {
+                Log.d("UpdateUsername", "Response code: ${response.code()} - ${response.message()}")
+                if (response.isSuccessful) {
+                    _updateUsernameResponse.value = response.body()
+                    Log.d("UpdateUsername", "Updated user data: ${response.body()}")
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("UpdateUsername", "Error: $errorBody")
+                    _toastText.value = Event("Error: ${response.code()} ${response.message()}. Body: $errorBody")
+                }
+            }
+
+            override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
+                Log.e("UpdateUsername", "Failure: ${t.message}")
+                _updateUsernameResponse.value = null
+                _toastText.value = Event("Failure: ${t.message}")
+            }
+        })
+    }
 
 
+    // Fungsi untuk memperbarui password
+    fun updatePassword(password: String) {
+        val passwordUpdate = mapOf("password" to password)
+        val client = apiService.updatePassword(passwordUpdate)
 
+        client.enqueue(object : Callback<GetUserResponse> {
+            override fun onResponse(call: Call<GetUserResponse>, response: Response<GetUserResponse>) {
+                if (response.isSuccessful) {
+                    _updatePasswordResponse.value = response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _updatePasswordResponse.value = null
+                    Log.e("UpdatePassword", "Error: $errorBody")
+                }
+            }
 
+            override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
+                _updatePasswordResponse.value = null
+                Log.e("UpdatePassword", "Failure: ${t.message}")
+            }
+        })
+    }
+
+    // Fungsi untuk menghapus pengguna
+    fun deleteUser() {
+        val client = apiService.deleteUser()
+
+        client.enqueue(object : Callback<DeleteResponse> {
+            override fun onResponse(call: Call<DeleteResponse>, response: Response<DeleteResponse>) {
+                if (response.isSuccessful) {
+                    _deleteUserResponse.value = response.body()
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _deleteUserResponse.value = null
+                    Log.e("DeleteUser", "Error: $errorBody")
+                }
+            }
+
+            override fun onFailure(call: Call<DeleteResponse>, t: Throwable) {
+                _deleteUserResponse.value = null
+                Log.e("DeleteUser", "Failure: ${t.message}")
+            }
+        })
+    }
 
 
     fun getSession(): LiveData<UserModel> {

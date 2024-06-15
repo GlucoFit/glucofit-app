@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.fitcoders.glucofitapp.data.AppRepository
 import com.fitcoders.glucofitapp.data.UserModel
 import com.fitcoders.glucofitapp.response.DataItem
+import com.fitcoders.glucofitapp.response.GetUserResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponseItem
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -21,6 +22,8 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
 
     val recommendationResponse: LiveData<Result<List<RecommendationResponseItem>>>
         get() = repository.recommendationResponse
+
+    val userResponse1: LiveData<GetUserResponse?> get() = repository.userResponse
 
 
 
@@ -57,6 +60,12 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
     fun fetchRecommendations() {
         viewModelScope.launch {
             repository.getRecommendation()
+        }
+    }
+
+    fun fetchUserData() {
+        viewModelScope.launch {
+            repository.fetchUserData()
         }
     }
 }

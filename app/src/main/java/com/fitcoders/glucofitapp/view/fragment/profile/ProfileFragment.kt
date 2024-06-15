@@ -62,11 +62,9 @@ class ProfileFragment : Fragment() {
         titleText.text = "Profile"
         backButton.visibility = View.GONE
 
-        // Observe the session for changes and update UI accordingly
-         profileViewModel.getSession().observe(viewLifecycleOwner) { user ->
-             binding.email.text = user.email
-             binding.username.text = user.username
-         }
+        observeViewModel()
+        // Panggil fetchUserData dari ViewModel untuk mengambil data pengguna saat fragment dimuat
+        profileViewModel.fetchUserData()
 
         // Setting click listener for logout button
         binding.btnLogout.setOnClickListener {
@@ -87,6 +85,16 @@ class ProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null  // Clear the binding when the view is destroyed to avoid memory leaks
+    }
+
+    private fun observeViewModel() {
+        profileViewModel.userResponse.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                binding.email.text = user.email
+                binding.username.text = user.userName
+            }
+        }
+
     }
 
     private fun showAlertDialog() = AlertDialog.Builder(requireContext())

@@ -64,9 +64,7 @@ class HomeFragment : Fragment() {
 
         setupRecyclerView()
 
-        homeViewModel.getSession().observe(viewLifecycleOwner) { user ->
-            binding.name.text = user.username
-        }
+
 
         observeViewModel()
 
@@ -111,6 +109,15 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireContext(), "Failed to load recommendations: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
         }
+
+        homeViewModel.fetchUserData()
+        homeViewModel.userResponse1.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                binding.name.text = user.userName
+            }
+        }
+
+
     }
 
     private fun toggleLayout() {
