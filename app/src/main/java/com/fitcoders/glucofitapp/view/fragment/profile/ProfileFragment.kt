@@ -30,6 +30,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.fitcoders.glucofitapp.view.activity.profile.account.AccountActivity
 import com.fitcoders.glucofitapp.view.activity.profile.password.PasswordActivity
+import com.fitcoders.glucofitapp.view.activity.profile.selfassessmentresult.SelfAssessmentResultActivity
 
 
 class ProfileFragment : Fragment() {
@@ -78,6 +79,11 @@ class ProfileFragment : Fragment() {
 
         binding.password.setOnClickListener {
             val intent = Intent(requireContext(), PasswordActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.selfAssessmentResult.setOnClickListener {
+            val intent = Intent(requireContext(), SelfAssessmentResultActivity::class.java)
             startActivity(intent)
         }
     }
