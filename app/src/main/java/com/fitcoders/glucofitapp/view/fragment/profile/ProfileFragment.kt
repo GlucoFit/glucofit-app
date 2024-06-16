@@ -1,6 +1,7 @@
 package com.fitcoders.glucofitapp.view.fragment.profile
 
 import android.app.Application
+import android.app.Dialog
 import android.content.Context
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -28,9 +29,11 @@ import kotlinx.coroutines.withContext
 import kotlin.math.log
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import com.fitcoders.glucofitapp.view.activity.profile.account.AccountActivity
 import com.fitcoders.glucofitapp.view.activity.profile.password.PasswordActivity
 import com.fitcoders.glucofitapp.view.activity.profile.selfassessmentresult.SelfAssessmentResultActivity
+import com.google.android.material.button.MaterialButton
 
 
 class ProfileFragment : Fragment() {
@@ -103,13 +106,49 @@ class ProfileFragment : Fragment() {
 
     }
 
-    private fun showAlertDialog() = AlertDialog.Builder(requireContext())
-        .setTitle(R.string.logout)
-        .setMessage(R.string.sure)
-        .setPositiveButton(R.string.No) { dialog, _ -> dialog.dismiss() } // Use dismiss to just close the dialog
-        .setNegativeButton(R.string.Yes) { _, _ -> this.performLogout() } // Handle logout inside performLogout method
-        .create()
-        .show()
+    private fun showAlertDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.custom_alert_layout)
+        dialog.window?.setBackgroundDrawable(requireActivity().getDrawable(R.drawable.shape_rounded_25dp))
+        dialog.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setCancelable(true)
+
+
+        val btnNo: Button = dialog.findViewById(R.id.btnNo)
+        val btnYes: Button = dialog.findViewById(R.id.btnYes)
+        val tvMessage: TextView = dialog.findViewById(R.id.tvMessage)
+
+
+        tvMessage.text = "Are you sure you want to log out?"
+        btnYes.text = "Yes, logout"
+        btnNo.text = "No"
+
+        btnNo.setOnClickListener {
+            dialog.dismiss()
+            setWindowTransparency(false)
+        }
+
+        btnYes.setOnClickListener {
+            dialog.dismiss()
+            performLogout()
+            setWindowTransparency(false)
+        }
+
+        dialog.setOnCancelListener {
+            setWindowTransparency(false)
+        }
+
+        dialog.show()
+        setWindowTransparency(true)
+    }
+
+    private fun setWindowTransparency(isTransparent: Boolean) {
+        val window = requireActivity().window
+        val params = window.attributes
+        params.alpha = if (isTransparent) 0.5f else 1.0f
+        window.attributes = params
+    }
+
 
     private fun performLogout() {
         // Memanggil metode logout di ProfileViewModel dan mengelola hasilnya

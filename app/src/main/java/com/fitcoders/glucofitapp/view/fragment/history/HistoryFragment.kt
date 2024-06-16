@@ -1,10 +1,12 @@
 package com.fitcoders.glucofitapp.view.fragment.history
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -219,16 +221,48 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
     }
 
     private fun promptDeleteConfirmation(item: DataItem) {
-        // Show a confirmation dialog before deleting
-        AlertDialog.Builder(requireContext())
-            .setTitle("Delete Confirmation")
-            .setMessage("Are you sure you want to delete this item?")
-            .setPositiveButton("Yes") { _, _ ->
-                // Call ViewModel to delete the item
-                item.id?.let { historyViewModel.deleteScanHistoryById(it) }
-            }
-            .setNegativeButton("No", null)
-            .show()
+
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.custom_alert_layout)
+        dialog.window?.setBackgroundDrawable(requireActivity().getDrawable(R.drawable.shape_rounded_25dp))
+        dialog.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setCancelable(true)
+
+
+        val btnNo: Button = dialog.findViewById(R.id.btnNo)
+        val btnYes: Button = dialog.findViewById(R.id.btnYes)
+        val tvMessage: TextView = dialog.findViewById(R.id.tvMessage)
+
+
+        tvMessage.text = "Are you sure you want to delete this item?"
+        btnYes.text = "Yes, remove"
+        btnNo.text = "No"
+
+        btnNo.setOnClickListener {
+            dialog.dismiss()
+            setWindowTransparency(false)
+        }
+
+        btnYes.setOnClickListener {
+            dialog.dismiss()
+            item.id?.let { historyViewModel.deleteScanHistoryById(it) }
+            setWindowTransparency(false)
+        }
+
+        dialog.setOnCancelListener {
+            setWindowTransparency(false)
+        }
+
+        dialog.show()
+        setWindowTransparency(true)
+
+    }
+
+    private fun setWindowTransparency(isTransparent: Boolean) {
+        val window = requireActivity().window
+        val params = window.attributes
+        params.alpha = if (isTransparent) 0.5f else 1.0f
+        window.attributes = params
     }
 
     private fun getCurrentDate(): String {
