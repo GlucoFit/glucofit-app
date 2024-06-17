@@ -43,4 +43,3 @@ data class FoodRecipeResponseItem(
 	@field:SerializedName("updatedAt")
 	val updatedAt: String? = null
 )
->>>>>>> 193f833 (feat: add search history and scan result layout)
