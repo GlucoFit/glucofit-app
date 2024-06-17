@@ -20,296 +20,178 @@
     <include
         android:id="@+id/previewImageCard"
         layout="@layout/scanner_image_preview_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/actionBar"/>
-
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/previewImageCard"
-        app:layout_constraintBottom_toTopOf="@+id/analyzeButton"
+        app:layout_constraintTop_toBottomOf="@+id/actionBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <LinearLayout
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/previewImageCard">
+
+        <!-- Instruction Text -->
+        <TextView
+            android:id="@+id/tips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/tips"
+            android:textSize="15sp"
+            android:textColor="@color/text_color_light_primary"
+            android:fontFamily="@font/poppins_bold"/>
 
-            <!-- Instruction Text -->
+        <!-- Tips List -->
+        <!-- Tip 1 -->
+        <LinearLayout
+            android:id="@+id/tip1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
             <TextView
-                android:id="@+id/tips"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tips"
-                android:textSize="15sp"
-                android:textColor="@color/text_color_light_primary"
-                android:fontFamily="@font/poppins_bold"/>
-
-            <!-- Tips List -->
-            <!-- Tip 1 -->
-            <LinearLayout
-                android:id="@+id/tip1"
-                android:layout_width="match_parent"
+                android:text="@string/_1"
+                android:textSize="14sp"
+                android:textColor="@color/text_color_light_secondary"
+                android:fontFamily="@font/poppins_semi_bold"/>
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_1"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_semi_bold"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="16dp"
-                    android:justificationMode="inter_word"
-                    android:text="@string/tip1"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_regular"/>
-            </LinearLayout>
-
-            <!-- Tip 2 -->
-            <LinearLayout
-                android:id="@+id/tip2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_2"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_semi_bold"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="16dp"
-                    android:justificationMode="inter_word"
-                    android:text="@string/tip2"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_regular"/>
-            </LinearLayout>
-
-            <!-- Tip 3 -->
-            <LinearLayout
-                android:id="@+id/tip3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_3"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_semi_bold"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="16dp"
-                    android:justificationMode="inter_word"
-                    android:text="@string/tip3"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_regular"/>
-            </LinearLayout>
-
-            <!-- Tip 4 -->
-            <LinearLayout
-                android:id="@+id/tip4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_4"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_semi_bold"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="16dp"
-                    android:justificationMode="inter_word"
-                    android:text="@string/tip4"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_regular"/>
-            </LinearLayout>
-
-            <!-- Tip 5 -->
-            <LinearLayout
-                android:id="@+id/tip5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_5"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_semi_bold"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="16dp"
-                    android:justificationMode="inter_word"
-                    android:text="@string/tip5"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_regular"/>
-            </LinearLayout>
-
-            <!-- Tip 6 -->
-            <LinearLayout
-                android:id="@+id/tip6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_6"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_semi_bold"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="16dp"
-                    android:justificationMode="inter_word"
-                    android:text="@string/tip6"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_regular"/>
-            </LinearLayout>
-
-            <!-- Tip 7 -->
-            <LinearLayout
-                android:id="@+id/tip7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_7"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_semi_bold"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="16dp"
-                    android:justificationMode="inter_word"
-                    android:text="@string/tip7"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_regular"/>
-            </LinearLayout>
-
-            <!-- Tip 8 -->
-            <LinearLayout
-                android:id="@+id/tip8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_8"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_semi_bold"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="16dp"
-                    android:justificationMode="inter_word"
-                    android:text="@string/tip8"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_regular"/>
-            </LinearLayout>
-
-            <!-- Tip 9 -->
-            <LinearLayout
-                android:id="@+id/tip9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_9"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_semi_bold"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="16dp"
-                    android:justificationMode="inter_word"
-                    android:text="@string/tip9"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_color_light_secondary"
-                    android:fontFamily="@font/poppins_regular"/>
-            </LinearLayout>
-
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="16dp"
+                android:justificationMode="inter_word"
+                android:text="@string/tip1"
+                android:textSize="14sp"
+                android:textColor="@color/text_color_light_secondary"
+                android:fontFamily="@font/poppins_regular"/>
         </LinearLayout>
-    </ScrollView>
+
+        <!-- Tip 2 -->
+        <LinearLayout
+            android:id="@+id/tip2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_2"
+                android:textSize="14sp"
+                android:textColor="@color/text_color_light_secondary"
+                android:fontFamily="@font/poppins_semi_bold"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="16dp"
+                android:justificationMode="inter_word"
+                android:text="@string/tip2"
+                android:textSize="14sp"
+                android:textColor="@color/text_color_light_secondary"
+                android:fontFamily="@font/poppins_regular"/>
+        </LinearLayout>
+
+        <!-- Tip 3 -->
+        <LinearLayout
+            android:id="@+id/tip3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_3"
+                android:textSize="14sp"
+                android:textColor="@color/text_color_light_secondary"
+                android:fontFamily="@font/poppins_semi_bold"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="16dp"
+                android:justificationMode="inter_word"
+                android:text="@string/tip3"
+                android:textSize="14sp"
+                android:textColor="@color/text_color_light_secondary"
+                android:fontFamily="@font/poppins_regular"/>
+        </LinearLayout>
+
+        <!-- Tip 4 -->
+        <LinearLayout
+            android:id="@+id/tip4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_4"
+                android:textSize="14sp"
+                android:textColor="@color/text_color_light_secondary"
+                android:fontFamily="@font/poppins_semi_bold"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="16dp"
+                android:justificationMode="inter_word"
+                android:text="@string/tip4"
+                android:textSize="14sp"
+                android:textColor="@color/text_color_light_secondary"
+                android:fontFamily="@font/poppins_regular"/>
+        </LinearLayout>
+
+        <!-- Tip 5 -->
+        <LinearLayout
+            android:id="@+id/tip5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_5"
+                android:textSize="14sp"
+                android:textColor="@color/text_color_light_secondary"
+                android:fontFamily="@font/poppins_semi_bold"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="16dp"
+                android:justificationMode="inter_word"
+                android:text="@string/tip5"
+                android:textSize="14sp"
+                android:textColor="@color/text_color_light_secondary"
+                android:fontFamily="@font/poppins_regular"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
 
     <!-- Analyze Button -->
     <Button
@@ -327,24 +209,24 @@
 
     <Button
         android:id="@+id/cameraButton"
-        android:layout_width="50dp"
+        android:layout_width="45dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="15dp"
         android:backgroundTint="@color/black"
-        android:drawableBottom="@drawable/ic_camera"
+        android:drawableBottom="@drawable/ic_add_from_camera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/analyzeButton"/>
 
     <Button
         android:id="@+id/galleryButton"
-        android:layout_width="50dp"
+        android:layout_width="45dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="15dp"
         android:backgroundTint="@color/black"
-        android:drawableBottom="@drawable/ic_gallery"
+        android:drawableBottom="@drawable/ic_add_from_gallery"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cameraButton"
         app:layout_constraintEnd_toEndOf="parent"/>

@@ -25,7 +25,7 @@
         android:theme="@style/Theme.GlucofitApp"
         tools:targetApi="31">
         <activity
-            android:name=".view.activity.Search.SearchHistoryActivity"
+            android:name=".view.activity.search.SearchActivity"
             android:exported="false" />
         <activity
             android:name=".view.activity.profile.selfassessmentresult.SelfAssessmentResultActivity"

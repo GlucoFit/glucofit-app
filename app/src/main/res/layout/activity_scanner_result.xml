@@ -1,49 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:background="@color/light_theme_primary"
     tools:context=".view.activity.scanner.ScannerResultActivity">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="380dp"
+        android:elevation="3dp"
+        app:cardCornerRadius="20dp"
+        android:background="@color/white">
 
-        <ImageView
-            android:id="@+id/result_image"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="fitCenter"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sugar Content"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_semi_bold"/>
+
+            <TextView
+                android:id="@+id/sugar_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="30 Gram"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_regular" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Food Name"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_semi_bold"/>
+
+            <TextView
+                android:id="@+id/food_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sliced Melon"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_regular" />
+
+            <Button
+                android:id="@+id/button_add_to_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add to History"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/black"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:layout_marginTop="20dp"
+                />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        app:cardCornerRadius="25dp"
+        android:elevation="5dp"
+        android:layout_marginTop="80dp"
+        android:layout_gravity="center_horizontal">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/previewImageView"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:elevation="5dp"
             android:src="@drawable/ic_food"
-            android:layout_marginBottom="16dp"/>
+            app:riv_corner_radius="25dip"/>
+    </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/result_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/result"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginBottom="16dp"/>
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/action_bar" />
 
-        <TextView
-            android:id="@+id/result_text_sugar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/result"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginBottom="16dp"/>
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/black"/>
-    </LinearLayout>
-</ScrollView>
+</FrameLayout>

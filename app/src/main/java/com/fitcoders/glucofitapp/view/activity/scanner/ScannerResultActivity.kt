@@ -3,10 +3,13 @@ package com.fitcoders.glucofitapp.view.activity.scanner
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
+import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityScannerResultBinding
 import com.fitcoders.glucofitapp.data.helper.ImageClassifierHelper
 import com.fitcoders.glucofitapp.service.ApiConfig
@@ -32,6 +35,10 @@ class ScannerResultActivity : AppCompatActivity() {
 
         // Get the image URI from the intent extras
         val imageUriString = intent.getStringExtra(IMAGE_URI)
+
+
+        setupUI()
+
 
         imageUriString?.let {
             val imageUri = Uri.parse(it)
@@ -60,8 +67,8 @@ class ScannerResultActivity : AppCompatActivity() {
         }
 
         // Save button click listener to save history
-        binding.saveButton.setOnClickListener {
-            val result = binding.resultText.text.toString()
+        binding.buttonAddToHistory.setOnClickListener {
+            val result = binding.foodName.text.toString()
             imageUriString?.let {
                 saveHistory(Uri.parse(it), result)
             } ?: run {
@@ -77,42 +84,54 @@ class ScannerResultActivity : AppCompatActivity() {
                 // Filter not null items and extract sugar values
                 val sugarValues = sugarItems.filterNotNull().mapNotNull { it.sugar }
                 val sugarInfo = sugarValues.joinToString(separator = ", ") { "${it}g" } // Join sugar values with commas
-                binding.resultTextSugar.text = "Sugar content: $sugarInfo" // Display sugar content
+                binding.sugarContent.text = "Sugar content: $sugarInfo" // Display sugar content
             } else {
-                binding.resultTextSugar.text = "No sugar data available or failed to fetch food info"
+                binding.sugarContent.text = "No sugar data available or failed to fetch food info"
             }
         })
 
     }
 
- /*   override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityScannerResultBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private fun setupUI() {
+        val titleText: TextView = findViewById(R.id.titleText)
+        val backButton: ImageButton = findViewById(R.id.backButton)
 
-        val imageUriString = intent.getStringExtra(IMAGE_URI)
-        imageUriString?.let {
-            val imageUri = Uri.parse(it)
-            showImage(imageUri)
+        titleText.text = "Scanner Result"
+        backButton.visibility = ImageButton.VISIBLE
 
-            scanViewModel.classifyImage(imageUri, this)
-        } ?: run {
-            showToast("No image URI provided")
+        backButton.setOnClickListener {
             finish()
         }
+    }
 
-        scanViewModel.foodInfo.observe(this, Observer { foodInfo ->
-            if (foodInfo != null && foodInfo.sugar != null) {
-                val sugarItems = foodInfo.sugar // List of SugarItem?
-                // Filter not null items and extract sugar values
-                val sugarValues = sugarItems.filterNotNull().mapNotNull { it.sugar }
-                val sugarInfo = sugarValues.joinToString(separator = ", ") { "${it}g" } // Join sugar values with commas
-                binding.resultTextSugar.text = "Sugar content: $sugarInfo" // Display sugar content
-            } else {
-                binding.resultTextSugar.text = "No sugar data available or failed to fetch food info"
-            }
-        })
-    }*/
+    /*   override fun onCreate(savedInstanceState: Bundle?) {
+           super.onCreate(savedInstanceState)
+           binding = ActivityScannerResultBinding.inflate(layoutInflater)
+           setContentView(binding.root)
+
+           val imageUriString = intent.getStringExtra(IMAGE_URI)
+           imageUriString?.let {
+               val imageUri = Uri.parse(it)
+               showImage(imageUri)
+
+               scanViewModel.classifyImage(imageUri, this)
+           } ?: run {
+               showToast("No image URI provided")
+               finish()
+           }
+
+           scanViewModel.foodInfo.observe(this, Observer { foodInfo ->
+               if (foodInfo != null && foodInfo.sugar != null) {
+                   val sugarItems = foodInfo.sugar // List of SugarItem?
+                   // Filter not null items and extract sugar values
+                   val sugarValues = sugarItems.filterNotNull().mapNotNull { it.sugar }
+                   val sugarInfo = sugarValues.joinToString(separator = ", ") { "${it}g" } // Join sugar values with commas
+                   binding.resultTextSugar.text = "Sugar content: $sugarInfo" // Display sugar content
+               } else {
+                   binding.resultTextSugar.text = "No sugar data available or failed to fetch food info"
+               }
+           })
+       }*/
     @SuppressLint("SetTextI18n")
     private fun showResults(results: List<Classifications>) {
         if (results.isNotEmpty() && results[0].categories.isNotEmpty()) {
@@ -120,14 +139,14 @@ class ScannerResultActivity : AppCompatActivity() {
             val label = topResult.label
             val score = topResult.score.formatToString()
 
-            binding.resultText.text = "$label ${score}"
+            binding.foodName.text = "$label ${score}"
         } else {
-            binding.resultText.text = "No classification results available"
+            binding.foodName.text = "No classification results available"
         }
     }
 
     private fun showImage(uri: Uri) {
-        binding.resultImage.setImageURI(uri)
+        binding.previewImageView.setImageURI(uri)
     }
 
     private fun saveHistory(imageUri: Uri, result: String) {

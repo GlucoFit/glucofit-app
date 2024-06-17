@@ -17,6 +17,7 @@ import com.fitcoders.glucofitapp.utils.adapter.FoodAdapter
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.fooddetail.FoodDetailActivity
 import com.fitcoders.glucofitapp.view.activity.scanner.ScannerActivity
+import com.fitcoders.glucofitapp.view.activity.search.SearchActivity
 
 class HomeFragment : Fragment() {
 
@@ -68,6 +69,12 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+
+        binding.searchBar.setOnClickListener {
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            startActivity(intent)
+        }
+
         observeViewModel()
 
         homeViewModel.fetchTodaySugarIntake()

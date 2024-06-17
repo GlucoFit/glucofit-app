@@ -9,6 +9,7 @@ import com.fitcoders.glucofitapp.databinding.ItemFoodGridBinding
 import com.fitcoders.glucofitapp.databinding.ItemFoodListBinding
 import com.fitcoders.glucofitapp.response.FoodDetails
 import com.bumptech.glide.Glide
+import com.fitcoders.glucofitapp.R
 
 class FoodAdapter(
     private val itemClick: (FoodDetails) -> Unit,
@@ -94,6 +95,7 @@ class FoodAdapter(
                 sugarUnitCalory.text = "Cal"
                 sugarContent.text = item.sugarContent.toString()
                 sugarUnit.text = "g"
+                favoriteIcon.setImageResource(R.drawable.ic_heart_filled)
                 itemView.setOnClickListener { itemClick(item) }
 
                 // Setup favorite button click
