@@ -11,7 +11,9 @@ import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
 import com.fitcoders.glucofitapp.response.DataFoodResponse
 import com.fitcoders.glucofitapp.response.DataItem
 import com.fitcoders.glucofitapp.response.DeleteResponse
+import com.fitcoders.glucofitapp.response.FavoritResponse
 import com.fitcoders.glucofitapp.response.FoodDetails
+import com.fitcoders.glucofitapp.response.FoodRecipeResponseItem
 import com.fitcoders.glucofitapp.response.GetAssesmantResponse
 import com.fitcoders.glucofitapp.response.GetUserResponse
 import com.fitcoders.glucofitapp.response.HistoryScanResponse
@@ -20,6 +22,7 @@ import com.fitcoders.glucofitapp.response.LogoutResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponseItem
 import com.fitcoders.glucofitapp.response.RegisterResponse
+import com.fitcoders.glucofitapp.response.SearchHistoryResponseItem
 import com.fitcoders.glucofitapp.service.ApiService
 import com.fitcoders.glucofitapp.utils.Event
 import kotlinx.coroutines.runBlocking
@@ -81,6 +84,17 @@ class AppRepository private constructor(private val pref: UserPreference, privat
 
     private val _deleteUserResponse = MutableLiveData<DeleteResponse?>()
     val deleteUserResponse: LiveData<DeleteResponse?> = _deleteUserResponse
+
+    // LiveData untuk menyimpan hasil pencarian makanan
+    private val _searchResults = MutableLiveData<Result<List<FoodRecipeResponseItem>>>()
+    val searchResults: LiveData<Result<List<FoodRecipeResponseItem>>> = _searchResults
+
+    // LiveData untuk menyimpan riwayat pencarian
+    private val _searchHistory = MutableLiveData<Result<List<SearchHistoryResponseItem>>>()
+    val searchHistory: LiveData<Result<List<SearchHistoryResponseItem>>> = _searchHistory
+
+    private val _favoriteResponse = MutableLiveData<FavoritResponse?>()
+    val favoriteResponse: LiveData<FavoritResponse?> = _favoriteResponse
 
 
     fun pRegister(userName: String, email: String, password: String) {
@@ -543,6 +557,80 @@ class AppRepository private constructor(private val pref: UserPreference, privat
             override fun onFailure(call: Call<DeleteResponse>, t: Throwable) {
                 _deleteUserResponse.value = null
                 Log.e("DeleteUser", "Failure: ${t.message}")
+            }
+        })
+    }
+
+    // Metode untuk mencari makanan berdasarkan nama resep
+    fun searchFoodByName(recipeName: String) {
+        _isLoading.value = true
+        val client = apiService.getFoodByRecipeName(recipeName)
+
+        client.enqueue(object : Callback<List<FoodRecipeResponseItem>> {
+            override fun onResponse(call: Call<List<FoodRecipeResponseItem>>, response: Response<List<FoodRecipeResponseItem>>) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val foodItems = response.body() ?: emptyList()
+                    _searchResults.value = Result.success(foodItems)
+                } else {
+                    _searchResults.value = Result.failure(Throwable("Failed to fetch food recipes: ${response.message()}"))
+                    _toastText.value = Event("Failed to fetch food recipes: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<FoodRecipeResponseItem>>, t: Throwable) {
+                _isLoading.value = false
+                _searchResults.value = Result.failure(t)
+                _toastText.value = Event("API call failed: ${t.message}")
+            }
+        })
+    }
+
+    // Metode untuk mendapatkan riwayat pencarian
+    fun getSearchHistory() {
+        _isLoading.value = true
+        val client = apiService.getSearchHistory()
+
+        client.enqueue(object : Callback<List<SearchHistoryResponseItem>> {
+            override fun onResponse(call: Call<List<SearchHistoryResponseItem>>, response: Response<List<SearchHistoryResponseItem>>) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val historyItems = response.body() ?: emptyList()
+                    _searchHistory.value = Result.success(historyItems)
+                } else {
+                    _searchHistory.value = Result.failure(Throwable("Failed to fetch search history: ${response.message()}"))
+                    _toastText.value = Event("Failed to fetch search history: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<SearchHistoryResponseItem>>, t: Throwable) {
+                _isLoading.value = false
+                _searchHistory.value = Result.failure(t)
+                _toastText.value = Event("API call failed: ${t.message}")
+            }
+        })
+    }
+
+    fun markAsFavorite(foodId: Int, isFavorite: Int) {
+        _isLoading.value = true
+
+        val call = apiService.markAsFavorite(foodId,isFavorite)
+
+        call.enqueue(object : Callback<FavoritResponse> {
+            override fun onResponse(call: Call<FavoritResponse>, response: Response<FavoritResponse>) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _favoriteResponse.value = response.body()
+                    _toastText.value = Event("Marked as favorite successfully.")
+                } else {
+                    _toastText.value = Event("Failed to mark as favorite: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<FavoritResponse>, t: Throwable) {
+                _isLoading.value = false
+                _favoriteResponse.value = null
+                _toastText.value = Event("API call failed: ${t.message}")
             }
         })
     }

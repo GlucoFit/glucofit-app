@@ -7,5 +7,9 @@ data class UserModel(
     val isLogin: Boolean
 )
 
+data class FavoriteRequest(
+    val foodId: Int,
+    val isFavorite: Int
+)
 
 

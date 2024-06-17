@@ -12,7 +12,8 @@ import com.bumptech.glide.Glide
 
 class FoodAdapter(
     private val itemClick: (FoodDetails) -> Unit,
-    private var isListView: Boolean = true // Default set to true for list view
+    private val favoriteClick: (FoodDetails, Boolean) -> Unit, // New callback for favorite button
+    private var isListView: Boolean = false
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -54,7 +55,7 @@ class FoodAdapter(
                     parent,
                     false
                 )
-                FoodGridViewHolder(binding, itemClick)
+                FoodGridViewHolder(binding, itemClick, favoriteClick)
             }
             else -> {
                 val binding = ItemFoodListBinding.inflate(
@@ -62,7 +63,7 @@ class FoodAdapter(
                     parent,
                     false
                 )
-                FoodListViewHolder(binding, itemClick)
+                FoodListViewHolder(binding, itemClick, favoriteClick)
             }
         }
     }
@@ -80,7 +81,8 @@ class FoodAdapter(
     // ViewHolder for list view
     class FoodListViewHolder(
         private val binding: ItemFoodListBinding,
-        private val itemClick: (FoodDetails) -> Unit
+        private val itemClick: (FoodDetails) -> Unit,
+        private val favoriteClick: (FoodDetails, Boolean) -> Unit // Favorite button click callback
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindView(item: FoodDetails) {
             with(binding) {
@@ -89,10 +91,16 @@ class FoodAdapter(
                     .into(foodImage)
                 foodName.text = item.recipeName
                 calories.text = item.calories.toString()
-                sugarUnitCalory.text= "Cal"
+                sugarUnitCalory.text = "Cal"
                 sugarContent.text = item.sugarContent.toString()
                 sugarUnit.text = "g"
                 itemView.setOnClickListener { itemClick(item) }
+
+                // Setup favorite button click
+                favoriteIcon.setOnClickListener {
+                    val isFavorite = item.isFavorite != true // Toggle favorite state
+                    favoriteClick(item, isFavorite)
+                }
             }
         }
     }
@@ -100,7 +108,8 @@ class FoodAdapter(
     // ViewHolder for grid view
     class FoodGridViewHolder(
         private val binding: ItemFoodGridBinding,
-        private val itemClick: (FoodDetails) -> Unit
+        private val itemClick: (FoodDetails) -> Unit,
+        private val favoriteClick: (FoodDetails, Boolean) -> Unit // Favorite button click callback
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindView(item: FoodDetails) {
             with(binding) {
@@ -109,10 +118,16 @@ class FoodAdapter(
                     .into(foodImage)
                 foodName.text = item.recipeName
                 calories.text = item.calories.toString()
-                sugarUnitCalory.text= "Cal"
+                sugarUnitCalory.text = "Cal"
                 sugarContent.text = item.sugarContent.toString()
                 sugarUnit.text = "g"
                 itemView.setOnClickListener { itemClick(item) }
+
+                // Setup favorite button click
+                favoriteIcon.setOnClickListener {
+                    val isFavorite = item.isFavorite != true // Toggle favorite state
+                    favoriteClick(item, isFavorite)
+                }
             }
         }
     }

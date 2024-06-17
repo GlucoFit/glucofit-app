@@ -60,8 +60,8 @@ class FoodDetailActivity : AppCompatActivity() {
             binding.foodName.text = it.recipeName
             binding.sugarContent.text = "${it.sugarContent}"
             binding.calories.text = "${it.calories}"
-            //binding.ingridientsTitle.text = it.ingredients
-           // binding.dietLabelsTitle.text = it.dietLabels
+            binding.servings.text = it.servings.toString()
+
 
             // Display diet labels
             val dietLabels = it.dietLabels?.split(", ") ?: emptyList()

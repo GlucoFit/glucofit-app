@@ -58,5 +58,12 @@ data class FoodDetails(
 	val createdAt: String? = null,
 
 	@SerializedName("updatedAt")
-	val updatedAt: String? = null
+	val updatedAt: String? = null,
+
+	@field:SerializedName("servings")
+	val servings: Int? = null,
+
+	@field:SerializedName("isFavorite")
+	val isFavorite: Boolean? = null,
+
 ): Parcelable

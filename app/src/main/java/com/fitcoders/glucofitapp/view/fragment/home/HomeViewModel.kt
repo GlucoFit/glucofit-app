@@ -7,8 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.fitcoders.glucofitapp.data.AppRepository
 import com.fitcoders.glucofitapp.data.UserModel
 import com.fitcoders.glucofitapp.response.DataItem
+import com.fitcoders.glucofitapp.response.FavoritResponse
+import com.fitcoders.glucofitapp.response.FoodRecipeResponseItem
 import com.fitcoders.glucofitapp.response.GetUserResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponseItem
+import com.fitcoders.glucofitapp.response.SearchHistoryResponseItem
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -25,11 +28,13 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
 
     val userResponse1: LiveData<GetUserResponse?> get() = repository.userResponse
 
+    val searchResults: LiveData<Result<List<FoodRecipeResponseItem>>> get() = repository.searchResults
+
+    // LiveData untuk riwayat pencarian
+    val searchHistory: LiveData<Result<List<SearchHistoryResponseItem>>> get() = repository.searchHistory
 
 
-    fun getSession(): LiveData<UserModel> {
-        return repository.getSession()
-    }
+    val favoriteResponse: LiveData<FavoritResponse?> get() = repository.favoriteResponse
 
     fun fetchTodaySugarIntake() {
         viewModelScope.launch {
@@ -66,6 +71,27 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
     fun fetchUserData() {
         viewModelScope.launch {
             repository.fetchUserData()
+        }
+    }
+
+    // Fungsi untuk mencari makanan berdasarkan nama resep
+    fun searchFoodByName(query: String) {
+        viewModelScope.launch {
+            repository.searchFoodByName(query)
+        }
+    }
+
+    // Fungsi untuk mendapatkan riwayat pencarian
+    fun getSearchHistory() {
+        viewModelScope.launch {
+            repository.getSearchHistory()
+        }
+    }
+
+    // Mark an item as favorite
+    fun markAsFavorite(foodId: Int, isFavorite: Int) {
+        viewModelScope.launch {
+            repository.markAsFavorite(foodId, isFavorite)
         }
     }
 }

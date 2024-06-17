@@ -1,10 +1,7 @@
 package com.fitcoders.glucofitapp.view.fragment.home
 
-import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fitcoders.glucofitapp.R
@@ -28,15 +24,24 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var modelFactory: ViewModelFactory
     private val homeViewModel: HomeViewModel by viewModels { modelFactory }
-    private var isListLayout = true
+    private var isListLayout = false
+
+    // Menyimpan status favorit
+    private val favoriteStatusMap = mutableMapOf<Int, Boolean>()
 
     private val foodAdapter: FoodAdapter by lazy {
         FoodAdapter(
             { item ->
-                // Aksi ketika item diklik, misalnya membuka detail makanan
                 val intent = Intent(requireContext(), FoodDetailActivity::class.java)
                 intent.putExtra("foodDetails", item)
                 startActivity(intent)
+            },
+            { item, isFavorite ->
+                item.id?.let {
+                    homeViewModel.markAsFavorite(it, if (isFavorite) 1 else 0)
+                    favoriteStatusMap[it] = isFavorite // Perbarui status favorit secara lokal
+                    foodAdapter.notifyDataSetChanged() // Beritahu adapter untuk mencerminkan perubahan
+                }
             },
             isListView = isListLayout
         )
@@ -63,15 +68,12 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-
-
-
         observeViewModel()
 
         homeViewModel.fetchTodaySugarIntake()
-        homeViewModel.todaySugarIntake.observe(viewLifecycleOwner, { totalSugar ->
+        homeViewModel.todaySugarIntake.observe(viewLifecycleOwner) { totalSugar ->
             updateEmojiAndText(totalSugar)
-        })
+        }
 
         binding.scanButton.setOnClickListener {
             val intent = Intent(requireContext(), ScannerActivity::class.java)
@@ -98,26 +100,29 @@ class HomeFragment : Fragment() {
         homeViewModel.fetchRecommendations()
         homeViewModel.recommendationResponse.observe(viewLifecycleOwner) { result ->
             result.onSuccess { recommendations ->
-                Log.d(TAG, "Recommendations received: ${recommendations.size}")
-
-                // Mengatur daftar item ke adapter
                 val foodList = recommendations.mapNotNull { it.foodDetails }
-                Log.d(TAG, "Food list generated for adapter: ${foodList.size}")
                 foodAdapter.submitList(foodList)
             }.onFailure { exception ->
-                Log.e(TAG, "Error fetching recommendations", exception)
                 Toast.makeText(requireContext(), "Failed to load recommendations: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
         }
 
         homeViewModel.fetchUserData()
         homeViewModel.userResponse1.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
-                binding.name.text = user.userName
+            user?.let {
+                binding.name.text = it.userName
             }
         }
 
-
+        // Mengamati respons favorit dan memperbarui peta
+        homeViewModel.favoriteResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                Toast.makeText(requireContext(), "Marked as favorite: ${it.isFavorite}", Toast.LENGTH_SHORT).show()
+                favoriteStatusMap[it.foodId ?: 0] = it.isFavorite == true
+                // Beritahu adapter untuk mencerminkan perubahan
+                foodAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
     private fun toggleLayout() {
@@ -135,10 +140,8 @@ class HomeFragment : Fragment() {
         )
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateEmojiAndText(intakeGula: Int) {
-        val sugarAmountTextView: TextView = binding.sugarAmount
-        sugarAmountTextView.text = intakeGula.toString()
+        binding.sugarAmount.text = intakeGula.toString()
 
         val maxSugarTextView: TextView = binding.sugarPercentage
         val maxSugarString = maxSugarTextView.text.toString().replace(" g", "").trim()
@@ -172,5 +175,3 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
-
-

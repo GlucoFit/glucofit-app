@@ -1,10 +1,13 @@
 package com.fitcoders.glucofitapp.service
 
+import com.fitcoders.glucofitapp.data.FavoriteRequest
 import com.fitcoders.glucofitapp.response.HistoryScanResponse
 import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
 import com.fitcoders.glucofitapp.response.DataFoodResponse
 import com.fitcoders.glucofitapp.response.DeleteResponse
+import com.fitcoders.glucofitapp.response.FavoritResponse
+import com.fitcoders.glucofitapp.response.FoodRecipeResponseItem
 import com.fitcoders.glucofitapp.response.GetAssesmantResponse
 import com.fitcoders.glucofitapp.response.GetUserResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
@@ -13,6 +16,7 @@ import com.fitcoders.glucofitapp.response.PostHistoryScanResponse
 import com.fitcoders.glucofitapp.response.RegisterResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponseItem
+import com.fitcoders.glucofitapp.response.SearchHistoryResponseItem
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -108,6 +112,21 @@ interface ApiService {
 
     @DELETE("users/me")
     fun deleteUser(): Call<DeleteResponse>
+
+    @GET("food/{recipeName}")
+    fun getFoodByRecipeName(
+        @Path("recipeName") recipeName: String
+    ): Call<List<FoodRecipeResponseItem>>
+
+    @GET("search/history")
+    fun getSearchHistory(
+    ): Call<List<SearchHistoryResponseItem>>
+    @FormUrlEncoded
+    @POST("favorite")
+    fun markAsFavorite(
+        @Field("foodId") foodId: Int,
+        @Field("isFavorite") isFavorite: Int,
+    ): Call<FavoritResponse>
 
 
 
