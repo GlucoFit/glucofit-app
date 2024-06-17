@@ -123,6 +123,7 @@ interface ApiService {
     @GET("search/history")
     fun getSearchHistory(
     ): Call<List<SearchHistoryResponseItem>>
+
     @FormUrlEncoded
     @POST("favorite")
     fun markAsFavorite(

@@ -71,7 +71,7 @@ class HomeFragment : Fragment() {
 
         setupRecyclerView()
 
-        binding.searchBar.setOnClickListener {
+        binding.searchButton.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
             startActivity(intent)
         }

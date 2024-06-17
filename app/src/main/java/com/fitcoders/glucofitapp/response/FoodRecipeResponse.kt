@@ -14,7 +14,7 @@ data class FoodRecipeResponseItem(
 	val recipeName: String? = null,
 
 	@field:SerializedName("sugarContent")
-	val sugarContent: Any? = null,
+	val sugarContent: Float? = null,
 
 	@field:SerializedName("instructionUrl")
 	val instructionUrl: String? = null,
@@ -38,7 +38,7 @@ data class FoodRecipeResponseItem(
 	val id: Int? = null,
 
 	@field:SerializedName("calories")
-	val calories: Any? = null,
+	val calories: Float? = null,
 
 	@field:SerializedName("updatedAt")
 	val updatedAt: String? = null
