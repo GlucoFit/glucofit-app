@@ -6,6 +6,8 @@ import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
 import com.fitcoders.glucofitapp.response.DataFoodResponse
 import com.fitcoders.glucofitapp.response.DeleteResponse
+import com.fitcoders.glucofitapp.response.FavoritFoodResponse
+import com.fitcoders.glucofitapp.response.FavoritFoodResponseItem
 import com.fitcoders.glucofitapp.response.FavoritResponse
 import com.fitcoders.glucofitapp.response.FoodRecipeResponseItem
 import com.fitcoders.glucofitapp.response.GetAssesmantResponse
@@ -127,6 +129,12 @@ interface ApiService {
         @Field("foodId") foodId: Int,
         @Field("isFavorite") isFavorite: Int,
     ): Call<FavoritResponse>
+
+    @GET("favorite")
+    fun getFavorite(): Call<List<FavoritFoodResponseItem>>
+
+
+
 
 
 

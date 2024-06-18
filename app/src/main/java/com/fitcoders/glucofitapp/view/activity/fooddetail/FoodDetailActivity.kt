@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityFoodDetailBinding
+import com.fitcoders.glucofitapp.response.Food
 import com.fitcoders.glucofitapp.response.FoodDetails
 import com.fitcoders.glucofitapp.utils.adapter.DietLabelsAdapter
 import com.fitcoders.glucofitapp.view.ViewModelFactory
@@ -43,55 +44,113 @@ class FoodDetailActivity : AppCompatActivity() {
         backButton.visibility = ImageButton.VISIBLE
 
         backButton.setOnClickListener {
-            finish() // Go back to the previous activity
+            finish() // Kembali ke aktivitas sebelumnya
         }
     }
 
     private fun displayFoodDetails() {
-        // Get the FoodDetails object passed from the previous activity
+        // Ambil objek Food atau FoodDetails yang dikirim melalui Intent
+        val food: Food? = intent.getParcelableExtra("food")
         val foodDetails: FoodDetails? = intent.getParcelableExtra("foodDetails")
 
-        // Update the UI with the food details
-        foodDetails?.let {
-            // Load the image
-            Glide.with(this).load(it.imageUrl).into(binding.foodImage)
-
-            // Set text views
-            binding.foodName.text = it.recipeName
-            binding.sugarContent.text = "${it.sugarContent}"
-            binding.calories.text = "${it.calories}"
-            binding.servings.text = it.servings.toString()
-
-
-            // Display diet labels
-            val dietLabels = it.dietLabels?.split(", ") ?: emptyList()
-            val dietLabelsAdapter = DietLabelsAdapter(dietLabels, this)
-            binding.dietLabelsRecyclerView.adapter = dietLabelsAdapter
-
-            // Format ingredients into a list with bullet points
-            val formattedIngredients = it.ingredients?.split(", ")?.joinToString("\n") { ingredient ->
-                "• $ingredient"
+        // Tentukan mana yang akan ditampilkan
+        when {
+            food != null -> {
+                // Menampilkan detail Food
+                updateUIWithFood(food)
             }
-            binding.ingridients.text = formattedIngredients
+            foodDetails != null -> {
+                // Menampilkan detail FoodDetails
+                updateUIWithFoodDetails(foodDetails)
+            }
+            else -> {
+                Toast.makeText(this, "No food details available", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
-            binding.jumpToInstructions.setOnClickListener { _ ->
-                // Check if the instruction URL is valid
-                it.instructionUrl?.let { url ->
-                    if (url.isNotEmpty()) {
-                        val intent = Intent(Intent.ACTION_VIEW).apply {
-                            data = Uri.parse(url)
-                        }
-                        try {
-                            startActivity(intent)
-                        } catch (e: ActivityNotFoundException) {
-                            Toast.makeText(this, "No browser found to open the URL", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(this, "Instruction URL is empty", Toast.LENGTH_SHORT).show()
+    private fun updateUIWithFood(food: Food) {
+        // Muat gambar
+        Glide.with(this).load(food.imageUrl).into(binding.foodImage)
+
+        // Setel text views
+        binding.foodName.text = food.recipeName
+        binding.sugarContent.text = "${food.sugarContent} g"
+        binding.calories.text = "${food.calories} kcal"
+        binding.servings.text = food.servings.toString()
+
+        // Tampilkan diet labels
+        val dietLabels = food.dietLabels?.split(", ") ?: emptyList()
+        val dietLabelsAdapter = DietLabelsAdapter(dietLabels, this)
+        binding.dietLabelsRecyclerView.adapter = dietLabelsAdapter
+
+        // Format ingredients menjadi daftar dengan bullet points
+        val formattedIngredients = food.ingredients?.split(", ")?.joinToString("\n") { ingredient ->
+            "• $ingredient"
+        }
+        binding.ingridients.text = formattedIngredients
+
+        // Handle klik tombol "jump to instructions"
+        binding.jumpToInstructions.setOnClickListener { _ ->
+            // Periksa apakah URL instruksi valid
+            food.instructionUrl?.let { url ->
+                if (url.isNotEmpty()) {
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse(url)
                     }
-                } ?: run {
-                    Toast.makeText(this, "No instruction URL available", Toast.LENGTH_SHORT).show()
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(this, "No browser found to open the URL", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this, "Instruction URL is empty", Toast.LENGTH_SHORT).show()
                 }
+            } ?: run {
+                Toast.makeText(this, "No instruction URL available", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun updateUIWithFoodDetails(foodDetails: FoodDetails) {
+        // Muat gambar
+        Glide.with(this).load(foodDetails.imageUrl).into(binding.foodImage)
+
+        // Setel text views
+        binding.foodName.text = foodDetails.recipeName
+        binding.sugarContent.text = "${foodDetails.sugarContent} g"
+        binding.calories.text = "${foodDetails.calories} kcal"
+        binding.servings.text = foodDetails.servings.toString()
+
+        // Tampilkan diet labels
+        val dietLabels = foodDetails.dietLabels?.split(", ") ?: emptyList()
+        val dietLabelsAdapter = DietLabelsAdapter(dietLabels, this)
+        binding.dietLabelsRecyclerView.adapter = dietLabelsAdapter
+
+        // Format ingredients menjadi daftar dengan bullet points
+        val formattedIngredients = foodDetails.ingredients?.split(", ")?.joinToString("\n") { ingredient ->
+            "• $ingredient"
+        }
+        binding.ingridients.text = formattedIngredients
+
+        // Handle klik tombol "jump to instructions"
+        binding.jumpToInstructions.setOnClickListener { _ ->
+            // Periksa apakah URL instruksi valid
+            foodDetails.instructionUrl?.let { url ->
+                if (url.isNotEmpty()) {
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse(url)
+                    }
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(this, "No browser found to open the URL", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this, "Instruction URL is empty", Toast.LENGTH_SHORT).show()
+                }
+            } ?: run {
+                Toast.makeText(this, "No instruction URL available", Toast.LENGTH_SHORT).show()
             }
         }
     }

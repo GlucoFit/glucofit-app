@@ -11,6 +11,8 @@ import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
 import com.fitcoders.glucofitapp.response.DataFoodResponse
 import com.fitcoders.glucofitapp.response.DataItem
 import com.fitcoders.glucofitapp.response.DeleteResponse
+import com.fitcoders.glucofitapp.response.FavoritFoodResponse
+import com.fitcoders.glucofitapp.response.FavoritFoodResponseItem
 import com.fitcoders.glucofitapp.response.FavoritResponse
 import com.fitcoders.glucofitapp.response.FoodDetails
 import com.fitcoders.glucofitapp.response.FoodRecipeResponseItem
@@ -95,6 +97,9 @@ class AppRepository private constructor(private val pref: UserPreference, privat
 
     private val _favoriteResponse = MutableLiveData<FavoritResponse?>()
     val favoriteResponse: LiveData<FavoritResponse?> = _favoriteResponse
+
+    private val _favoriteFoods = MutableLiveData<Result<List<FavoritFoodResponseItem>>>()
+    val favoriteFoods: MutableLiveData<Result<List<FavoritFoodResponseItem>>> get() = _favoriteFoods
 
 
     fun pRegister(userName: String, email: String, password: String) {
@@ -419,6 +424,41 @@ class AppRepository private constructor(private val pref: UserPreference, privat
             }
         })
     }
+
+    // Fungsi untuk mengambil makanan favorit dari API
+    fun getFavoriteFoods() {
+        _isLoading.value = true
+        val call = apiService.getFavorite()
+
+        call.enqueue(object : Callback<List<FavoritFoodResponseItem>> {
+            override fun onResponse(call: Call<List<FavoritFoodResponseItem>>, response: Response<List<FavoritFoodResponseItem>>) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val favoriteItems = response.body() ?: emptyList()
+                    Log.d("AppRepository", "Fetched favorite foods successfully. Total items: ${favoriteItems.size}")
+                    favoriteItems.forEach { item ->
+                        Log.d("AppRepository", "Favorite Item: $item")
+                    }
+                    _favoriteFoods.value = Result.success(favoriteItems.filterNotNull())
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    _toastText.value = Event("Failed to fetch favorite foods: ${response.code()} ${response.message()}. Body: $errorBody")
+                    Log.e("AppRepository", "Failed to fetch favorite foods. Error: $errorBody")
+                }
+            }
+
+            override fun onFailure(call: Call<List<FavoritFoodResponseItem>>, t: Throwable) {
+                _isLoading.value = false
+                _toastText.value = Event("API call failed: ${t.message}")
+                Log.e("AppRepository", "Failed to fetch favorite foods. Throwable: ${t.message}")
+            }
+        })
+    }
+
+
+
+
+
     //user me
     fun fetchUserData() {
         _isLoading.value = true
@@ -621,9 +661,8 @@ class AppRepository private constructor(private val pref: UserPreference, privat
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _favoriteResponse.value = response.body()
-                    _toastText.value = Event("Marked as favorite successfully.")
                 } else {
-                    _toastText.value = Event("Failed to mark as favorite: ${response.message()}")
+                    _favoriteResponse.value = null
                 }
             }
 
@@ -634,6 +673,7 @@ class AppRepository private constructor(private val pref: UserPreference, privat
             }
         })
     }
+
 
 
     fun getSession(): LiveData<UserModel> {

@@ -15,6 +15,7 @@ import com.fitcoders.glucofitapp.view.activity.profile.selfassessmentresult.Asse
 import com.fitcoders.glucofitapp.view.activity.register.RegisterViewModel
 import com.fitcoders.glucofitapp.view.activity.scanner.ScanViewModel
 import com.fitcoders.glucofitapp.view.activity.search.SearchViewModel
+import com.fitcoders.glucofitapp.view.fragment.favorite.FavoriteViewModel
 import com.fitcoders.glucofitapp.view.fragment.history.HistoryViewModel
 import com.fitcoders.glucofitapp.view.fragment.home.HomeViewModel
 import com.fitcoders.glucofitapp.view.fragment.profile.ProfileViewModel
@@ -59,6 +60,9 @@ class ViewModelFactory(private val repository: AppRepository) : ViewModelProvide
             }
             modelClass.isAssignableFrom(SearchViewModel::class.java) -> {
                 SearchViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> {
+                FavoriteViewModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

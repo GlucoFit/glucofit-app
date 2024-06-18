@@ -23,7 +23,9 @@ data class RecommendationResponseItem(
 
 	@field:SerializedName("food_details")
 	val foodDetails: FoodDetails? = null
-)
+) {
+}
+
 @Parcelize
 data class FoodDetails(
 
@@ -64,6 +66,6 @@ data class FoodDetails(
 	val servings: Int? = null,
 
 	@field:SerializedName("isFavorite")
-	val isFavorite: Boolean? = null,
+    var isFavorite: Boolean? = null,
 
 ): Parcelable

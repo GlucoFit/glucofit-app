@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         mainBinding.bottomNavigation.setOnItemSelectedListener { item ->
             val fragment = when (item.itemId) {
                 R.id.home -> HomeFragment.newInstance()
-                R.id.favorite -> FavoriteFragment.newInstance("value1", "value2")
+                R.id.favorite -> FavoriteFragment.newInstance()
                 R.id.history -> HistoryFragment.newInstance()
                 R.id.profile -> ProfileFragment.newInstance()
                 else -> return@setOnItemSelectedListener false

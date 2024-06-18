@@ -40,8 +40,9 @@ class HomeFragment : Fragment() {
             { item, isFavorite ->
                 item.id?.let {
                     homeViewModel.markAsFavorite(it, if (isFavorite) 1 else 0)
-                    favoriteStatusMap[it] = isFavorite // Perbarui status favorit secara lokal
-                    foodAdapter.notifyDataSetChanged() // Beritahu adapter untuk mencerminkan perubahan
+                    item.isFavorite = isFavorite // Update item favorite status locally
+                    favoriteStatusMap[it] = isFavorite // Update local map
+                    foodAdapter.notifyDataSetChanged() // Notify adapter to refresh the view
                 }
             },
             isListView = isListLayout
@@ -124,9 +125,7 @@ class HomeFragment : Fragment() {
         // Mengamati respons favorit dan memperbarui peta
         homeViewModel.favoriteResponse.observe(viewLifecycleOwner) { response ->
             response?.let {
-                Toast.makeText(requireContext(), "Marked as favorite: ${it.isFavorite}", Toast.LENGTH_SHORT).show()
                 favoriteStatusMap[it.foodId ?: 0] = it.isFavorite == true
-                // Beritahu adapter untuk mencerminkan perubahan
                 foodAdapter.notifyDataSetChanged()
             }
         }
