@@ -1,5 +1,6 @@
 package com.fitcoders.glucofitapp.view.activity.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fitcoders.glucofitapp.R
@@ -16,6 +18,7 @@ import com.fitcoders.glucofitapp.response.SearchHistoryResponseItem
 import com.fitcoders.glucofitapp.utils.adapter.SearchHistoryAdapter
 import com.fitcoders.glucofitapp.utils.adapter.SearchResultAdapter
 import com.fitcoders.glucofitapp.view.ViewModelFactory
+import com.fitcoders.glucofitapp.view.activity.fooddetail.FoodDetailActivity
 
 class SearchActivity : AppCompatActivity() {
 
@@ -38,7 +41,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // Initialize search history adapter with click listener
-        searchHistoryAdapter = SearchHistoryAdapter(emptyList()) { item ->
+        searchHistoryAdapter = SearchHistoryAdapter(mutableListOf()) { item ->
             handleSearchHistoryItemClick(item)
         }
         binding.searchHistoryRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -47,10 +50,17 @@ class SearchActivity : AppCompatActivity() {
         // Initialize search result adapter
         searchResultAdapter = SearchResultAdapter(
             { item ->
-                // Handle item click here
+                val intent = Intent(this, FoodDetailActivity::class.java)
+                intent.putExtra("foodRecipe", item)
+                startActivity(intent)
             },
             { item, isFavorite ->
                 // Handle favorite button click here
+                item.id?.let {
+                    searchViewModel.markAsFavorite(it, if (isFavorite) 1 else 0)
+                    item.isFavorite = isFavorite // Update status lokal item
+                    searchResultAdapter.notifyDataSetChanged() // Notify adapter to refresh the view
+                }
             }
         )
         binding.searchResultRecyclerView.layoutManager = GridLayoutManager(this, 2)

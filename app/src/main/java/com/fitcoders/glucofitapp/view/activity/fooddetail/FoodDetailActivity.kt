@@ -17,6 +17,7 @@ import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityFoodDetailBinding
 import com.fitcoders.glucofitapp.response.Food
 import com.fitcoders.glucofitapp.response.FoodDetails
+import com.fitcoders.glucofitapp.response.FoodRecipeResponseItem
 import com.fitcoders.glucofitapp.utils.adapter.DietLabelsAdapter
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.main.MainActivity
@@ -52,6 +53,7 @@ class FoodDetailActivity : AppCompatActivity() {
         // Ambil objek Food atau FoodDetails yang dikirim melalui Intent
         val food: Food? = intent.getParcelableExtra("food")
         val foodDetails: FoodDetails? = intent.getParcelableExtra("foodDetails")
+        val foodRecipe: FoodRecipeResponseItem? = intent.getParcelableExtra("foodRecipe")
 
         // Tentukan mana yang akan ditampilkan
         when {
@@ -62,6 +64,9 @@ class FoodDetailActivity : AppCompatActivity() {
             foodDetails != null -> {
                 // Menampilkan detail FoodDetails
                 updateUIWithFoodDetails(foodDetails)
+            }
+            foodRecipe != null ->{
+                updateUIWithFoodRecipe(foodRecipe)
             }
             else -> {
                 Toast.makeText(this, "No food details available", Toast.LENGTH_SHORT).show()
@@ -75,8 +80,8 @@ class FoodDetailActivity : AppCompatActivity() {
 
         // Setel text views
         binding.foodName.text = food.recipeName
-        binding.sugarContent.text = "${food.sugarContent} g"
-        binding.calories.text = "${food.calories} kcal"
+        binding.sugarContent.text = food.sugarContent.toString()
+        binding.calories.text = food.calories.toString()
         binding.servings.text = food.servings.toString()
 
         // Tampilkan diet labels
@@ -118,8 +123,8 @@ class FoodDetailActivity : AppCompatActivity() {
 
         // Setel text views
         binding.foodName.text = foodDetails.recipeName
-        binding.sugarContent.text = "${foodDetails.sugarContent} g"
-        binding.calories.text = "${foodDetails.calories} kcal"
+        binding.sugarContent.text = foodDetails.sugarContent.toString()
+        binding.calories.text = foodDetails.calories.toString()
         binding.servings.text = foodDetails.servings.toString()
 
         // Tampilkan diet labels
@@ -154,4 +159,51 @@ class FoodDetailActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun updateUIWithFoodRecipe(foodRecipe: FoodRecipeResponseItem) {
+        // Muat gambar
+        Glide.with(this).load(foodRecipe.imageUrl).into(binding.foodImage)
+
+        // Setel text views
+        binding.foodName.text = foodRecipe.recipeName
+        binding.sugarContent.text = foodRecipe.sugarContent.toString()
+        binding.calories.text = foodRecipe.calories.toString()
+        binding.servings.text = foodRecipe.servings.toString()
+
+        // Tampilkan diet labels
+        val dietLabels = foodRecipe.dietLabels?.split(", ") ?: emptyList()
+        val dietLabelsAdapter = DietLabelsAdapter(dietLabels, this)
+        binding.dietLabelsRecyclerView.adapter = dietLabelsAdapter
+
+        // Format ingredients menjadi daftar dengan bullet points
+        val formattedIngredients = foodRecipe.ingredients?.split(", ")?.joinToString("\n") { ingredient ->
+            "• $ingredient"
+        }
+        binding.ingridients.text = formattedIngredients
+
+        // Handle klik tombol "jump to instructions"
+        binding.jumpToInstructions.setOnClickListener { _ ->
+            // Periksa apakah URL instruksi valid
+            foodRecipe.instructionUrl?.let { url ->
+                if (url.isNotEmpty()) {
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse(url)
+                    }
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(this, "No browser found to open the URL", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this, "Instruction URL is empty", Toast.LENGTH_SHORT).show()
+                }
+            } ?: run {
+                Toast.makeText(this, "No instruction URL available", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+
+
 }

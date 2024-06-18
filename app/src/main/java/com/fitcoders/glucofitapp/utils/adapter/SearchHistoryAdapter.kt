@@ -7,7 +7,7 @@ import com.fitcoders.glucofitapp.databinding.ItemSearchHistoryBinding
 import com.fitcoders.glucofitapp.response.SearchHistoryResponseItem
 
 class SearchHistoryAdapter(
-    private var historyList: List<SearchHistoryResponseItem>,
+    private var historyList:MutableList<SearchHistoryResponseItem>,
     private val itemClick: (SearchHistoryResponseItem) -> Unit // Add click listener
 ) : RecyclerView.Adapter<SearchHistoryAdapter.SearchHistoryViewHolder>() {
 
@@ -34,7 +34,9 @@ class SearchHistoryAdapter(
 
     // Update dataset and notify adapter of changes
     fun updateData(newHistoryList: List<SearchHistoryResponseItem>) {
-        this.historyList = newHistoryList
+        val uniqueItems = newHistoryList.distinctBy { it.searchText }
+        historyList.clear()
+        historyList.addAll(uniqueItems)
         notifyDataSetChanged()
     }
 }

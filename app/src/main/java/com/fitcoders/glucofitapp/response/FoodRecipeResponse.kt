@@ -1,13 +1,15 @@
 package com.fitcoders.glucofitapp.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 data class FoodRecipeResponse(
 
 	@field:SerializedName("FoodRecipeResponse")
 	val foodRecipeResponse: List<FoodRecipeResponseItem?>? = null
 )
-
+@Parcelize
 data class FoodRecipeResponseItem(
 
 	@field:SerializedName("recipeName")
@@ -25,6 +27,9 @@ data class FoodRecipeResponseItem(
 	@field:SerializedName("createdAt")
 	val createdAt: String? = null,
 
+	@field:SerializedName("servings")
+	val servings: Int? = null,
+
 	@field:SerializedName("dietLabels")
 	val dietLabels: String? = null,
 
@@ -41,5 +46,8 @@ data class FoodRecipeResponseItem(
 	val calories: Float? = null,
 
 	@field:SerializedName("updatedAt")
-	val updatedAt: String? = null
-)
+	val updatedAt: String? = null,
+
+	@field:SerializedName("isFavorite")
+	var isFavorite: Boolean? = null,
+): Parcelable

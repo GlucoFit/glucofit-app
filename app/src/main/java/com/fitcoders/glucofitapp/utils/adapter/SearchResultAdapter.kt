@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ItemFoodGridBinding
 import com.fitcoders.glucofitapp.response.FoodRecipeResponseItem
 
@@ -63,8 +64,18 @@ class SearchResultAdapter (
                 sugarUnitCalory.text = "Cal"
                 sugarContent.text = searchResultItem.sugarContent.toString()
                 sugarUnit.text = "g"
+
+                // Set ikon favorit berdasarkan status
+                favoriteIcon.setImageResource(if ( searchResultItem.isFavorite == true) R.drawable.ic_heart_filled else R.drawable.ic_heart)
+
                 itemView.setOnClickListener {
                     itemClick(searchResultItem)
+                }
+
+                // Setup favorite button click
+                favoriteIcon.setOnClickListener {
+                    val newFavoriteStatus = searchResultItem.isFavorite?.not() ?: true
+                    favoriteClick(searchResultItem, newFavoriteStatus)
                 }
 
             }
