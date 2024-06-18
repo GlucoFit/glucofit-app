@@ -28,7 +28,7 @@ data class FavoritFoodResponseItem(
 	val food: Food? = null,
 
 	@field:SerializedName("isFavorite")
-	val isFavorite: Boolean? = null,
+	var isFavorite: Boolean? = null,
 
 	@field:SerializedName("updatedAt")
 	val updatedAt: String? = null

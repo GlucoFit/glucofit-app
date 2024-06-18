@@ -16,11 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.FragmentFavoriteBinding
 import com.fitcoders.glucofitapp.utils.adapter.FavoriteAdapter
-import com.fitcoders.glucofitapp.utils.adapter.FoodAdapter
 import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.fitcoders.glucofitapp.view.activity.fooddetail.FoodDetailActivity
 import com.fitcoders.glucofitapp.view.activity.main.MainActivity
-import com.fitcoders.glucofitapp.view.fragment.history.HistoryFragment
 
 class FavoriteFragment : Fragment() {
 
@@ -28,18 +26,20 @@ class FavoriteFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var modelFactory: ViewModelFactory
     private val favoriteViewModel: FavoriteViewModel by viewModels { modelFactory }
-    private var isListLayout = false
+    private var isListLayout = true
 
     private val favoriteAdapter: FavoriteAdapter by lazy {
         FavoriteAdapter(
             onItemClicked = { item ->
-              val intent = Intent(requireContext(), FoodDetailActivity::class.java)
-              intent.putExtra("food", item.food)
-               startActivity(intent)
+                val intent = Intent(requireContext(), FoodDetailActivity::class.java)
+                intent.putExtra("food", item.food)
+                startActivity(intent)
             },
             onFavoriteClicked = { item, isFavorite ->
-                item.id?.let {
-                   favoriteViewModel.markAsFavorite(it, if (isFavorite) 1 else 0 )
+                item.food?.id?.let {
+                    favoriteViewModel.markAsFavorite(it, if (isFavorite) 1 else 0)
+                    item.isFavorite = isFavorite // Update status lokal item
+                    favoriteAdapter.notifyDataSetChanged() // Notify adapter to refresh the view
                 }
             },
             isListView = isListLayout
@@ -67,16 +67,15 @@ class FavoriteFragment : Fragment() {
         val backButton: ImageButton = binding.root.findViewById(R.id.backButton)
 
         titleText.text = "Favorite Foods"
-
         backButton.setOnClickListener {
             startActivity(Intent(activity, MainActivity::class.java))
         }
 
         setupRecyclerView()
         observeViewModel()
+
         // Muat data favorit saat tampilan dibuat
         favoriteViewModel.fetchFavoriteFoods()
-
 
         binding.toggleButton.setOnClickListener {
             toggleLayout()
@@ -94,20 +93,30 @@ class FavoriteFragment : Fragment() {
         }
     }
 
-
     private fun observeViewModel() {
         // Mengamati hasil respons favorit
         favoriteViewModel.favoriteFoods.observe(viewLifecycleOwner) { result ->
             result.onSuccess { favoriteFoods ->
                 Log.d("FavoriteFragment", "Favorite data loaded successfully: ${favoriteFoods.size} items")
-                favoriteAdapter.submitList(favoriteFoods)
+                // Filter hanya item favorit
+                val favoriteOnly = favoriteFoods.filter { it.isFavorite == true }
+                favoriteAdapter.submitList(favoriteOnly)
             }.onFailure { exception ->
                 Log.e("FavoriteFragment", "Failed to load favorite foods: ${exception.message}", exception)
                 Toast.makeText(requireContext(), "Failed to load favorite foods: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
+        // Mengamati respons pembaruan status favorit
+        favoriteViewModel.favoriteResponse.observe(viewLifecycleOwner) { response ->
+            response?.let {
+                // Dapatkan item dari daftar favorit dan update statusnya
+                val foodId = it.foodId ?: return@observe
+                val isFavorite = it.isFavorite == true
+                favoriteAdapter.updateFavoriteStatus(foodId, isFavorite)
+            }
+        }
+    }
 
     private fun toggleLayout() {
         isListLayout = !isListLayout
@@ -123,6 +132,7 @@ class FavoriteFragment : Fragment() {
             if (isListLayout) R.drawable.ic_window else R.drawable.ic_table
         )
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -133,6 +143,3 @@ class FavoriteFragment : Fragment() {
         fun newInstance() = FavoriteFragment()
     }
 }
-
-
-

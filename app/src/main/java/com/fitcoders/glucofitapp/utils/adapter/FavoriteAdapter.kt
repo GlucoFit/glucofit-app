@@ -25,7 +25,7 @@ class FavoriteAdapter(
 
     private val differCallback = object : DiffUtil.ItemCallback<FavoritFoodResponseItem>() {
         override fun areItemsTheSame(oldItem: FavoritFoodResponseItem, newItem: FavoritFoodResponseItem): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.food?.id == newItem.food?.id
         }
 
         override fun areContentsTheSame(oldItem: FavoritFoodResponseItem, newItem: FavoritFoodResponseItem): Boolean {
@@ -43,6 +43,15 @@ class FavoriteAdapter(
     fun setViewType(isListView: Boolean) {
         this.isListView = isListView
         notifyDataSetChanged()
+    }
+
+    // Memperbarui status favorit pada item tertentu
+    fun updateFavoriteStatus(foodId: Int, isFavorite: Boolean) {
+        val index = differ.currentList.indexOfFirst { it.food?.id == foodId }
+        if (index != -1) {
+            differ.currentList[index].isFavorite = isFavorite
+            notifyItemChanged(index)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -86,7 +95,7 @@ class FavoriteAdapter(
 
     override fun getItemCount(): Int = differ.currentList.size
 
-    // ViewHolder for list view
+    // ViewHolder untuk tampilan daftar
     class FoodListViewHolder(
         private val binding: ItemFoodListBinding,
         private val itemClick: (FavoritFoodResponseItem) -> Unit,
@@ -100,6 +109,8 @@ class FavoriteAdapter(
                 foodName.text = item.food?.recipeName
                 calories.text = item.food?.calories.toString()
                 sugarContent.text = item.food?.sugarContent.toString()
+                sugarUnit.text  = "g"
+                sugarUnitCalory.text ="Cal"
                 favoriteIcon.setImageResource(if (item.isFavorite == true) R.drawable.ic_heart_filled else R.drawable.ic_heart)
                 itemView.setOnClickListener { itemClick(item) }
 
@@ -112,7 +123,7 @@ class FavoriteAdapter(
         }
     }
 
-    // ViewHolder for grid view
+    // ViewHolder untuk tampilan grid
     class FoodGridViewHolder(
         private val binding: ItemFoodGridBinding,
         private val itemClick: (FavoritFoodResponseItem) -> Unit,
@@ -126,6 +137,8 @@ class FavoriteAdapter(
                 foodName.text = item.food?.recipeName
                 calories.text = item.food?.calories.toString()
                 sugarContent.text = item.food?.sugarContent.toString()
+                sugarUnit.text  = "g"
+                sugarUnitCalory.text ="Cal"
                 favoriteIcon.setImageResource(if (item.isFavorite == true) R.drawable.ic_heart_filled else R.drawable.ic_heart)
                 itemView.setOnClickListener { itemClick(item) }
 

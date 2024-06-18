@@ -109,6 +109,10 @@ class HomeFragment : Fragment() {
         homeViewModel.recommendationResponse.observe(viewLifecycleOwner) { result ->
             result.onSuccess { recommendations ->
                 val foodList = recommendations.mapNotNull { it.foodDetails }
+                foodList.forEach { item ->
+                    // Sinkronkan status favorit dari peta lokal jika ada
+                    item.isFavorite = favoriteStatusMap[item.id] ?: item.isFavorite
+                }
                 foodAdapter.submitList(foodList)
             }.onFailure { exception ->
                 Toast.makeText(requireContext(), "Failed to load recommendations: ${exception.message}", Toast.LENGTH_SHORT).show()
@@ -122,7 +126,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // Mengamati respons favorit dan memperbarui peta
+        // Mengamati respons favorit dan memperbarui peta status favorit lokal
         homeViewModel.favoriteResponse.observe(viewLifecycleOwner) { response ->
             response?.let {
                 favoriteStatusMap[it.foodId ?: 0] = it.isFavorite == true
@@ -130,7 +134,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
     private fun toggleLayout() {
         isListLayout = !isListLayout
         foodAdapter.setViewType(isListLayout)

@@ -1,15 +1,16 @@
 package com.fitcoders.glucofitapp.utils.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ItemFoodGridBinding
 import com.fitcoders.glucofitapp.databinding.ItemFoodListBinding
 import com.fitcoders.glucofitapp.response.FoodDetails
-import com.bumptech.glide.Glide
-import com.fitcoders.glucofitapp.R
 
 class FoodAdapter(
     private val itemClick: (FoodDetails) -> Unit, // Callback untuk item click
@@ -91,6 +92,8 @@ class FoodAdapter(
                 foodName.text = item.recipeName
                 calories.text = item.calories?.toString() ?: "0"
                 sugarContent.text = item.sugarContent?.toString() ?: "0"
+                sugarUnit.text  = "g"
+                sugarUnitCalory.text ="Cal"
 
                 // Set ikon favorit berdasarkan status
                 favoriteIcon.setImageResource(if (item.isFavorite == true) R.drawable.ic_heart_filled else R.drawable.ic_heart)
@@ -126,6 +129,8 @@ class FoodAdapter(
                 foodName.text = item.recipeName
                 calories.text = item.calories?.toString() ?: "0"
                 sugarContent.text = item.sugarContent?.toString() ?: "0"
+                sugarUnit.text  = "g"
+                sugarUnitCalory.text ="Cal"
 
                 // Set ikon favorit berdasarkan status
                 favoriteIcon.setImageResource(if (item.isFavorite == true) R.drawable.ic_heart_filled else R.drawable.ic_heart)
