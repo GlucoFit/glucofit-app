@@ -7,18 +7,16 @@ import com.fitcoders.glucofitapp.databinding.ItemSearchHistoryBinding
 import com.fitcoders.glucofitapp.response.SearchHistoryResponseItem
 
 class SearchHistoryAdapter(
-    private var historyList: List<SearchHistoryResponseItem>
+    private var historyList: List<SearchHistoryResponseItem>,
+    private val itemClick: (SearchHistoryResponseItem) -> Unit // Add click listener
 ) : RecyclerView.Adapter<SearchHistoryAdapter.SearchHistoryViewHolder>() {
 
     inner class SearchHistoryViewHolder(private val binding: ItemSearchHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(historyItem: SearchHistoryResponseItem) {
-            // Null check example
             binding.historyText.text = historyItem.searchText ?: "No Search Text"
-
-            // Uncomment this section and add your item click logic here
-            /* itemView.setOnClickListener {
-                // Handle item click here if needed
-            } */
+            itemView.setOnClickListener {
+                itemClick(historyItem) // Handle item click
+            }
         }
     }
 

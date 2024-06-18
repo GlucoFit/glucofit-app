@@ -48,7 +48,7 @@ class ScannerActivity : AppCompatActivity() {
         backButton.visibility = ImageButton.VISIBLE
 
         backButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 
