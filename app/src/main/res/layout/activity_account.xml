@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -9,17 +9,14 @@
     android:orientation="vertical"
     tools:context=".view.activity.profile.account.AccountActivity">
 
-    <include
-        android:id="@+id/actionBar"
-        layout="@layout/action_bar" />
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp">
 
             <TextView
                 android:id="@+id/accountInfo"
@@ -226,7 +223,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-
-
-
-</LinearLayout>
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/action_bar" />
+</FrameLayout>

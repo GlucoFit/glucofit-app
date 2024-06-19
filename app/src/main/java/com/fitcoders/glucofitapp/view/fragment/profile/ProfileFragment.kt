@@ -30,6 +30,7 @@ import kotlin.math.log
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.FrameLayout
 import com.fitcoders.glucofitapp.view.activity.profile.account.AccountActivity
 import com.fitcoders.glucofitapp.view.activity.profile.password.PasswordActivity
 import com.fitcoders.glucofitapp.view.activity.profile.selfassessmentresult.SelfAssessmentResultActivity
@@ -63,7 +64,6 @@ class ProfileFragment : Fragment() {
         val titleText: TextView = binding.root.findViewById(R.id.titleText)
         val backButton: ImageButton = binding.root.findViewById(R.id.backButton)
 
-        titleText.text = "Profile"
         backButton.visibility = View.GONE
 
         observeViewModel()
