@@ -1,9 +1,11 @@
 package com.fitcoders.glucofitapp.view.activity.scanner
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -11,154 +13,154 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityScannerResultBinding
-import com.fitcoders.glucofitapp.data.helper.ImageClassifierHelper
-import com.fitcoders.glucofitapp.service.ApiConfig
 import com.fitcoders.glucofitapp.view.ViewModelFactory
-import org.tensorflow.lite.task.vision.classifier.Classifications
+import com.fitcoders.glucofitapp.view.activity.main.MainActivity
+import com.fitcoders.glucofitapp.view.fragment.history.HistoryFragment
+import java.io.File
 
 class ScannerResultActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityScannerResultBinding
-    private val scanViewModel: ScanViewModel by viewModels {
-        // Initialize the ViewModel using a factory method
-        ViewModelFactory.getInstance(application)
-    }
+    private lateinit var progressBar: ProgressBar
+    private val scanViewModel: ScanViewModel by viewModels { ViewModelFactory.getInstance(application) }
 
     companion object {
-        const val IMAGE_URI = "image_uri"
+        const val EXTRA_IMAGE_URI = "extra_image_uri"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScannerResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Get the image URI from the intent extras
-        val imageUriString = intent.getStringExtra(IMAGE_URI)
-
+        progressBar = findViewById(R.id.progressBar)
 
         setupUI()
-
-
-        imageUriString?.let {
-            val imageUri = Uri.parse(it)
-            showImage(imageUri)
-
-            // Using ViewModel to classify the image
-            scanViewModel.classifyImage(imageUri, this)
-
-            // Using ImageClassifierHelper to classify the image
-            val imageClassifierHelper = ImageClassifierHelper(
-                context = this,
-                classifierListener = object : ImageClassifierHelper.ClassifierListener {
-                    override fun onError(errorMsg: String) {
-                        showToast("Error: $errorMsg")
-                    }
-
-                    override fun onResults(results: List<Classifications>?, inferenceTime: Long) {
-                        results?.let { showResults(it) }
-                    }
-                }
-            )
-            imageClassifierHelper.classifyImage(imageUri)
-        } ?: run {
-            showToast("No image URI provided")
-            finish()
-        }
-
-        // Save button click listener to save history
-        binding.buttonAddToHistory.setOnClickListener {
-            val result = binding.foodName.text.toString()
-            imageUriString?.let {
-                saveHistory(Uri.parse(it), result)
-            } ?: run {
-                showToast("No image URI provided")
-                finish()
-            }
-        }
-
-        // Observe food information from the API and display sugar data
-        scanViewModel.foodInfo.observe(this, Observer { foodInfo ->
-            if (foodInfo != null && foodInfo.sugar != null) {
-                val sugarItems = foodInfo.sugar // List of SugarItem?
-                // Filter not null items and extract sugar values
-                val sugarValues = sugarItems.filterNotNull().mapNotNull { it.sugar }
-                val sugarInfo = sugarValues.joinToString(separator = ", ") { "${it}g" } // Join sugar values with commas
-                binding.sugarContent.text = "Sugar content: $sugarInfo" // Display sugar content
-            } else {
-                binding.sugarContent.text = "No sugar data available or failed to fetch food info"
-            }
-        })
-
+        startAnalysis()
+        setupObservers()
     }
 
     private fun setupUI() {
         val titleText: TextView = findViewById(R.id.titleText)
         val backButton: ImageButton = findViewById(R.id.backButton)
 
-        titleText.text = "Scanner Result"
+        titleText.text = getString(R.string.scanner_result_title)
         backButton.visibility = ImageButton.VISIBLE
 
         backButton.setOnClickListener {
             finish()
         }
-    }
-
-    /*   override fun onCreate(savedInstanceState: Bundle?) {
-           super.onCreate(savedInstanceState)
-           binding = ActivityScannerResultBinding.inflate(layoutInflater)
-           setContentView(binding.root)
-
-           val imageUriString = intent.getStringExtra(IMAGE_URI)
-           imageUriString?.let {
-               val imageUri = Uri.parse(it)
-               showImage(imageUri)
-
-               scanViewModel.classifyImage(imageUri, this)
-           } ?: run {
-               showToast("No image URI provided")
-               finish()
-           }
-
-           scanViewModel.foodInfo.observe(this, Observer { foodInfo ->
-               if (foodInfo != null && foodInfo.sugar != null) {
-                   val sugarItems = foodInfo.sugar // List of SugarItem?
-                   // Filter not null items and extract sugar values
-                   val sugarValues = sugarItems.filterNotNull().mapNotNull { it.sugar }
-                   val sugarInfo = sugarValues.joinToString(separator = ", ") { "${it}g" } // Join sugar values with commas
-                   binding.resultTextSugar.text = "Sugar content: $sugarInfo" // Display sugar content
-               } else {
-                   binding.resultTextSugar.text = "No sugar data available or failed to fetch food info"
-               }
-           })
-       }*/
-    @SuppressLint("SetTextI18n")
-    private fun showResults(results: List<Classifications>) {
-        if (results.isNotEmpty() && results[0].categories.isNotEmpty()) {
-            val topResult = results[0].categories[0]
-            val label = topResult.label
-            val score = topResult.score.formatToString()
-
-            binding.foodName.text = "$label ${score}"
-        } else {
-            binding.foodName.text = "No classification results available"
+        binding.buttonAddToHistory.setOnClickListener {
+            uploadAnalysisResult()
         }
     }
 
-    private fun showImage(uri: Uri) {
-        binding.previewImageView.setImageURI(uri)
+    private fun uploadAnalysisResult() {
+        val imageUriString = intent.getStringExtra(EXTRA_IMAGE_URI)
+        val objectName = binding.foodName.text.toString()
+        val objectSugar = binding.sugarContent.text.toString()
+        val datasetLabel = "spageti" // Label dataset sesuai kebutuhan Anda
+
+        imageUriString?.let {
+            val imageUri = Uri.parse(it)
+            val imageFile = File(imageUri.path ?: "")
+
+            if (imageFile.exists() && imageFile.isFile) {
+                // Menggunakan ViewModel untuk mengunggah hasil analisis ke API
+                scanViewModel.uploadScanImage(imageFile, objectName, objectSugar, datasetLabel)
+            } else {
+                showToast(getString(R.string.invalid_image_file))
+            }
+        }
     }
 
-    private fun saveHistory(imageUri: Uri, result: String) {
-        // Placeholder for saving the classification history
+    private fun startAnalysis() {
+        val imageUriString = intent.getStringExtra(EXTRA_IMAGE_URI)
+        val imageUri = imageUriString?.let { Uri.parse(it) }
+
+        imageUri?.let {
+            // Menampilkan gambar yang dianalisis
+            binding.previewImageView.setImageURI(it)
+
+            // Mulai analisis gambar
+            val imageFile = File(it.path ?: "")
+            if (imageFile.exists() && imageFile.isFile) {
+                Log.d("ScannerResultActivity", "Starting analysis for image: $it")
+                // Tampilkan progress bar
+                progressBar.visibility = android.view.View.VISIBLE
+                // Menggunakan ViewModel untuk mengirim gambar ke API
+                scanViewModel.analyzeImage(imageFile)
+            } else {
+                showToast(getString(R.string.invalid_image_file))
+                finish()
+            }
+        } ?: run {
+            showToast("No image URI provided")
+            finish()
+        }
+    }
+
+    private fun setupObservers() {
+        // Mengamati hasil analisis makanan
+        scanViewModel.foodInfo.observe(this, Observer { foodInfo ->
+            foodInfo?.let {
+                Log.d("ScannerResultActivity", "Food info received: ${it.foodName}, ${it.sugarContent}")
+                // Sembunyikan progress bar setelah analisis selesai
+                progressBar.visibility = android.view.View.GONE
+
+                // Menampilkan hasil di UI
+                binding.foodName.text = it.foodName ?: "Unknown"
+                binding.sugarContent.text = it.sugarContent ?: "No data available"
+            } ?: run {
+                Log.e("ScannerResultActivity", "foodInfo is null")
+                finish()
+            }
+        })
+
+        // Mengamati status loading
+        scanViewModel.isLoading.observe(this, Observer { isLoading ->
+            if (isLoading) {
+                Log.d("ScannerResultActivity", "Loading started")
+                // Tampilkan indikator loading
+                progressBar.visibility = android.view.View.VISIBLE
+            } else {
+                Log.d("ScannerResultActivity", "Loading finished")
+                // Sembunyikan indikator loading
+                progressBar.visibility = android.view.View.GONE
+            }
+        })
+
+        // Mengamati pesan toast (error atau sukses)
+        scanViewModel.toastText.observe(this, Observer { event ->
+            event.getContentIfNotHandled()?.let { message ->
+                showToast(message)
+                Log.e("ScannerResultActivity", "Toast message: $message")
+                // Sembunyikan progress bar jika ada pesan toast (error)
+                progressBar.visibility = android.view.View.GONE
+            }
+        })
+
+        // Mengamati hasil upload scan
+        scanViewModel.uploadScanResponse.observe(this, Observer { response ->
+            response?.let {
+                Log.d("ScannerResultActivity", "Scan uploaded: ${it.data?.objectName}, ${it.data?.objectSugar}")
+                // Menampilkan pesan sukses setelah upload
+                showToast("Scan uploaded successfully")
+                // Pindah ke halaman riwayat setelah berhasil mengunggah
+                moveToHistoryPage()
+            } ?: run {
+                Log.e("ScannerResultActivity", "uploadScanResponse is null")
+            }
+        })
+    }
+
+    private fun moveToHistoryPage() {
+        // Intent untuk pindah ke halaman riwayat (sesuaikan dengan aktivitas Anda)
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish() // Optional: Tutup ScannerResultActivity setelah pindah
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    // Extension function to format score as a percentage string
-    private fun Float.formatToString(): String {
-        return String.format("%.2f%%", this * 100)
     }
 }

@@ -118,7 +118,7 @@ class LoginActivity : AppCompatActivity() {
 
                         loginViewModel.checkAssessmentStatus()
 
-                          Log.d("logi","apakah pidah ??,username:${user.userName} ,TOKEN :${token}")
+                          Log.d("login","apakah pidah ??,username:${user.userName} ,TOKEN :${token}")
 
                         loginViewModel.assessmentStatus.observe(this@LoginActivity) {hasAssessment ->
                             if (hasAssessment == true) {

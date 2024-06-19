@@ -147,4 +147,6 @@
     <string name="_6">6.</string>
     <string name="tip6">Thank you for using the GlucoFit app!</string>
     <string name="food_detail_title">Detail</string>
+    <string name="invalid_image_file">Invalid image file</string>
+    <string name="scanner_result_title">Scanner Result</string>
 </resources>

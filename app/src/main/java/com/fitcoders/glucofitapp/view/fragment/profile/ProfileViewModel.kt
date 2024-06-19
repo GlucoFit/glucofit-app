@@ -21,10 +21,14 @@ class ProfileViewModel (private val repository: AppRepository) : ViewModel() {
 
 
     fun logout(onLogoutResult: (Boolean, String?) -> Unit) {
-        viewModelScope.launch {
+        try {
             repository.logout { success, message ->
                 onLogoutResult(success, message)
             }
+        } catch (e: Exception) {
+            // Handle logout error
+            Log.e("ProfileViewModel", "Error logging out: ${e.message}")
+            onLogoutResult(false, "Error logging out: ${e.message}")
         }
     }
 

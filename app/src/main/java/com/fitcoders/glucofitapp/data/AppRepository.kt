@@ -1,36 +1,39 @@
 package com.fitcoders.glucofitapp.data
 
-import android.content.Intent
 import android.util.Log
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import com.fitcoders.glucofitapp.response.AnalyzeResponse
 import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
-import com.fitcoders.glucofitapp.response.DataFoodResponse
+import com.fitcoders.glucofitapp.response.Data
+
 import com.fitcoders.glucofitapp.response.DataItem
 import com.fitcoders.glucofitapp.response.DeleteResponse
-import com.fitcoders.glucofitapp.response.FavoritFoodResponse
 import com.fitcoders.glucofitapp.response.FavoritFoodResponseItem
 import com.fitcoders.glucofitapp.response.FavoritResponse
-import com.fitcoders.glucofitapp.response.FoodDetails
 import com.fitcoders.glucofitapp.response.FoodRecipeResponseItem
 import com.fitcoders.glucofitapp.response.GetAssesmantResponse
 import com.fitcoders.glucofitapp.response.GetUserResponse
 import com.fitcoders.glucofitapp.response.HistoryScanResponse
 import com.fitcoders.glucofitapp.response.LoginResponse
 import com.fitcoders.glucofitapp.response.LogoutResponse
-import com.fitcoders.glucofitapp.response.RecommendationResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponseItem
 import com.fitcoders.glucofitapp.response.RegisterResponse
 import com.fitcoders.glucofitapp.response.SearchHistoryResponseItem
+import com.fitcoders.glucofitapp.response.UplodScanResponse
 import com.fitcoders.glucofitapp.service.ApiService
 import com.fitcoders.glucofitapp.utils.Event
 import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -43,10 +46,10 @@ class AppRepository private constructor(private val pref: UserPreference, privat
     val registerResponse: MutableLiveData<RegisterResponse?> = _registerResponse
 
     private val _loginResponse = MutableLiveData<LoginResponse>()
-    val loginResponse: LiveData<LoginResponse> = _loginResponse
+    val loginResponse:  MutableLiveData<LoginResponse> = _loginResponse
 
     private val _toastText = MutableLiveData<Event<String>>()
-    val toastText: LiveData<Event<String>> = _toastText
+    val toastText: MutableLiveData<Event<String>> = _toastText
 
     private val _alertDialog = MutableLiveData<Boolean>()
     val alertDialog: LiveData<Boolean> = _alertDialog
@@ -66,8 +69,8 @@ class AppRepository private constructor(private val pref: UserPreference, privat
     private val _assessmentResponse = MutableLiveData<GetAssesmantResponse?>()
     val assessmentResponse: LiveData<GetAssesmantResponse?> = _assessmentResponse
 
-    private val _foodInfo = MutableLiveData<DataFoodResponse?>()
-    val foodInfo: MutableLiveData<DataFoodResponse?> = _foodInfo
+    private val _foodInfo = MutableLiveData<Data?>()
+    val foodInfo: LiveData<Data?> = _foodInfo
 
     private val _deleteResponse = MutableLiveData<DeleteResponse?>()
     val deleteResponse: LiveData<DeleteResponse?> = _deleteResponse
@@ -100,6 +103,9 @@ class AppRepository private constructor(private val pref: UserPreference, privat
 
     private val _favoriteFoods = MutableLiveData<Result<List<FavoritFoodResponseItem>>>()
     val favoriteFoods: MutableLiveData<Result<List<FavoritFoodResponseItem>>> get() = _favoriteFoods
+
+    private val _uploadScanResponse = MutableLiveData<UplodScanResponse?>()
+    val uploadScanResponse: LiveData<UplodScanResponse?> get() = _uploadScanResponse
 
 
     fun pRegister(userName: String, email: String, password: String) {
@@ -331,7 +337,7 @@ class AppRepository private constructor(private val pref: UserPreference, privat
 
 
     // Fungsi untuk memanggil API berdasarkan label makanan
-    fun fetchFoodInfoByLabel(label: String) {
+    /*fun fetchFoodInfoByLabel(label: String) {
         _isLoading.value = true
         val call = apiService.getFoodInfoByLabel(label)
         call.enqueue(object : Callback<DataFoodResponse> {
@@ -351,7 +357,7 @@ class AppRepository private constructor(private val pref: UserPreference, privat
                 _toastText.postValue(Event("API call failed: ${t.message}"))
             }
         })
-    }
+    }*/
 
     fun deleteScanHistoryById(id: Int) {
         _isLoading.value = true
@@ -674,6 +680,71 @@ class AppRepository private constructor(private val pref: UserPreference, privat
         })
     }
 
+    fun analyzeFoodImage(image: File) {
+        if (!image.exists() || !image.isFile) {
+            _toastText.postValue(Event("Invalid image file"))
+            return
+        }
+
+        _isLoading.value = true
+        val requestFile = image.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        val multipartBody = MultipartBody.Part.createFormData("image", image.name, requestFile)
+
+        apiService.analyzeFoodImage(multipartBody).enqueue(object : Callback<AnalyzeResponse> {
+            override fun onResponse(call: Call<AnalyzeResponse>, response: Response<AnalyzeResponse>) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val analyzeResponse = response.body()
+                    _foodInfo.value = analyzeResponse?.data
+
+                    // Log untuk memastikan data yang diterima
+                    Log.d("ScanViewModel", "AnalyzeResponse received: ${analyzeResponse?.data}")
+                } else {
+                    _toastText.value = Event("Failed to analyze image")
+                    Log.e("ScanViewModel", "Failed to analyze image: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<AnalyzeResponse>, t: Throwable) {
+                _isLoading.value = false
+                _toastText.value = Event("API call failed: ${t.message}")
+                Log.e("ScanViewModel", "API call failed", t)
+            }
+        })
+    }
+
+    // Metode untuk mengunggah hasil analisis
+    fun uploadScanImage(imageFile: File, objectName: String, objectSugar: String, datasetLabel: String) {
+        _isLoading.value = true
+
+        val requestObjectName = RequestBody.create("text/plain".toMediaTypeOrNull(), objectName)
+        val requestObjectSugar = RequestBody.create("text/plain".toMediaTypeOrNull(), objectSugar)
+        val requestDatasetLabel = RequestBody.create("text/plain".toMediaTypeOrNull(), datasetLabel)
+
+        val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), imageFile)
+        val multipartImage = MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
+
+        apiService.uploadScanImage(multipartImage, requestObjectName, requestObjectSugar, requestDatasetLabel)
+            .enqueue(object : Callback<UplodScanResponse> {
+                override fun onResponse(call: Call<UplodScanResponse>, response: Response<UplodScanResponse>) {
+                    _isLoading.value = false
+                    if (response.isSuccessful) {
+                        _uploadScanResponse.value = response.body()
+                        Log.d("AppRepository", "UploadScanResponse received: ${response.body()}")
+                    } else {
+                        _toastText.value = Event("Failed to upload scan: ${response.message()}")
+                        Log.e("AppRepository", "Failed to upload scan: ${response.errorBody()?.string()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<UplodScanResponse>, t: Throwable) {
+                    _isLoading.value = false
+                    _toastText.value = Event("API call failed: ${t.message}")
+                    Log.e("AppRepository", "API call failed", t)
+                }
+            })
+    }
+
 
 
     fun getSession(): LiveData<UserModel> {
@@ -684,9 +755,6 @@ class AppRepository private constructor(private val pref: UserPreference, privat
         pref.saveSession(session)
     }
 
-    suspend fun login() {
-        pref.login()
-    }
 
 
 

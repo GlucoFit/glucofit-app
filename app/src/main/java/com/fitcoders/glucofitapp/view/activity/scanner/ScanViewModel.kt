@@ -3,57 +3,48 @@ package com.fitcoders.glucofitapp.view.activity.scanner
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.data.AppRepository
 import com.fitcoders.glucofitapp.data.helper.ImageClassifierHelper
 import com.fitcoders.glucofitapp.data.helper.TensorFlowHelper
-import com.fitcoders.glucofitapp.response.DataFoodResponse
+import com.fitcoders.glucofitapp.response.AnalyzeResponse
+import com.fitcoders.glucofitapp.response.Data
+import com.fitcoders.glucofitapp.response.UplodScanResponse
+import com.fitcoders.glucofitapp.utils.Event
 import kotlinx.coroutines.launch
 import org.tensorflow.lite.task.vision.classifier.Classifications
+import java.io.File
 
 // ScanViewModel.kt
 class ScanViewModel(private val repository: AppRepository) : ViewModel() {
 
+    // LiveData untuk mengamati hasil analisis makanan
+    val uploadScanResponse: LiveData<UplodScanResponse?> get() = repository.uploadScanResponse
+    val foodInfo: LiveData<Data?> get() = repository.foodInfo
+    // LiveData untuk mengamati pesan toast (feedback error atau sukses)
+    val toastText: LiveData<Event<String>> get() = repository.toastText
 
-    val foodInfo: MutableLiveData<DataFoodResponse?> = repository.foodInfo
+    // LiveData untuk mengamati status loading
+    val isLoading: LiveData<Boolean> get() = repository.isLoading
 
-    // Fungsi untuk memulai klasifikasi gambar
-    fun classifyImage(imageUri: Uri, context: Context) {
-        val imageClassifierHelper = ImageClassifierHelper(
-            context = context,
-            classifierListener = object : ImageClassifierHelper.ClassifierListener {
-                override fun onError(errorMsg: String) {
-                    // Tangani error
-                }
-
-                override fun onResults(results: List<Classifications>?, inferenceTime: Long) {
-                    results?.let {
-                        val firstResult = it[0].categories.firstOrNull()
-                        firstResult?.let { category ->
-                            repository.fetchFoodInfoByLabel(category.label)
-                        }
-                    }
-                }
-            }
-        )
-        imageClassifierHelper.classifyImage(imageUri)
+    // Fungsi untuk memulai analisis gambar makanan
+    fun analyzeImage(imageFile: File) {
+        if (imageFile.exists() && imageFile.isFile) {
+            repository.analyzeFoodImage(imageFile)
+        } else {
+            // Menyampaikan pesan error jika file tidak valid
+            repository.toastText.postValue(Event("Invalid image file"))
+        }
     }
-   /* fun classifyImage(imageUri: Uri, context: Context) {
-        // Load the bitmap from the image URI
-        val bitmap = BitmapFactory.decodeStream(context.contentResolver.openInputStream(imageUri))
 
-        // Initialize TensorFlowHelper if not already initialized
-        TensorFlowHelper.initialize(context.assets)
-
-        // Classify the image and get the result
-        val label = TensorFlowHelper.classifyImage(bitmap)
-
-        // Fetch additional information based on the classification result
-        repository.fetchFoodInfoByLabel(label)
-    }*/
-
+    fun uploadScanImage(imageFile: File, objectName: String, objectSugar: String, datasetLabel: String) {
+        repository.uploadScanImage(imageFile, objectName, objectSugar, datasetLabel)
+    }
 
 }

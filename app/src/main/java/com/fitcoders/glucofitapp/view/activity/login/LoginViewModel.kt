@@ -1,5 +1,6 @@
 package com.fitcoders.glucofitapp.view.activity.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +16,7 @@ class LoginViewModel(private val repository: AppRepository) : ViewModel() {
 
     val loginResponse: LiveData<LoginResponse> = repository.loginResponse
     val isLoading: LiveData<Boolean> = repository.isLoading
-    val toastText: LiveData<Event<String>> = repository.toastText
+    val toastText: MutableLiveData<Event<String>> = repository.toastText
     val assessmentStatus: MutableLiveData<Boolean?> = repository.assessmentStatus
 
 
@@ -31,11 +32,7 @@ class LoginViewModel(private val repository: AppRepository) : ViewModel() {
         }
     }
 
-    fun login() {
-        viewModelScope.launch {
-            repository.login()
-        }
-    }
+
 
     fun checkAssessmentStatus() {
         viewModelScope.launch {

@@ -1,10 +1,11 @@
 package com.fitcoders.glucofitapp.service
 
 import com.fitcoders.glucofitapp.data.FavoriteRequest
+import com.fitcoders.glucofitapp.response.AnalyzeResponse
 import com.fitcoders.glucofitapp.response.HistoryScanResponse
 import com.fitcoders.glucofitapp.response.AssessmentResponse
 import com.fitcoders.glucofitapp.response.AssessmentStatusResponse
-import com.fitcoders.glucofitapp.response.DataFoodResponse
+
 import com.fitcoders.glucofitapp.response.DeleteResponse
 import com.fitcoders.glucofitapp.response.FavoritFoodResponse
 import com.fitcoders.glucofitapp.response.FavoritFoodResponseItem
@@ -19,14 +20,19 @@ import com.fitcoders.glucofitapp.response.RegisterResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponseItem
 import com.fitcoders.glucofitapp.response.SearchHistoryResponseItem
+import com.fitcoders.glucofitapp.response.UplodScanResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import java.io.File
 
@@ -85,10 +91,10 @@ interface ApiService {
     fun logout(
    ): Call<LogoutResponse>
 
-    @GET("scan/label/{datasetLabel}")
+  /*  @GET("scan/label/{datasetLabel}")
     fun getFoodInfoByLabel(
         @Path("datasetLabel") label: String
-    ): Call<DataFoodResponse>
+    ): Call<DataFoodResponse>*/
 
     @DELETE("scan/history/{id}")
      fun deleteScanHistoryById(@Path("id") id: Int
@@ -135,9 +141,21 @@ interface ApiService {
     fun getFavorite(): Call<List<FavoritFoodResponseItem>>
 
 
+    // Analyze food image
+    @Multipart
+    @POST("scan/analyze")
+    fun analyzeFoodImage(
+        @Part image: MultipartBody.Part
+    ): Call<AnalyzeResponse>
 
-
-
+    @Multipart
+    @POST("scan/upload")
+    fun uploadScanImage(
+        @Part image: MultipartBody.Part, // Mengunggah file gambar
+        @Part("objectName") objectName: RequestBody,
+        @Part("objectSugar") objectSugar: RequestBody,
+        @Part("datasetLabel") datasetLabel: RequestBody
+    ): Call<UplodScanResponse>
 
 }
 

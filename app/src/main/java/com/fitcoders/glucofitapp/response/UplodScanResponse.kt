@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName
 data class UplodScanResponse(
 
 	@field:SerializedName("data")
-	val data: Data? = null,
+	val data: DataUpload? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null
 )
 
-data class Data(
+data class DataUpload(
 
 	@field:SerializedName("objectImageUrl")
 	val objectImageUrl: String? = null,

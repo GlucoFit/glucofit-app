@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class AnalyzeResponse(
 
 	@field:SerializedName("data")
-	val data: Data? = null
+	val data: Data? = null,
+
 )
 
 data class Data(

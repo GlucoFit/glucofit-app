@@ -9,16 +9,18 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityScannerBinding
-import com.fitcoders.glucofitapp.view.activity.main.MainActivity
+import com.fitcoders.glucofitapp.view.ViewModelFactory
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
@@ -29,12 +31,17 @@ class ScannerActivity : AppCompatActivity() {
     private var croppedImageUri: Uri? = null
     private lateinit var photoUri: Uri
     private lateinit var previewImageView: ImageView
+    private lateinit var modelFactory: ViewModelFactory
+    private val scanViewModel: ScanViewModel by viewModels { modelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScannerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         previewImageView = findViewById(R.id.previewImageView)
+
+        // Inisialisasi ViewModelFactory
+        modelFactory = ViewModelFactory.getInstance(this)
 
         setupUI()
         setupListeners()
@@ -70,19 +77,15 @@ class ScannerActivity : AppCompatActivity() {
 
         binding.analyzeButton.setOnClickListener {
             Log.d("ScannerActivity", "Analyze button clicked")
-            initImageUri?.let {
-                val intent = Intent(this, ScannerResultActivity::class.java)
-                croppedImageUri?.let { uri ->
-                    intent.putExtra(ScannerResultActivity.IMAGE_URI, uri.toString())
-                    Log.d("ScannerActivity", "Starting ScannerResultActivity with URI: $uri")
-                    startActivity(intent)
-                } ?: showToast(getString(R.string.image_classifier_failed))
-            } ?: run {
-                showToast(getString(R.string.image_classifier_failed))
-            }
+            croppedImageUri?.let { uri ->
+                // Pindah ke ScannerResultActivity dan kirim URI gambar yang di-crop
+                val intent = Intent(this, ScannerResultActivity::class.java).apply {
+                    putExtra(ScannerResultActivity.EXTRA_IMAGE_URI, uri.toString())
+                }
+                startActivity(intent)
+            } ?: showToast(getString(R.string.image_classifier_failed))
         }
     }
-
 
     private fun createImageFile(): File {
         val fileName = "IMG_${System.currentTimeMillis()}"
@@ -175,7 +178,7 @@ class ScannerActivity : AppCompatActivity() {
         if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
             val resultUri = UCrop.getOutput(data!!)
             resultUri?.let {
-                showCroppedImage(resultUri)
+                showCroppedImage(it)
             } ?: showToast(getString(R.string.image_crop_error))
         } else if (resultCode == UCrop.RESULT_ERROR) {
             showToast("Crop error: ${UCrop.getError(data!!)?.message}")
