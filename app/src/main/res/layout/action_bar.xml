@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/action_bar_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:background="@drawable/rounded_bottom">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp"
+    android:background="@drawable/shape_rounded_25dp">
 
-    <!-- Back Button -->
-    <ImageButton
-        android:id="@+id/backButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/circle_gray_background"
-        android:contentDescription="@string/back_button"
-        android:src="@drawable/ic_back"
-        android:padding="8dp"
-        android:visibility="gone"/>
+        <!-- Back Button -->
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/round_outline"
+            android:contentDescription="@string/back_button"
+            android:src="@drawable/ic_arrow_left_thin"
+            android:padding="8dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginVertical="2dp"
+            android:visibility="gone"/>
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textColor="@color/black"
-        android:paddingVertical="2dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/poppins_regular"/>
-
-</RelativeLayout>
+        <!-- Title -->
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/black"
+            android:paddingVertical="5dp"
+            android:layout_marginVertical="2dp"
+            android:layout_gravity="center_vertical"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/poppins_regular"/>
+</FrameLayout>
