@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityScannerResultBinding
@@ -154,10 +155,14 @@ class ScannerResultActivity : AppCompatActivity() {
     }
 
     private fun moveToHistoryPage() {
-        // Intent untuk pindah ke halaman riwayat (sesuaikan dengan aktivitas Anda)
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish() // Optional: Tutup ScannerResultActivity setelah pindah
+        val fragment = HistoryFragment.newInstance()
+        fragmentManager(fragment)
+    }
+
+    private fun fragmentManager(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.content, fragment, fragment.javaClass.simpleName)
+        transaction.commit()
     }
 
     private fun showToast(message: String) {
