@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="Life Stlye"
+        android:text="Life Style"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="14sp"
         android:textStyle="bold"
