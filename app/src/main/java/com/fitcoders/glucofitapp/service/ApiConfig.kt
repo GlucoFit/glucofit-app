@@ -30,8 +30,8 @@ class ApiConfig {
             val client = clientBuilder.build()
 
             val retrofit = Retrofit.Builder()
-                //.baseUrl("https://glucofit-api-public-l76ziq6bya-et.a.run.app/api/")
-                .baseUrl("http://195.35.6.208:8080/api/")
+                .baseUrl("https://glucofit-api-public-l76ziq6bya-et.a.run.app/api/")
+                //.baseUrl("http://195.35.6.208:8080/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

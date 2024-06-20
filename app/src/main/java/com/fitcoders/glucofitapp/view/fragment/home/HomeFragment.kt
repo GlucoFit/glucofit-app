@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -26,8 +25,9 @@ class HomeFragment : Fragment() {
     private lateinit var modelFactory: ViewModelFactory
     private val homeViewModel: HomeViewModel by viewModels { modelFactory }
     private var isListLayout = false
+    private var maxSugar: Int = 50 // Default value set to 50
 
-    // Menyimpan status favorit
+    // Store favorite status
     private val favoriteStatusMap = mutableMapOf<Int, Boolean>()
 
     private val foodAdapter: FoodAdapter by lazy {
@@ -70,26 +70,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-
-        binding.searchButton.setOnClickListener {
-            val intent = Intent(requireContext(), SearchActivity::class.java)
-            startActivity(intent)
-        }
-
+        setupListeners()
         observeViewModel()
 
+        // Fetch today's sugar intake data
         homeViewModel.fetchTodaySugarIntake()
         homeViewModel.todaySugarIntake.observe(viewLifecycleOwner) { totalSugar ->
-            updateEmojiAndText(totalSugar)
-        }
-
-        binding.scanButton.setOnClickListener {
-            val intent = Intent(requireContext(), ScannerActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.toggleButton.setOnClickListener {
-            toggleLayout()
+            updateEmojiAndText(totalSugar, maxSugar)
         }
     }
 
@@ -104,13 +91,29 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun setupListeners() {
+        binding.searchButton.setOnClickListener {
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.scanButton.setOnClickListener {
+            val intent = Intent(requireContext(), ScannerActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.toggleButton.setOnClickListener {
+            toggleLayout()
+        }
+    }
+
     private fun observeViewModel() {
         homeViewModel.fetchRecommendations()
         homeViewModel.recommendationResponse.observe(viewLifecycleOwner) { result ->
             result.onSuccess { recommendations ->
                 val foodList = recommendations.mapNotNull { it.foodDetails }
                 foodList.forEach { item ->
-                    // Sinkronkan status favorit dari peta lokal jika ada
+                    // Sync favorite status from local map if available
                     item.isFavorite = favoriteStatusMap[item.id] ?: item.isFavorite
                 }
                 foodAdapter.submitList(foodList)
@@ -126,14 +129,23 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // Mengamati respons favorit dan memperbarui peta status favorit lokal
+        // Observe favorite response and update local favorite status map
         homeViewModel.favoriteResponse.observe(viewLifecycleOwner) { response ->
             response?.let {
                 favoriteStatusMap[it.foodId ?: 0] = it.isFavorite == true
                 foodAdapter.notifyDataSetChanged()
             }
         }
+
+        homeViewModel.fetchAssessmentData()
+        homeViewModel.resultResponse.observe(viewLifecycleOwner) { assessment ->
+            assessment?.let {
+                maxSugar = it.result!! // Update maxSugar with the assessment result
+                binding.tvSugarIntakeMax.text = "/ $maxSugar g" // Update UI with the maxSugar value
+            }
+        }
     }
+
     private fun toggleLayout() {
         isListLayout = !isListLayout
         foodAdapter.setViewType(isListLayout)
@@ -149,16 +161,12 @@ class HomeFragment : Fragment() {
         )
     }
 
-    private fun updateEmojiAndText(intakeGula: Int) {
+    private fun updateEmojiAndText(intakeGula: Int, maxSugar: Int) {
         binding.sugarAmount.text = intakeGula.toString()
-
-        val maxSugarTextView: TextView = binding.sugarPercentage
-        val maxSugarString = maxSugarTextView.text.toString().replace(" g", "").trim()
-        val maxSugar = maxSugarString.toIntOrNull() ?: 2000
 
         val percentage = (intakeGula.toDouble() / maxSugar) * 100
         binding.sugarPercentage.text = "${percentage.toInt()}% "
-        binding.tvSugarIntakeMax.text = "/ ${maxSugar} g"
+        binding.tvSugarIntakeMax.text = "/ $maxSugar g"
 
         when {
             intakeGula <= 0 -> {

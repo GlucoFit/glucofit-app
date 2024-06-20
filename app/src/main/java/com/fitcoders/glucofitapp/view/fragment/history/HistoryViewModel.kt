@@ -6,9 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.fitcoders.glucofitapp.data.AppRepository
 import com.fitcoders.glucofitapp.response.DataItem
 import com.fitcoders.glucofitapp.response.DeleteResponse
+import com.fitcoders.glucofitapp.response.GetAssesmantResponse
 import kotlinx.coroutines.launch
 
 class HistoryViewModel(private val repository: AppRepository) : ViewModel() {
+
+    val resultResponse: LiveData<GetAssesmantResponse?> = repository.assessmentResponse
 
 
     val scanHistoryResponse: LiveData<Result<List<DataItem>>> get() = repository.scanHistoryResponse
@@ -37,6 +40,13 @@ class HistoryViewModel(private val repository: AppRepository) : ViewModel() {
             repository.deleteScanHistoryById(id)
         }
     }
+
+    fun fetchAssessmentData() {
+        viewModelScope.launch {
+            repository.fetchAssessments()
+        }
+    }
+
 
 
 }

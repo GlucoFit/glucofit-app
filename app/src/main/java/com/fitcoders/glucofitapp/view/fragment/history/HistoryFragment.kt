@@ -175,7 +175,7 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
         val maxSugarTextView: TextView = binding.root.findViewById(R.id.tv_sugar_intake_max)
 
         val maxSugarString = maxSugarTextView.text.toString().replace(" g", "").trim()
-        val maxSugar = maxSugarString.toIntOrNull() ?: 2000
+        val maxSugar = maxSugarString.toIntOrNull() ?: 50
         val percentage = (intakeGula.toDouble() / maxSugar) * 100
 
         percentageTextView.text = "${percentage.toInt()}%"

@@ -5,7 +5,10 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -60,6 +63,46 @@ class LoginActivity : AppCompatActivity() {
         playAnimation()
         setupAction()
        // moveActivity()
+
+        binding.passwordEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // No action needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                s?.let {
+                    if (it.length < 8) {
+                        binding.passwordEditTextLayout.error = "Password tidak boleh kurang dari 8 karakter"
+                    } else {
+                        binding.passwordEditTextLayout.error = null
+                    }
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // No action needed
+            }
+        })
+
+        binding.emailEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Tidak ada aksi yang diperlukan
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                s?.let {
+                    if (!Patterns.EMAIL_ADDRESS.matcher(it).matches()) {
+                        binding.emailEditTextLayout.error = "Email tidak valid"
+                    } else {
+                        binding.emailEditTextLayout.error = null
+                    }
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Tidak ada aksi yang diperlukan
+            }
+        })
 
 
     }

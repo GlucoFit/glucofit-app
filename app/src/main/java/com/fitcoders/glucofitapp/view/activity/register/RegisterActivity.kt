@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Patterns
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -59,6 +60,26 @@ class RegisterActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 // No action needed
+            }
+        })
+
+        binding.emailEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Tidak ada aksi yang diperlukan
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                s?.let {
+                    if (!Patterns.EMAIL_ADDRESS.matcher(it).matches()) {
+                        binding.emailEditTextLayout.error = "Email tidak valid"
+                    } else {
+                        binding.emailEditTextLayout.error = null
+                    }
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Tidak ada aksi yang diperlukan
             }
         })
 

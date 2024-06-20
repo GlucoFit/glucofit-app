@@ -9,6 +9,7 @@ import com.fitcoders.glucofitapp.data.UserModel
 import com.fitcoders.glucofitapp.response.DataItem
 import com.fitcoders.glucofitapp.response.FavoritResponse
 import com.fitcoders.glucofitapp.response.FoodRecipeResponseItem
+import com.fitcoders.glucofitapp.response.GetAssesmantResponse
 import com.fitcoders.glucofitapp.response.GetUserResponse
 import com.fitcoders.glucofitapp.response.RecommendationResponseItem
 import kotlinx.coroutines.launch
@@ -28,6 +29,8 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
     val userResponse1: LiveData<GetUserResponse?> get() = repository.userResponse
 
     val favoriteResponse: LiveData<FavoritResponse?> get() = repository.favoriteResponse
+
+    val resultResponse: LiveData<GetAssesmantResponse?> = repository.assessmentResponse
 
     fun fetchTodaySugarIntake() {
         viewModelScope.launch {
@@ -73,6 +76,13 @@ class HomeViewModel(private val repository: AppRepository) : ViewModel() {
             repository.markAsFavorite(foodId, isFavorite)
         }
     }
+
+    fun fetchAssessmentData() {
+        viewModelScope.launch {
+            repository.fetchAssessments()
+        }
+    }
+
 }
 
 

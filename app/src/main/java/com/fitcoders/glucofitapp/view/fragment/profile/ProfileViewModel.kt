@@ -16,7 +16,6 @@ class ProfileViewModel (private val repository: AppRepository) : ViewModel() {
 
     // LiveData untuk menampung respons data pengguna dari repository
     val userResponse: LiveData<GetUserResponse?> get() = repository.userResponse
-    val isLoading: LiveData<Boolean> get() = repository.isLoading
     val toastText: LiveData<Event<String>> get() = repository.toastText
 
 

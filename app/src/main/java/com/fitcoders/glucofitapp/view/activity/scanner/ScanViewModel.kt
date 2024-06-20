@@ -1,18 +1,8 @@
 package com.fitcoders.glucofitapp.view.activity.scanner
 
-import android.content.Context
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.data.AppRepository
-import com.fitcoders.glucofitapp.data.helper.ImageClassifierHelper
-import com.fitcoders.glucofitapp.data.helper.TensorFlowHelper
 import com.fitcoders.glucofitapp.response.AnalyzeResponse
 import com.fitcoders.glucofitapp.response.Data
 import com.fitcoders.glucofitapp.response.UplodScanResponse
