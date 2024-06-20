@@ -154,7 +154,7 @@ class HomeFragment : Fragment() {
 
         val maxSugarTextView: TextView = binding.sugarPercentage
         val maxSugarString = maxSugarTextView.text.toString().replace(" g", "").trim()
-        val maxSugar = maxSugarString.toIntOrNull() ?: 2000
+        val maxSugar = maxSugarString.toIntOrNull() ?: 50
 
         val percentage = (intakeGula.toDouble() / maxSugar) * 100
         binding.sugarPercentage.text = "${percentage.toInt()}% "

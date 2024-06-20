@@ -140,6 +140,10 @@ interface ApiService {
     @GET("favorite")
     fun getFavorite(): Call<List<FavoritFoodResponseItem>>
 
+    @DELETE("search/history/{recipeName}")
+    fun deleteSearchHistory(
+        @Path("recipeName") recipeName: String
+    ): Call<DeleteResponse>
 
     // Analyze food image
     @Multipart

@@ -69,7 +69,9 @@
             android:layout_height="72dp"
             motion:layout_constraintTop_toBottomOf="@+id/imageView"
             motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="36dp" />
+            android:layout_marginTop="36dp"
+            motion:layout_constraintBottom_toTopOf="@+id/textView2"
+            android:layout_marginBottom="24dp" />
         <Constraint
             android:id="@+id/textView2"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -121,9 +123,10 @@
             android:layout_width="346dp"
             android:layout_height="72dp"
             motion:layout_constraintTop_toBottomOf="@+id/image"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="28dp"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent" />
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintHorizontal_bias="0.492" />
         <Constraint
             android:id="@+id/desc"
             android:layout_width="336dp"

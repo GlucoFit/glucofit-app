@@ -149,4 +149,10 @@
     <string name="food_detail_title">Detail</string>
     <string name="invalid_image_file">Invalid image file</string>
     <string name="scanner_result_title">Scanner Result</string>
+    <string name="onboarding_1">Track Your Sugar Intake and Get Recommendations</string>
+    <string name="onboarding_3">Use our powerful image recognition to scan food items instantly know their sugar content or search by name for detailed nutritional information.</string>
+    <string name="onboarding_desc_2">Get comprehensive information on sugar content, calories, servings, diet labels, ingredients, and recipe instructions for various foods. Save your favorite foods for quick access and easy tracking. Review your scan history to monitor your food choices over time.</string>
+    <string name="onboarding_desc_1">Keep a close eye on your daily sugar consumption to maintain a healthy lifestyle. Receive personalized food recommendations based on your dietary preferences and health goals.</string>
+    <string name="onboarding_2">Explore Detailed Food Insights and Manage Your Favorites</string>
+    <string name="onboarding_tittle_3">Scan and Search Your Food Preferences</string>
 </resources>
