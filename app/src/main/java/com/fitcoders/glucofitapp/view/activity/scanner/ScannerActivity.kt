@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageButton
@@ -21,8 +22,12 @@ import androidx.core.content.FileProvider
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityScannerBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
+import com.fitcoders.glucofitapp.view.activity.main.MainActivity
+import com.fitcoders.glucofitapp.view.activity.scanner.ScannerResultActivity.Companion.EXTRA_IMAGE_URI
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.time.delay
 import java.io.File
+import java.util.logging.Handler
 
 class ScannerActivity : AppCompatActivity() {
 
@@ -55,6 +60,8 @@ class ScannerActivity : AppCompatActivity() {
         backButton.visibility = ImageButton.VISIBLE
 
         backButton.setOnClickListener {
+            val intent = Intent(this,MainActivity::class.java)
+            startActivity(intent)
             finish()
         }
     }
@@ -78,12 +85,13 @@ class ScannerActivity : AppCompatActivity() {
         binding.analyzeButton.setOnClickListener {
             Log.d("ScannerActivity", "Analyze button clicked")
             croppedImageUri?.let { uri ->
-                // Pindah ke ScannerResultActivity dan kirim URI gambar yang di-crop
-                val intent = Intent(this, ScannerResultActivity::class.java).apply {
-                    putExtra(ScannerResultActivity.EXTRA_IMAGE_URI, uri.toString())
-                }
-                startActivity(intent)
-            } ?: showToast(getString(R.string.image_classifier_failed))
+                android.os.Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this, ScannerResultActivity::class.java).apply {
+                        putExtra(EXTRA_IMAGE_URI, uri.toString())
+                    }
+                    startActivity(intent)
+                }, 300) // Delay 300 ms
+            }
         }
     }
 

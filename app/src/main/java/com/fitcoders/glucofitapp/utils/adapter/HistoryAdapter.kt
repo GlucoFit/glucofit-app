@@ -10,6 +10,10 @@ import com.fitcoders.glucofitapp.databinding.ItemScanGridBinding
 import com.fitcoders.glucofitapp.databinding.ItemScanListBinding
 import com.fitcoders.glucofitapp.response.DataItem
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -98,35 +102,35 @@ class HistoryAdapter(
                     .into(avatarImageView)
 
                 foodName.text = item.objectName
-                sugarWeight.text = item.objectSugar.toString()
-                sugarUnit.text = "g"
+
                 // Convert UTC time to local time
-                val localCreatedAt = convertUtcToLocalTime(item.createdAt ?: "")
-                scanDate.text = localCreatedAt
-                scanTime.text = localCreatedAt
+                val localDateTime = convertUtcToLocalTime(item.createdAt ?: "")
+
+                // Format only the date part
+                val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                scanDate.text = localDateTime.toLocalDate().format(dateFormatter)
+
+                // Format only the time part
+                val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                scanTime.text = localDateTime.toLocalTime().format(timeFormatter)
+
+                sugarUnit.text = "g"
+                sugarWeight.text = item.objectSugar.toString()
 
                 // Handle item click
                 itemView.setOnClickListener { itemClick(item) }
 
                 // Handle delete click
-                trashIcon.setOnClickListener { itemDelete(item) } // Correct delete action
+                trashIcon.setOnClickListener { itemDelete(item) }
             }
         }
 
-        private fun convertUtcToLocalTime(utcTime: String): String {
-            // Format time provided in UTC
-            val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-            utcFormat.timeZone = TimeZone.getTimeZone("UTC")
+        private fun convertUtcToLocalTime(utcTime: String): ZonedDateTime {
+            val utcFormatter = DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"))
+            val localZone = ZoneId.systemDefault()
 
-            // Parse time in UTC
-            val date: Date? = utcFormat.parse(utcTime)
-
-            // Format time for local time zone
-            val localFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            localFormat.timeZone = TimeZone.getDefault() // Set to device's local time zone
-
-            // Convert and return time in local format
-            return date?.let { localFormat.format(it) } ?: utcTime
+            // Parse the UTC time and convert to local ZonedDateTime
+            return ZonedDateTime.parse(utcTime, utcFormatter).withZoneSameInstant(localZone)
         }
     }
 
@@ -145,36 +149,35 @@ class HistoryAdapter(
                     .into(foodImage)
 
                 foodName.text = item.objectName
+
                 // Convert UTC time to local time
-                val localCreatedAt = convertUtcToLocalTime(item.createdAt ?: "")
-                scanDate.text = localCreatedAt
-                scanTime.text = localCreatedAt
+                val localDateTime = convertUtcToLocalTime(item.createdAt ?: "")
+
+                // Format only the date part
+                val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                scanDate.text = localDateTime.toLocalDate().format(dateFormatter)
+
+                // Format only the time part
+                val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                scanTime.text = localDateTime.toLocalTime().format(timeFormatter)
+
                 sugarUnit.text = "g"
                 sugarWeight.text = item.objectSugar.toString()
 
                 // Handle item click
                 itemView.setOnClickListener { itemClick(item) }
 
-
                 // Handle delete click
-                trashIcon.setOnClickListener { itemDelete(item) } // Correct delete action
+                trashIcon.setOnClickListener { itemDelete(item) }
             }
         }
 
-        private fun convertUtcToLocalTime(utcTime: String): String {
-            // Format time provided in UTC
-            val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-            utcFormat.timeZone = TimeZone.getTimeZone("UTC")
+        private fun convertUtcToLocalTime(utcTime: String): ZonedDateTime {
+            val utcFormatter = DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"))
+            val localZone = ZoneId.systemDefault()
 
-            // Parse time in UTC
-            val date: Date? = utcFormat.parse(utcTime)
-
-            // Format time for local time zone
-            val localFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            localFormat.timeZone = TimeZone.getDefault() // Set to device's local time zone
-
-            // Convert and return time in local format
-            return date?.let { localFormat.format(it) } ?: utcTime
+            // Parse the UTC time and convert to local ZonedDateTime
+            return ZonedDateTime.parse(utcTime, utcFormatter).withZoneSameInstant(localZone)
         }
     }
 }

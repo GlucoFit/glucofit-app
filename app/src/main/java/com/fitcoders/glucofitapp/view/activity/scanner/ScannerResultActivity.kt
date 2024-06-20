@@ -3,6 +3,8 @@ package com.fitcoders.glucofitapp.view.activity.scanner
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ProgressBar
@@ -24,6 +26,7 @@ class ScannerResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScannerResultBinding
     private lateinit var progressBar: ProgressBar
     private val scanViewModel: ScanViewModel by viewModels { ViewModelFactory.getInstance(application) }
+
 
     companion object {
         const val EXTRA_IMAGE_URI = "extra_image_uri"
@@ -48,6 +51,8 @@ class ScannerResultActivity : AppCompatActivity() {
         backButton.visibility = ImageButton.VISIBLE
 
         backButton.setOnClickListener {
+            val intent = Intent(this, ScannerActivity::class.java)
+            startActivity(intent)
             finish()
         }
         binding.buttonAddToHistory.setOnClickListener {
@@ -68,10 +73,13 @@ class ScannerResultActivity : AppCompatActivity() {
             if (imageFile.exists() && imageFile.isFile) {
                 // Menggunakan ViewModel untuk mengunggah hasil analisis ke API
                 scanViewModel.uploadScanImage(imageFile, objectName, objectSugar, datasetLabel)
+                moveToHistoryPageWithDelay()
+                showToast("Scan uploaded successfully")
             } else {
                 showToast(getString(R.string.invalid_image_file))
             }
         }
+
     }
 
     private fun startAnalysis() {
@@ -110,23 +118,10 @@ class ScannerResultActivity : AppCompatActivity() {
 
                 // Menampilkan hasil di UI
                 binding.foodName.text = it.foodName ?: "Unknown"
-                binding.sugarContent.text = it.sugarContent ?: "No data available"
+                binding.sugarContent.text =  "${it.sugarContent} gram"
             } ?: run {
                 Log.e("ScannerResultActivity", "foodInfo is null")
                 finish()
-            }
-        })
-
-        // Mengamati status loading
-        scanViewModel.isLoading.observe(this, Observer { isLoading ->
-            if (isLoading) {
-                Log.d("ScannerResultActivity", "Loading started")
-                // Tampilkan indikator loading
-                progressBar.visibility = android.view.View.VISIBLE
-            } else {
-                Log.d("ScannerResultActivity", "Loading finished")
-                // Sembunyikan indikator loading
-                progressBar.visibility = android.view.View.GONE
             }
         })
 
@@ -140,30 +135,18 @@ class ScannerResultActivity : AppCompatActivity() {
             }
         })
 
-        // Mengamati hasil upload scan
-        scanViewModel.uploadScanResponse.observe(this, Observer { response ->
-            response?.let {
-                Log.d("ScannerResultActivity", "Scan uploaded: ${it.data?.objectName}, ${it.data?.objectSugar}")
-                // Menampilkan pesan sukses setelah upload
-                showToast("Scan uploaded successfully")
-                // Pindah ke halaman riwayat setelah berhasil mengunggah
-                moveToHistoryPage()
-            } ?: run {
-                Log.e("ScannerResultActivity", "uploadScanResponse is null")
-            }
-        })
+
     }
 
-    private fun moveToHistoryPage() {
-        val fragment = HistoryFragment.newInstance()
-        fragmentManager(fragment)
+
+    private fun moveToHistoryPageWithDelay() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this, ScannerActivity::class.java)
+            startActivity(intent)
+            Log.d("Pindah", "berhasil")
+        }, 200) // Delay 500 ms
     }
 
-    private fun fragmentManager(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.content, fragment, fragment.javaClass.simpleName)
-        transaction.commit()
-    }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
