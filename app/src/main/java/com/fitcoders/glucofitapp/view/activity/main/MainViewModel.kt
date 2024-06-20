@@ -12,9 +12,5 @@ import kotlinx.coroutines.launch
 
 class MainViewModel (private val repository: AppRepository) : ViewModel() {
 
-    val toastText: LiveData<Event<String>> = repository.toastText
 
-    fun getSession(): LiveData<UserModel> {
-        return repository.getSession()
-    }
 }

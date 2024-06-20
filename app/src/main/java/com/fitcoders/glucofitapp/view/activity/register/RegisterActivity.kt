@@ -154,7 +154,6 @@ class RegisterActivity : AppCompatActivity() {
 
                         // Pindah ke AssessmentActivity setelah token disimpan
                         startActivity(Intent(this@RegisterActivity, AssessmentActivity::class.java))
-                        finish()
                     }
                 } else {
                     Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show()

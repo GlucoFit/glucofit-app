@@ -169,7 +169,6 @@ class LoginActivity : AppCompatActivity() {
                             } else {
                                 startActivity(Intent(this@LoginActivity, AssessmentActivity::class.java))
                             }
-                            finish()
                         }
                     }
                 } else {

@@ -32,6 +32,7 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
     private lateinit var tvDateMonth: TextView
     private lateinit var ivCalendarNext: ImageView
     private lateinit var ivCalendarPrevious: ImageView
+    private var maxSugar: Int = 50 // Default value set to 50
 
     private lateinit var modelFactory: ViewModelFactory
     private val historyViewModel: HistoryViewModel by viewModels { modelFactory }
@@ -85,6 +86,10 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
         binding.toggleButton.setOnClickListener {
             toggleLayout()
         }
+        historyViewModel.fetchScanHistoryByDate(getCurrentDate())
+        historyViewModel.todaySugarIntake.observe(viewLifecycleOwner){ totalSugar ->
+            updateEmojiAndText(totalSugar, maxSugar)
+        }
     }
 
     private fun setupCalendar() {
@@ -123,15 +128,13 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
                 if (dataItems.isEmpty()) {
                     bindHistory(dataItems)
                     val totalSugar = historyViewModel.calculateTotalSugar(dataItems)
-                    displayTotalSugar(totalSugar)
-                    updateEmojiAndText(totalSugar)
+                    updateEmojiAndText(totalSugar, maxSugar)
                     showEmptyView()
                 } else {
                     hideEmptyView()
                     bindHistory(dataItems)
                     val totalSugar = historyViewModel.calculateTotalSugar(dataItems)
-                    displayTotalSugar(totalSugar)
-                    updateEmojiAndText(totalSugar)
+                    updateEmojiAndText(totalSugar, maxSugar)
                 }
             }.onFailure { exception ->
                 Log.e("HistoryFragment", "Error fetching history: ${exception.message}")
@@ -145,6 +148,15 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
                 Log.d("HistoryFragment", "Delete Response: ${it.message}")
                 // Refresh the list after a deletion by fetching the data again
                 historyViewModel.fetchScanHistoryByDate(getCurrentDate())
+            }
+        }
+
+        historyViewModel.fetchAssessmentData()
+        historyViewModel.resultResponse.observe(viewLifecycleOwner) { assessment ->
+            assessment?.let {
+                maxSugar = it.result?: 20 // Update maxSugar with the assessment result
+                val maxSugarTextView: TextView = binding.root.findViewById(R.id.tv_sugar_intake_max)
+                maxSugarTextView.text = "/ ${maxSugar} g"
             }
         }
     }
@@ -164,19 +176,23 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
         Log.d("HistoryFragment", "Data displayed: $data")
     }
 
-    private fun displayTotalSugar(totalSugar: Int) {
+  /*  private fun displayTotalSugar(totalSugar: Int) {
         val totalSugarTextView: TextView = binding.root.findViewById(R.id.tv_sugar_intake_value)
         totalSugarTextView.text = "$totalSugar"
-    }
+    }*/
 
-    private fun updateEmojiAndText(intakeGula: Int) {
+    private fun updateEmojiAndText(intakeGula: Int,  maxSugar: Int) {
+
+
         val emojiImageView: ImageView = binding.root.findViewById(R.id.iv_sugar_intake)
         val percentageTextView: TextView = binding.root.findViewById(R.id.tv_sugar_intake_percentage)
         val maxSugarTextView: TextView = binding.root.findViewById(R.id.tv_sugar_intake_max)
+        val totalSugarTextView: TextView = binding.root.findViewById(R.id.tv_sugar_intake_value)
 
-        val maxSugarString = maxSugarTextView.text.toString().replace(" g", "").trim()
-        val maxSugar = maxSugarString.toIntOrNull() ?: 50
+
         val percentage = (intakeGula.toDouble() / maxSugar) * 100
+
+        totalSugarTextView.text = intakeGula.toString()
 
         percentageTextView.text = "${percentage.toInt()}%"
         maxSugarTextView.text = "/ ${maxSugar} g"
@@ -199,6 +215,9 @@ class HistoryFragment : Fragment(), HorizontalCalendarAdapter.OnItemClickListene
             }
         }
     }
+
+
+
 
     override fun onItemClick(ddMmYy: String, dd: String, day: String) {
         Log.d("HistoryFragment", "Selected date: $ddMmYy")

@@ -747,9 +747,9 @@ class AppRepository private constructor(private val pref: UserPreference, privat
 
 
 
-    fun getSession(): LiveData<UserModel> {
+   /* fun getSession(): LiveData<UserModel> {
         return pref.getSession().asLiveData()
-    }
+    }*/
 
     suspend fun saveSession(session: UserModel) {
         pref.saveSession(session)

@@ -69,14 +69,27 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupUI()
         setupRecyclerView()
-        setupListeners()
         observeViewModel()
+        setupListeners()
 
         homeViewModel.fetchTodaySugarIntake()
         homeViewModel.todaySugarIntake.observe(viewLifecycleOwner) { totalSugar ->
             updateEmojiAndText(totalSugar, maxSugar)
         }
+    }
+
+    private fun setupUI() {
+        binding.scanButton.setOnClickListener {
+            startScannerActivity()
+        }
+    }
+
+    private fun startScannerActivity() {
+        // Memulai ScannerActivity saat tombol scan diklik
+        val intent = Intent(activity, ScannerActivity::class.java)
+        startActivity(intent)
     }
 
     private fun setupRecyclerView() {
@@ -93,11 +106,6 @@ class HomeFragment : Fragment() {
     private fun setupListeners() {
         binding.searchButton.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.scanButton.setOnClickListener {
-            val intent = Intent(requireContext(), ScannerActivity::class.java)
             startActivity(intent)
         }
 

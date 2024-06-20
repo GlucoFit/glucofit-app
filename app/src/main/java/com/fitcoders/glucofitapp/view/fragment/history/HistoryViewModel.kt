@@ -1,6 +1,7 @@
 package com.fitcoders.glucofitapp.view.fragment.history
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fitcoders.glucofitapp.data.AppRepository
@@ -13,17 +14,13 @@ class HistoryViewModel(private val repository: AppRepository) : ViewModel() {
 
     val resultResponse: LiveData<GetAssesmantResponse?> = repository.assessmentResponse
 
-
     val scanHistoryResponse: LiveData<Result<List<DataItem>>> get() = repository.scanHistoryResponse
 
     val deleteResponse: LiveData<DeleteResponse?> get() = repository.deleteResponse
 
-    // Method to trigger fetching scan history
-    /*fun fetchScanHistory() {
-        viewModelScope.launch {
-            repository.fetchScanHistory()
-        }
-    }*/
+    private val _todaySugarIntake = MutableLiveData<Int>()
+    val todaySugarIntake: LiveData<Int> get() = _todaySugarIntake
+
 
     fun fetchScanHistoryByDate(date: String) {
         viewModelScope.launch {
