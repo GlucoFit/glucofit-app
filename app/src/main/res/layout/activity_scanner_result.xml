@@ -24,6 +24,13 @@
             android:layout_marginEnd="20dp"
             android:orientation="vertical">
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_gravity="center"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,7 +43,7 @@
                 android:id="@+id/sugar_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="30 Gram"
+                android:text="Undefined"
                 android:textSize="14sp"
                 android:textColor="@color/black"
                 android:fontFamily="@font/poppins_regular" />
@@ -52,7 +59,7 @@
                 android:id="@+id/food_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sliced Melon"
+                android:text="Undefined"
                 android:textSize="14sp"
                 android:textColor="@color/black"
                 android:fontFamily="@font/poppins_regular" />
@@ -61,7 +68,7 @@
                 android:id="@+id/button_add_to_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add to History"
+                android:text="Add to Daily Sugar Intake"
                 android:textSize="14sp"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/black"
@@ -88,6 +95,8 @@
             android:elevation="5dp"
             android:src="@drawable/ic_food"
             app:riv_corner_radius="25dip"/>
+
+
     </androidx.cardview.widget.CardView>
 
     <include
@@ -98,17 +107,4 @@
         android:layout_marginEnd="10dp"
         android:layout_marginTop="20dp"
         layout="@layout/action_bar" />
-
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </FrameLayout>
