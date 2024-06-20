@@ -159,7 +159,7 @@
                 android:backgroundTint="@color/black"
                 android:fontFamily="@font/poppins_regular"
                 android:textSize="18sp"
-                android:text="@string/login"
+                android:text="Register"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"

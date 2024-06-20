@@ -73,7 +73,6 @@ class HomeFragment : Fragment() {
         setupListeners()
         observeViewModel()
 
-        // Fetch today's sugar intake data
         homeViewModel.fetchTodaySugarIntake()
         homeViewModel.todaySugarIntake.observe(viewLifecycleOwner) { totalSugar ->
             updateEmojiAndText(totalSugar, maxSugar)
