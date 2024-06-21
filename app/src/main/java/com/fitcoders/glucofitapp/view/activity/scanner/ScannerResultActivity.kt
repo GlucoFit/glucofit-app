@@ -12,14 +12,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.fitcoders.glucofitapp.R
 import com.fitcoders.glucofitapp.databinding.ActivityScannerResultBinding
 import com.fitcoders.glucofitapp.view.ViewModelFactory
-import com.fitcoders.glucofitapp.view.activity.main.MainActivity
-import com.fitcoders.glucofitapp.view.fragment.history.HistoryFragment
 import java.io.File
+import java.util.Locale
 
 class ScannerResultActivity : AppCompatActivity() {
 
@@ -27,6 +25,7 @@ class ScannerResultActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private val scanViewModel: ScanViewModel by viewModels { ViewModelFactory.getInstance(application) }
 
+    private var originalSugarContent: String? = null // Store the original sugar content value
 
     companion object {
         const val EXTRA_IMAGE_URI = "extra_image_uri"
@@ -63,7 +62,7 @@ class ScannerResultActivity : AppCompatActivity() {
     private fun uploadAnalysisResult() {
         val imageUriString = intent.getStringExtra(EXTRA_IMAGE_URI)
         val objectName = binding.foodName.text.toString()
-        val objectSugar = binding.sugarContent.text.toString()
+        val objectSugar = originalSugarContent.toString() // Use the original sugar content value
         val datasetLabel = "spageti" // Label dataset sesuai kebutuhan Anda
 
         imageUriString?.let {
@@ -116,9 +115,12 @@ class ScannerResultActivity : AppCompatActivity() {
                 // Sembunyikan progress bar setelah analisis selesai
                 progressBar.visibility = android.view.View.GONE
 
-                // Menampilkan hasil di UI
-                binding.foodName.text = it.foodName ?: "Unknown"
-                binding.sugarContent.text =  it.sugarContent?: "Unknown"
+                // Store the original sugar content value
+                originalSugarContent = it.sugarContent
+
+                // Format and display food name and sugar content
+                binding.foodName.text = formatFoodName(it.foodName ?: "Unknown")
+                binding.sugarContent.text = if (it.sugarContent != null) "${it.sugarContent} Gram" else "Unknown"
             } ?: run {
                 Log.e("ScannerResultActivity", "foodInfo is null")
                 finish()
@@ -134,10 +136,7 @@ class ScannerResultActivity : AppCompatActivity() {
                 progressBar.visibility = android.view.View.GONE
             }
         })
-
-
     }
-
 
     private fun moveToHistoryPageWithDelay() {
         Handler(Looper.getMainLooper()).postDelayed({
@@ -150,5 +149,11 @@ class ScannerResultActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun formatFoodName(foodName: String): String {
+        return foodName.split("_").joinToString(" ") { word ->
+            word.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        }
     }
 }
