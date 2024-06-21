@@ -118,7 +118,7 @@ class ScannerResultActivity : AppCompatActivity() {
 
                 // Menampilkan hasil di UI
                 binding.foodName.text = it.foodName ?: "Unknown"
-                binding.sugarContent.text =  "${it.sugarContent} gram"
+                binding.sugarContent.text =  it.sugarContent?: "Unknown"
             } ?: run {
                 Log.e("ScannerResultActivity", "foodInfo is null")
                 finish()
